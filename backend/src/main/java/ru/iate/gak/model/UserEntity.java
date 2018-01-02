@@ -72,4 +72,12 @@ public class UserEntity extends LongIdentifiableEntity {
     public void setLastname(String lastname) {
         this.lastname = lastname;
     }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
 }
