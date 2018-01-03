@@ -1,5 +1,5 @@
 {
-  "/api": {
+  "/": {
     "target":  {
       "host": "localhost",
       "protocol": "http:",

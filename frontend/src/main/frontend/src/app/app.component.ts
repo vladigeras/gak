@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {Http} from "@angular/http";
+import {HttpClient} from "@angular/common/http";
 
 @Component({
   selector: 'app-root',
@@ -7,14 +7,12 @@ import {Http} from "@angular/http";
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'test frontend part of application';
-
-  constructor(private http: Http) {
+  constructor(private http: HttpClient) {
   }
 
   ngOnInit() {
-    this.http.get("/api/hello").subscribe(data => {
-      this.title = data.text() + "dsfshhvhjdf";
+    this.http.get("/users/get").subscribe(data => {
+
     });
   }
 }
