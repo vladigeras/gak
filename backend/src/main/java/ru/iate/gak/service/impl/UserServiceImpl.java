@@ -3,6 +3,7 @@ package ru.iate.gak.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.iate.gak.domain.User;
+import ru.iate.gak.util.MD5Hash;
 import ru.iate.gak.model.UserEntity;
 import ru.iate.gak.repository.UserRepository;
 import ru.iate.gak.service.UserService;
@@ -33,7 +34,7 @@ public class UserServiceImpl implements UserService {
         UserEntity userEntity = new UserEntity();
         userEntity.setId(user.getId());
         userEntity.setLogin(user.getLogin());
-        userEntity.setPassword(user.getPassword());
+        userEntity.setPassword(MD5Hash.getMD5HashOfString(user.getPassword()));
         userEntity.setFirstname(user.getFirstname());
         userEntity.setMiddlename(user.getMiddlename());
         userEntity.setLastname(user.getLastname());
