@@ -1,6 +1,5 @@
 package ru.iate.gak.domain;
 
-import ru.iate.gak.model.Role;
 import ru.iate.gak.model.UserEntity;
 
 import java.util.Set;

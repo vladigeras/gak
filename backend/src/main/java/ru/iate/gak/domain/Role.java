@@ -1,8 +1,8 @@
-package ru.iate.gak.model;
+package ru.iate.gak.domain;
 
 public enum Role {
     ADMIN,
-    PREDISENT,
+    PRESIDENT,
     MEMBER,
     SECRETARY,
     MENTOR,

@@ -6,6 +6,7 @@ import java.security.NoSuchAlgorithmException;
 
 public class MD5Hash {
     public static String getMD5HashOfString(String input) {
+        if (input == null || input.isEmpty()) return null;
         MessageDigest messageDigest = null;
         byte[] digest = new byte[0];
 

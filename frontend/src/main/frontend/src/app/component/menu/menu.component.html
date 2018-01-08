@@ -1,0 +1,20 @@
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">Система поддержки ГАК</a>
+    </div>
+    <div class="container-fluid">
+      <div class="nav navbar-nav navbar-right">
+        <button class="btn btn-default navbar-btn" data-toggle="modal" data-target="#userAddModal" type="submit"
+                (click)="addUser()">Добавить пользователя
+        </button>
+        <button class="btn btn-default navbar-btn" data-toggle="modal" data-target="#loginModal" type="submit"
+                (click)="enter()">Вход в систему
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<login-modal></login-modal>
+<user-add-modal></user-add-modal>

@@ -28,7 +28,8 @@
     "jquery": "^3.2.1",
     "bootstrap": "^3.3.7",
     "@ng-bootstrap/ng-bootstrap": "~1.0.0-beta.8",
-    "ng2-toastr": "^4.1.2"
+    "ng2-toastr": "^4.1.2",
+    "angular2-multiselect-dropdown": "^2.3.0"
   },
   "devDependencies": {
     "@angular/cli": "1.2.5",

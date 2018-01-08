@@ -1,5 +1,5 @@
-import {Component} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {Component, ViewContainerRef} from '@angular/core';
+import {ToastsManager} from "ng2-toastr";
 
 @Component({
   selector: 'app-root',
@@ -7,13 +7,10 @@ import {HttpClient} from "@angular/common/http";
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  constructor(private http: HttpClient) {
-  }
-
-  ngOnInit() {
-    this.http.get("/users/get").subscribe(data => {
-
-    });
+  constructor(private toast: ToastsManager, private vcr: ViewContainerRef ) {
+    this.toast.setRootViewContainerRef(vcr);
   }
 }
+
+
 

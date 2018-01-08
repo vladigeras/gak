@@ -1,7 +1,7 @@
 package ru.iate.gak.dto;
 
 import ru.iate.gak.domain.User;
-import ru.iate.gak.model.Role;
+import ru.iate.gak.domain.Role;
 
 import java.util.Set;
 

@@ -1,5 +1,7 @@
 package ru.iate.gak.model;
 
+import ru.iate.gak.domain.Role;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
