@@ -8,17 +8,17 @@ import javax.persistence.*;
 @Table(name = "roles")
 public class RoleEntity {
 
+    @Id
+    @Enumerated(value = EnumType.STRING)
+    @Column(name = "title")
+    private Role role;
+
     public RoleEntity() {
     }
 
     public RoleEntity(Role role) {
         this.role = role;
     }
-
-    @Id
-    @Enumerated(value = EnumType.STRING)
-    @Column(name = "title")
-    private Role role;
 
     public Role getRole() {
         return role;
