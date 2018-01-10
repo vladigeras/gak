@@ -23,7 +23,7 @@ public class User extends LongIdentifiable {
         this.password = null;
         this.firstname = userEntity.getFirstname();
         this.middlename = userEntity.getMiddlename();
-        this.lastname = userEntity.getMiddlename();
+        this.lastname = userEntity.getLastname();
         this.roles = userEntity.getRoles();
     }
 

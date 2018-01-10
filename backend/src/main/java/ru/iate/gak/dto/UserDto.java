@@ -20,8 +20,9 @@ public class UserDto extends LongIdentifiableDto {
 
     public UserDto(User user) {
         super(user.getId());
-        this.login = user.getFirstname();
+        this.login = user.getLogin();
         this.password = null;
+        this.firstname = user.getFirstname();
         this.middlename = user.getMiddlename();
         this.lastname = user.getLastname();
         this.roles = user.getRoles();

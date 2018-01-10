@@ -22,14 +22,15 @@
     "@angular/platform-browser": "^5.0.0",
     "@angular/platform-browser-dynamic": "^5.0.0",
     "@angular/router": "^5.0.0",
-    "es6-shim": "^0.35.3",
+    "core-js": "^2.5.3",
     "rxjs": "^5.4.1",
     "zone.js": "^0.8.14",
     "jquery": "^3.2.1",
     "bootstrap": "^3.3.7",
     "@ng-bootstrap/ng-bootstrap": "~1.0.0-beta.8",
     "ng2-toastr": "^4.1.2",
-    "angular2-multiselect-dropdown": "^2.3.0"
+    "angular2-multiselect-dropdown": "^2.3.0",
+    "@swimlane/ngx-datatable": "^11.1.7"
   },
   "devDependencies": {
     "@angular/cli": "1.2.5",

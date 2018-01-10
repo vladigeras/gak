@@ -13,6 +13,8 @@ import {UserAddModalComponent} from "./component/modal/user-add-modal/user-add-m
 import {UserService} from "./service/user.service";
 import { AngularMultiSelectModule } from 'angular2-multiselect-dropdown/angular2-multiselect-dropdown';
 import {FormsModule} from "@angular/forms";
+import { UsersTableComponent } from './component/users-table/users-table.component';
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
 export class CustomToastOptions extends ToastOptions {
   showCloseButton = true;
@@ -26,7 +28,8 @@ export class CustomToastOptions extends ToastOptions {
     MenuComponent,
     FooterComponent,
     LoginModalComponent,
-    UserAddModalComponent
+    UserAddModalComponent,
+    UsersTableComponent
   ],
   imports: [
     BrowserModule,
@@ -35,7 +38,8 @@ export class CustomToastOptions extends ToastOptions {
     FormsModule,
     NgbModule.forRoot(),
     ToastModule.forRoot(),
-    AngularMultiSelectModule
+    AngularMultiSelectModule,
+    NgxDatatableModule
   ],
   providers: [
     {provide: ToastOptions, useClass: CustomToastOptions},

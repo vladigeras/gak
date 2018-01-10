@@ -9,6 +9,7 @@ import ru.iate.gak.util.MD5Hash;
 import ru.iate.gak.model.UserEntity;
 import ru.iate.gak.repository.UserRepository;
 import ru.iate.gak.service.UserService;
+import ru.iate.gak.util.StringUtil;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
@@ -36,13 +37,28 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void saveUser(User user) {
-        if (user.getLogin() != null) {
-            if (userRepository.findByLogin(user.getLogin()) != null) throw new RuntimeException("Данный логин уже используется");
-        }
+        if (userRepository.findByLogin(user.getLogin()) != null)
+            throw new RuntimeException("Данный логин уже используется");
         UserEntity userEntity = new UserEntity();
         userEntity.setId(user.getId());
         userEntity.setLogin(user.getLogin());
         userEntity.setPassword(MD5Hash.getMD5HashOfString(user.getPassword()));
+        userEntity.setFirstname(user.getFirstname());
+        userEntity.setMiddlename(user.getMiddlename());
+        userEntity.setLastname(user.getLastname());
+        userEntity.setRoles(user.getRoles());
+        userRepository.save(userEntity);
+    }
+
+    @Override
+    @Transactional
+    public void updateUser(User user) {
+        UserEntity userEntity = userRepository.findByLogin(user.getLogin());
+        if (userEntity == null) throw new RuntimeException("Произошла ошибка");     //логин сменить нельзя
+
+        if (!StringUtil.isStringNullOrEmptyTrim(user.getPassword())) {
+            userEntity.setPassword(MD5Hash.getMD5HashOfString(user.getPassword()));
+        }
         userEntity.setFirstname(user.getFirstname());
         userEntity.setMiddlename(user.getMiddlename());
         userEntity.setLastname(user.getLastname());

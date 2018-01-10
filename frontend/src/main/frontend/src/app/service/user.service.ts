@@ -13,4 +13,12 @@ export class UserService {
   addUser(userDto) {
     return this.http.post("/users/add", userDto);
   }
+
+  getUsers() {
+    return this.http.get("/users/get");
+  }
+
+  updateUser(userDto) {
+    return this.http.post("/users/update", userDto);
+  }
 }

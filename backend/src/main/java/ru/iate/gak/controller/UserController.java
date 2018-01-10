@@ -27,13 +27,25 @@ public class UserController {
 
     @PostMapping(path = "/add", consumes = "application/json")
     public void saveUser(@RequestBody UserDto userDto) {
-        if (StringUtil.isStringNullOrEmptyTrim(userDto.firstname) || StringUtil.isStringNullOrEmptyTrim(userDto.lastname)) {
-            throw new RuntimeException("Имя, фамилия не могут быть пустыми");
+        if (StringUtil.isStringNullOrEmptyTrim(userDto.firstname) || StringUtil.isStringNullOrEmptyTrim(userDto.lastname)
+                || StringUtil.isStringNullOrEmptyTrim(userDto.login) || StringUtil.isStringNullOrEmptyTrim(userDto.password)) {
+            throw new RuntimeException("Имя, фамилия, логин, пароль не могут быть пустыми");
         }
         if (userDto.roles == null || userDto.roles.isEmpty()) {
             throw new RuntimeException("Пользователь должен иметь хотя бы одну роль");
         }
         userService.saveUser(userDto.toUser());
+    }
+
+    @PostMapping(path = "/update", consumes = "application/json")
+    public void updateUser(@RequestBody UserDto userDto) {
+        if (StringUtil.isStringNullOrEmptyTrim(userDto.firstname) || StringUtil.isStringNullOrEmptyTrim(userDto.lastname)) {
+            throw new RuntimeException("Имя, фамилия, логин не могут быть пустыми");
+        }
+        if (userDto.roles == null || userDto.roles.isEmpty()) {
+            throw new RuntimeException("Пользователь должен иметь хотя бы одну роль");
+        }
+        userService.updateUser(userDto.toUser());
     }
 
     @GetMapping(path = "/roles")

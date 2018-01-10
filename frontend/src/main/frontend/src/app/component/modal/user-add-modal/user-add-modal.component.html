@@ -4,34 +4,54 @@
       <div class="modal-header">
         <button type="button" (click)="clearWindow()" class="close" data-dismiss="modal" aria-label="Close"><span
           aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="userAddModalLabel">Добавление нового пользователя</h4>
+        <div *ngIf="isAddingNewUser">
+          <h4 class="modal-title" id="userAddModalLabel">Добавление нового пользователя</h4>
+        </div>
+        <div *ngIf="!isAddingNewUser">
+          <h4 class="modal-title" id="userUpdateModalLabel">Редактирование пользователя</h4>
+        </div>
       </div>
       <div class="modal-body">
         <form>
           <div class="form-group">
-            <label for="inputFirstname">Имя</label>
-            <input type="text" class="form-control" id="inputFirstname" placeholder="Имя"
+            <label for="inputFirstnameUserForm">Имя</label>
+            <input type="text" class="form-control" id="inputFirstnameUserForm" placeholder="Имя"
                    [(ngModel)]="user.firstname" name="firstname">
           </div>
           <div class="form-group">
-            <label for="inputLastname">Фамилия</label>
-            <input type="text" class="form-control" id="inputLastname" placeholder="Фамилия"
+            <label for="inputLastnameUserForm">Фамилия</label>
+            <input type="text" class="form-control" id="inputLastnameUserForm" placeholder="Фамилия"
                    [(ngModel)]="user.lastname" name="lastname">
           </div>
           <div class="form-group">
-            <label for="inputMiddlename">Отчество</label>
-            <input type="text" class="form-control" id="inputMiddlename" placeholder="Отчество"
+            <label for="inputMiddlenameUserForm">Отчество</label>
+            <input type="text" class="form-control" id="inputMiddlenameUserForm" placeholder="Отчество"
                    [(ngModel)]="user.middlename" name="middlename">
           </div>
           <div class="form-group">
-            <label for="inputLogin">Логин</label>
-            <input type="text" class="form-control" id="inputLogin" placeholder="Логин" [(ngModel)]="user.login"
-                   name="login">
+            <i class="glyphicon glyphicon-user"></i>
+            <label>Логин</label>
+            <div *ngIf="!isAddingNewUser">
+              <input type="text" class="form-control" placeholder="Логин" disabled
+                     [(ngModel)]="user.login" name="login">
+            </div>
+            <div *ngIf="isAddingNewUser">
+              <input type="text" class="form-control" placeholder="Логин"
+                     [(ngModel)]="user.login" name="login">
+            </div>
           </div>
           <div class="form-group">
-            <label for="inputPassword">Пароль</label>
-            <input type="password" class="form-control" id="inputPassword" placeholder="Пароль"
+            <i class="glyphicon glyphicon-lock"></i>
+            <label for="inputPasswordUserForm">Пароль</label>
+            <input type="password" class="form-control" id="inputPasswordUserForm" placeholder="Пароль"
                    [(ngModel)]="user.password" name="password">
+          </div>
+          <div class="form-group">
+            <i class="glyphicon glyphicon-lock"></i>
+            <label for="inputConfirmPasswordUserForm">Подтверждение пароля</label>
+            <input type="password" class="form-control" id="inputConfirmPasswordUserForm"
+                   placeholder="Подтверждение пароля"
+                   [(ngModel)]="confirmPassword" name="confirmPassword">
           </div>
           <div class="form-group">
             <label>Роль</label>
@@ -39,10 +59,19 @@
                                   [settings]="roleSelectDropdownSettings"></angular2-multiselect>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-default pull-left" (click)="clearWindow()" data-dismiss="modal">Закрыть</button>
-            <button type="submit" class="btn btn-primary pull-right"
-                    (click)="add()">Добавить
+            <button type="button" class="btn btn-default pull-left" (click)="clearWindow()" data-dismiss="modal">
+              Закрыть
             </button>
+            <div *ngIf="isAddingNewUser">
+              <button type="submit" class="btn btn-primary pull-right"
+                      (click)="add()">Добавить
+              </button>
+            </div>
+            <div *ngIf="!isAddingNewUser">
+              <button type="submit" class="btn btn-primary pull-right"
+                      (click)="update()">Сохранить
+              </button>
+            </div>
           </div>
         </form>
       </div>

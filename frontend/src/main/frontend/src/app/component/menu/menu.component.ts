@@ -6,12 +6,11 @@ import {LoginModalComponent} from "../modal/login-modal/login-modal.component";
 @Component({
   selector: 'app-menu',
   templateUrl: './menu.component.html',
-  styleUrls: ['./menu.component.scss'],
-  providers: [UserAddModalComponent, LoginModalComponent]
+  styleUrls: ['./menu.component.scss']
 })
 export class MenuComponent implements OnInit {
 
-  constructor (private userAddModal: UserAddModalComponent) {
+  constructor () {
   };
 
   ngOnInit() {
