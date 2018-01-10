@@ -56,6 +56,7 @@ export class UserAddModalComponent implements OnInit {
         this.toast.success("Пользователь был добавлен", "Успешно");
         this.userChangedOrAdded.emit(true);
         $('#userAddModal').modal('hide');
+        this.confirmPassword = null;
       },
       error => {
         if (error.error.message != undefined) this.toast.error(error.error.message, "Ошибка");
@@ -82,6 +83,7 @@ export class UserAddModalComponent implements OnInit {
       data => {
         this.toast.success("Пользователь был обновлен", "Успешно");
         this.userChangedOrAdded.emit(true);
+        this.confirmPassword = null;
         $('#userAddModal').modal('hide');
       },
       error => {

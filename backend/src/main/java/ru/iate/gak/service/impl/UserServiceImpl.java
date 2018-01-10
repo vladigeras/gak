@@ -1,11 +1,11 @@
 package ru.iate.gak.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.iate.gak.domain.User;
 import ru.iate.gak.domain.Role;
 import ru.iate.gak.repository.RoleRepository;
-import ru.iate.gak.util.MD5Hash;
 import ru.iate.gak.model.UserEntity;
 import ru.iate.gak.repository.UserRepository;
 import ru.iate.gak.service.UserService;
@@ -23,6 +23,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private RoleRepository roleRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional
@@ -42,7 +45,7 @@ public class UserServiceImpl implements UserService {
         UserEntity userEntity = new UserEntity();
         userEntity.setId(user.getId());
         userEntity.setLogin(user.getLogin());
-        userEntity.setPassword(MD5Hash.getMD5HashOfString(user.getPassword()));
+        userEntity.setPassword(passwordEncoder.encode(user.getPassword()));
         userEntity.setFirstname(user.getFirstname());
         userEntity.setMiddlename(user.getMiddlename());
         userEntity.setLastname(user.getLastname());
@@ -57,7 +60,7 @@ public class UserServiceImpl implements UserService {
         if (userEntity == null) throw new RuntimeException("Произошла ошибка");     //логин сменить нельзя
 
         if (!StringUtil.isStringNullOrEmptyTrim(user.getPassword())) {
-            userEntity.setPassword(MD5Hash.getMD5HashOfString(user.getPassword()));
+            userEntity.setPassword(passwordEncoder.encode(user.getPassword()));
         }
         userEntity.setFirstname(user.getFirstname());
         userEntity.setMiddlename(user.getMiddlename());
