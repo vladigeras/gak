@@ -1,7 +1,6 @@
-import {Component, OnInit, ViewContainerRef} from '@angular/core';
-import { ToastsManager } from 'ng2-toastr/ng2-toastr';
-import {UserAddModalComponent} from "../modal/user-add-modal/user-add-modal.component";
-import {LoginModalComponent} from "../modal/login-modal/login-modal.component";
+import {Component, OnInit} from '@angular/core';
+import {ToastsManager} from 'ng2-toastr/ng2-toastr';
+import {AuthService} from "../../security/auth.service";
 
 @Component({
   selector: 'app-menu',
@@ -10,8 +9,7 @@ import {LoginModalComponent} from "../modal/login-modal/login-modal.component";
 })
 export class MenuComponent implements OnInit {
 
-  constructor () {
-  };
+  constructor (private toast: ToastsManager, private authService: AuthService) {};
 
   ngOnInit() {
   }
@@ -22,5 +20,15 @@ export class MenuComponent implements OnInit {
 
   addUser() {
 
+  }
+
+  logout() {
+    this.authService.logout().subscribe(
+      data => { this.toast.warning("Вы вышли из аккаунта", "Внимание")},
+      error => {
+        if (error.error.message != undefined) this.toast.error(error.error.message, "Ошибка");
+        else this.toast.error(error.error, "Ошибка");
+      }
+    )
   }
 }

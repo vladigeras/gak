@@ -10,8 +10,8 @@
         <form>
           <div class="form-group">
             <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-            <input type="text" class="form-control" id="inputLoginLoginForm" placeholder="Логин" [(ngModel)]="login"
-                   name="user.login">
+            <input type="text" class="form-control" id="inputLoginLoginForm" placeholder="Логин" [(ngModel)]="user.login"
+                   name="login">
           </div>
           <div class="form-group">
             <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
@@ -21,8 +21,8 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Закрыть</button>
-        <button type="submit" class="btn btn-primary pull-right">Войти</button>
+        <button type="button" class="btn btn-default pull-left" data-dismiss="modal" (click)="clearWindow()">Закрыть</button>
+        <button type="submit" class="btn btn-primary pull-right" (click)="enter()">Войти</button>
       </div>
     </div>
   </div>

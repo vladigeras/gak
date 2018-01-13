@@ -6,14 +6,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 import ru.iate.gak.domain.Role;
 import ru.iate.gak.model.UserEntity;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class UserPrincipal implements UserDetails {
 
     private UserEntity user;
-    private List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+    private Set<SimpleGrantedAuthority> authorities = new HashSet<>();
 
     public UserPrincipal(UserEntity user) {
         super();
