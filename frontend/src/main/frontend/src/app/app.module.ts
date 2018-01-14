@@ -17,6 +17,13 @@ import {UsersTableComponent} from './component/users-table/users-table.component
 import {NgxDatatableModule} from '@swimlane/ngx-datatable';
 import {AuthService} from "./security/auth.service";
 import { CookieService } from 'ngx-cookie-service';
+import { AdminPanelComponent } from './pages/admin-panel/admin-panel.component';
+import { MainPageComponent } from './pages/main-page/main-page.component';
+import {RouterModule, Routes} from "@angular/router";
+import { NotFoundPageComponent } from './pages/not-found-page/not-found-page.component';
+import { MemberPanelComponent } from './pages/member-panel/member-panel.component';
+import { SecretaryPanelComponent } from './pages/secretary-panel/secretary-panel.component';
+import { PresidentPanelComponent } from './pages/president-panel/president-panel.component';
 
 
 export class CustomToastOptions extends ToastOptions {
@@ -25,6 +32,15 @@ export class CustomToastOptions extends ToastOptions {
   maxShown = 20;
 }
 
+const routes: Routes =[
+  { path: '', component: MainPageComponent},
+  { path: 'president', component: PresidentPanelComponent},
+  { path: 'member', component: MemberPanelComponent},
+  { path: 'secretary', component: SecretaryPanelComponent},
+  { path: 'admin', component: AdminPanelComponent},
+  { path: '**', component: NotFoundPageComponent }
+];
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -32,7 +48,13 @@ export class CustomToastOptions extends ToastOptions {
     FooterComponent,
     LoginModalComponent,
     UserAddModalComponent,
-    UsersTableComponent
+    UsersTableComponent,
+    AdminPanelComponent,
+    MainPageComponent,
+    NotFoundPageComponent,
+    MemberPanelComponent,
+    SecretaryPanelComponent,
+    PresidentPanelComponent
   ],
   imports: [
     BrowserModule,
@@ -42,7 +64,8 @@ export class CustomToastOptions extends ToastOptions {
     NgbModule.forRoot(),
     ToastModule.forRoot(),
     AngularMultiSelectModule,
-    NgxDatatableModule
+    NgxDatatableModule,
+    RouterModule.forRoot(routes)
   ],
   providers: [
     {provide: ToastOptions, useClass: CustomToastOptions},

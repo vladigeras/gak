@@ -10,13 +10,15 @@ export class LoginModalComponent {
 
   user = {login: null, password: null};
 
-  constructor(private toast: ToastsManager, private authService: AuthService) {
-  }
+  constructor(private toast: ToastsManager, private authService: AuthService) {}
 
   enter() {
     this.authService.login(this.user).subscribe(
       data => {
-        console.log(data);
+        this.toast.success("Вы вошли в систему", "Успешно");
+        setTimeout(function () {
+          location.reload()
+        }, 500)
       },
       error => {
         if (error.error.message != undefined) this.toast.error(error.error.message, "Ошибка");
