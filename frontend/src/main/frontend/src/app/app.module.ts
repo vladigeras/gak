@@ -24,6 +24,9 @@ import { NotFoundPageComponent } from './pages/not-found-page/not-found-page.com
 import { MemberPanelComponent } from './pages/member-panel/member-panel.component';
 import { SecretaryPanelComponent } from './pages/secretary-panel/secretary-panel.component';
 import { PresidentPanelComponent } from './pages/president-panel/president-panel.component';
+import {DndModule} from 'ng2-dnd';
+import { StudentSpeechByDateComponent } from './component/student-speech-by-date/student-speech-by-date.component';
+import {StudentService} from "./service/student.service";
 
 
 export class CustomToastOptions extends ToastOptions {
@@ -54,7 +57,8 @@ const routes: Routes =[
     NotFoundPageComponent,
     MemberPanelComponent,
     SecretaryPanelComponent,
-    PresidentPanelComponent
+    PresidentPanelComponent,
+    StudentSpeechByDateComponent
   ],
   imports: [
     BrowserModule,
@@ -65,13 +69,15 @@ const routes: Routes =[
     ToastModule.forRoot(),
     AngularMultiSelectModule,
     NgxDatatableModule,
-    RouterModule.forRoot(routes)
+    RouterModule.forRoot(routes),
+    DndModule.forRoot()
   ],
   providers: [
     {provide: ToastOptions, useClass: CustomToastOptions},
     UserService,
     AuthService,
-    CookieService
+    CookieService,
+    StudentService
   ],
   bootstrap: [AppComponent]
 })
