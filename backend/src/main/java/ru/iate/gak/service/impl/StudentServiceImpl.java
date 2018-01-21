@@ -2,10 +2,17 @@ package ru.iate.gak.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.iate.gak.domain.Group;
 import ru.iate.gak.domain.Student;
+import ru.iate.gak.domain.User;
+import ru.iate.gak.model.DiplomEntity;
 import ru.iate.gak.model.GroupEntity;
+import ru.iate.gak.model.StudentEntity;
+import ru.iate.gak.model.UserEntity;
+import ru.iate.gak.repository.DiplomRepository;
 import ru.iate.gak.repository.GroupRepository;
 import ru.iate.gak.repository.StudentRepository;
+import ru.iate.gak.repository.UserRepository;
 import ru.iate.gak.service.StudentService;
 
 import javax.transaction.Transactional;
@@ -21,6 +28,12 @@ public class StudentServiceImpl implements StudentService {
     @Autowired
     private GroupRepository groupRepository;
 
+    @Autowired
+    private DiplomRepository diplomRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
     @Override
     @Transactional
     public List<Student> getStudentOfCurrentGroup(String group) {
@@ -29,9 +42,40 @@ public class StudentServiceImpl implements StudentService {
 
         List<Student> result = new ArrayList<>();
         studentRepository.getAllByGroup(groupEntity).forEach(s -> {
-            result.add(new Student(s));
+            Student student = new Student(s);
+            student.setTitle(s.getDiplom().getTitle());
+            student.setMentor(new User(s.getDiplom().getMentor()));
+            student.setReviewer(new User(s.getDiplom().getReviewer()));
+            result.add(student);
         });
 
         return result;
+    }
+
+    @Override
+    @Transactional
+    public void saveStudent(Student student) {
+        GroupEntity groupEntity = groupRepository.findOne(student.getGroup().getTitle());
+        if (groupEntity == null) throw new RuntimeException("Группа с названием " + student.getGroup().getTitle() + "  не найдена");
+
+        UserEntity mentorEntity = userRepository.findOne(student.getMentor().getId());
+        if (mentorEntity == null) throw new RuntimeException("Руководитель с id " + student.getMentor().getId() + "  не найден");
+
+        UserEntity reviewerEntity = userRepository.findOne(student.getReviewer().getId());
+        if (reviewerEntity == null) throw new RuntimeException("Рецензент с id " + student.getReviewer().getId() + "  не найден");
+
+        StudentEntity studentEntity = new StudentEntity();
+        studentEntity.setFirstname(student.getFirstname());
+        studentEntity.setLastname(student.getLastname());
+        studentEntity.setMiddlename(student.getMiddlename());
+        studentEntity.setGroup(groupEntity);
+        studentRepository.save(studentEntity);
+
+        DiplomEntity diplomEntity = new DiplomEntity();
+        diplomEntity.setTitle(student.getTitle());
+        diplomEntity.setMentor(mentorEntity);
+        diplomEntity.setReviewer(reviewerEntity);
+        diplomEntity.setStudent(studentEntity);
+        diplomRepository.save(diplomEntity);
     }
 }

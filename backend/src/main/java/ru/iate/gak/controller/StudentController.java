@@ -1,10 +1,7 @@
 package ru.iate.gak.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.iate.gak.dto.StudentDto;
 import ru.iate.gak.security.GakSecured;
 import ru.iate.gak.security.Roles;
@@ -33,5 +30,22 @@ public class StudentController {
         });
         return result;
     }
+
+    @PostMapping(value = "/add", consumes = "application/json")
+    @GakSecured(roles = {Roles.ADMIN})
+    public void saveStudent(@RequestBody StudentDto studentDto) {
+        if (StringUtil.isStringNullOrEmptyTrim(studentDto.firstname) || StringUtil.isStringNullOrEmptyTrim(studentDto.lastname)
+                || StringUtil.isStringNullOrEmptyTrim(studentDto.title)) {
+            throw new RuntimeException("Имя, фамилия, тема работы не могут быть пустыми");
+        }
+
+        if (studentDto.group == null || StringUtil.isStringNullOrEmptyTrim(studentDto.group.title))
+            throw new RuntimeException("Не выбрана группа");
+        if (studentDto.mentor == null || studentDto.reviewer == null || studentDto.mentor.id == null || studentDto.reviewer.id == null)
+            throw new RuntimeException("Выберите руководителя и рецензента");
+
+        studentService.saveStudent(studentDto.toStudent());
+    }
+
 
 }

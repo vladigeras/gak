@@ -1,34 +1,46 @@
-<div>
-  <h4>Расписание и порядок защиты студентов</h4>
-</div>
+<div class="content">
+  <div class="row">
+    <div class="pull-left">
+      <h4>Расписание и порядок защиты студентов</h4>
+    </div>
+    <div class="pull-right">
+      <button class="btn btn-default navbar-btn">Сохранить</button>
+    </div>
+  </div>
 
-<div class="form-group">
-  <angular2-multiselect [data]="availableGroups" [(ngModel)]="selectedGroup"
-                        [settings]="groupSelectDropdownSettings"
-                        (onSelect)="getStudentsOfGroup()">
-  </angular2-multiselect>
-</div>
+  <div class="form-group">
+    <angular2-multiselect [data]="availableGroups" [(ngModel)]="selectedGroup"
+                          [settings]="groupSelectDropdownSettings"
+                          (onSelect)="getStudentsOfGroup()">
+    </angular2-multiselect>
+  </div>
 
-<div class="row">
-  <div class="col-sm-3">
-    <div class="panel panel-success">
-      <div class="panel-heading">Студенты</div>
-      <div class="panel-body">
-        <div *ngFor="let student of studentsOfSelectedGroup" class="panel panel-default" dnd-draggable [dragEnabled]="true">
-          <div class="panel-body">
-            <div>{{student.name}}</div>
+  <div class="row">
+    <div class="col-sm-4 col-md-5 left-block">
+      <div class="panel panel-success">
+        <div class="panel-heading">Студенты</div>
+        <div class="panel-body">
+          <div *ngFor="let student of studentsOfSelectedGroup" class="panel panel-default" dnd-draggable
+               [dragEnabled]="true"
+               [dragData]="student">
+            <div class="panel-body">
+              <div>{{student.name}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-8 col-md-7 right-block">
+      <div dnd-droppable class="panel panel-info" (onDropSuccess)="dragStudent($event)">
+        <div class="panel-heading">Расписание</div>
+        <div class="panel-body">
+          <div *ngFor="let student of resultStudentList" class="panel panel-default">
+            <div class="panel-body">
+              <div>{{student.name}}</div>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <div class="col-sm-3">
-    <div dnd-droppable class="panel panel-info">
-      <div class="panel-heading">Расписание</div>
-      <div class="panel-body">
-        <div *ngIf="simpleDrop">Item was dropped here</div>
-      </div>
-    </div>
-  </div>
 </div>
-<button class="btn btn-default">Сохранить</button>

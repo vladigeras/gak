@@ -19,6 +19,9 @@ public class StudentEntity extends LongIdentifiableEntity {
     @JoinColumn(name = "group_title")
     private GroupEntity group;
 
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "student")
+    private DiplomEntity diplom;
+
     public String getFirstname() {
         return firstname;
     }
@@ -49,5 +52,13 @@ public class StudentEntity extends LongIdentifiableEntity {
 
     public void setGroup(GroupEntity group) {
         this.group = group;
+    }
+
+    public DiplomEntity getDiplom() {
+        return diplom;
+    }
+
+    public void setDiplom(DiplomEntity diplom) {
+        this.diplom = diplom;
     }
 }

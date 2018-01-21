@@ -35,6 +35,12 @@ public class UserEntity extends LongIdentifiableEntity {
     @Column(name = "role")
     private Set<Role> roles = new HashSet<>();
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "mentor")
+    private Set<DiplomEntity> diplomsWhereUserIsMentor;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "reviewer")
+    private Set<DiplomEntity> diplomsWhereUserIsReviewer;
+
     public String getLogin() {
         return login;
     }
@@ -81,5 +87,21 @@ public class UserEntity extends LongIdentifiableEntity {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public Set<DiplomEntity> getDiplomsWhereUserIsMentor() {
+        return diplomsWhereUserIsMentor;
+    }
+
+    public void setDiplomsWhereUserIsMentor(Set<DiplomEntity> diplomsWhereUserIsMentor) {
+        this.diplomsWhereUserIsMentor = diplomsWhereUserIsMentor;
+    }
+
+    public Set<DiplomEntity> getDiplomsWhereUserIsReviewer() {
+        return diplomsWhereUserIsReviewer;
+    }
+
+    public void setDiplomsWhereUserIsReviewer(Set<DiplomEntity> diplomsWhereUserIsReviewer) {
+        this.diplomsWhereUserIsReviewer = diplomsWhereUserIsReviewer;
     }
 }

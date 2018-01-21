@@ -1,0 +1,60 @@
+<div class="modal fade" id="studentAddModal" tabindex="-1" role="dialog" aria-labelledby="studentAddModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" (click)="clearWindow()" class="close" data-dismiss="modal" aria-label="Close"><span
+          aria-hidden="true">&times;</span></button>
+        <div>
+          <h4 class="modal-title" id="studentAddModalLabel">Добавление нового студента</h4>
+        </div>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="inputFirstnameStudentForm">Имя</label>
+            <input type="text" class="form-control" id="inputFirstnameStudentForm" placeholder="Имя"
+                   [(ngModel)]="student.firstname" name="firstname">
+          </div>
+          <div class="form-group">
+            <label for="inputLastnameStudentForm">Фамилия</label>
+            <input type="text" class="form-control" id="inputLastnameStudentForm" placeholder="Фамилия"
+                   [(ngModel)]="student.lastname" name="lastname">
+          </div>
+          <div class="form-group">
+            <label for="inputMiddlenameStudentForm">Отчество</label>
+            <input type="text" class="form-control" id="inputMiddlenameStudentForm" placeholder="Отчество"
+                   [(ngModel)]="student.middlename" name="middlename">
+          </div>
+          <div class="form-group">
+            <label for="inputTitleStudentForm">Название темы</label>
+            <input type="text" class="form-control" id="inputTitleStudentForm" placeholder="Название темы"
+                   [(ngModel)]="student.title" name="title">
+          </div>
+          <div class="form-group">
+            <label>Группа</label>
+            <angular2-multiselect [data]="availableGroups" [(ngModel)]="selectedGroup" name="group"
+                                  [settings]="groupSelectDropdownSettings"></angular2-multiselect>
+          </div>
+          <div class="form-group">
+            <label>Руководитель</label>
+            <angular2-multiselect [data]="availableMentors" [(ngModel)]="selectedMentor" name="mentor"
+                                  [settings]="mentorSelectDropdownSettings"></angular2-multiselect>
+          </div>
+          <div class="form-group">
+            <label>Рецензент</label>
+            <angular2-multiselect [data]="availableReviewers" [(ngModel)]="selectedReviewer" name="reviewer"
+                                  [settings]="reviewerSelectDropdownSettings"></angular2-multiselect>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default pull-left" (click)="clearWindow()" data-dismiss="modal">
+              Закрыть
+            </button>
+            <div>
+              <button type="submit" class="btn btn-primary pull-right" (click)="add()">Добавить</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

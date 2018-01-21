@@ -1,0 +1,25 @@
+<div class="content">
+  <div class="row">
+    <div class="pull-left">
+      <h4>Студенты</h4>
+    </div>
+    <div class="pull-right">
+      <button class="btn btn-default navbar-btn" data-toggle="modal" (click)="showEmptyModalForAdd()" type="submit">
+        Добавить студента
+      </button>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <angular2-multiselect [data]="availableGroups" [(ngModel)]="selectedGroup"
+                          [settings]="groupSelectDropdownSettings"
+                          (onSelect)="getStudentsOfGroup()">
+    </angular2-multiselect>
+  </div>
+
+  <ngx-datatable class="material" [rows]="students" [columns]="headers" [columnMode]="'force'"
+                 [headerHeight]="40" [footerHeight]="40" [limit]="10"
+                 [rowHeight]="'auto'" [selectionType]="'single'"></ngx-datatable>
+
+  <app-student-add-modal></app-student-add-modal>
+</div>

@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface UserService {
     List<User> getAllUsers();
+    List<User> getAllUsersByRole(Role role);
     void saveUser(User user);
     void updateUser(User user);
     List<Role> getAllRoles();

@@ -47,8 +47,8 @@ export class UsersTableComponent implements OnInit {
             login: u.login,
             roles: roles
           });
-          this.reloadTable();
         });
+        this.reloadTable();
       },
       error => {
         if (error.error.message != undefined) this.toast.error(error.error.message, "Ошибка");

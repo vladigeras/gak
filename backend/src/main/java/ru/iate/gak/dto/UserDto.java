@@ -30,6 +30,7 @@ public class UserDto extends LongIdentifiableDto {
 
     public User toUser() {
         User user = new User();
+        user.setId(this.id);
         user.setLogin(this.login);
         user.setPassword(this.password);
         user.setFirstname(this.firstname);

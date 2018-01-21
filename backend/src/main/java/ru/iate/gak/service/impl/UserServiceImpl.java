@@ -3,17 +3,19 @@ package ru.iate.gak.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ru.iate.gak.domain.User;
 import ru.iate.gak.domain.Role;
-import ru.iate.gak.repository.RoleRepository;
+import ru.iate.gak.domain.User;
 import ru.iate.gak.model.UserEntity;
+import ru.iate.gak.repository.RoleRepository;
 import ru.iate.gak.repository.UserRepository;
 import ru.iate.gak.service.UserService;
 import ru.iate.gak.util.StringUtil;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -32,6 +34,18 @@ public class UserServiceImpl implements UserService {
     public List<User> getAllUsers() {
         List<User> result = new ArrayList<>();
         userRepository.findAll().forEach(u -> {
+            result.add(new User(u));
+        });
+        return result;
+    }
+
+    @Override
+    @Transactional
+    public List<User> getAllUsersByRole(Role role) {
+        List<User> result = new ArrayList<>();
+        Set<Role> roles = new HashSet<>();
+        roles.add(role);
+        userRepository.findAllByRoles(roles).forEach(u -> {
             result.add(new User(u));
         });
         return result;

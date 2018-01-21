@@ -11,6 +11,7 @@ export class StudentSpeechByDateComponent implements OnInit {
 
   availableGroups = [];
   selectedGroup = null;
+  resultStudentList = [];
   studentsOfSelectedGroup = [];
   groupSelectDropdownSettings = {
     singleSelection: true,
@@ -59,5 +60,11 @@ export class StudentSpeechByDateComponent implements OnInit {
         else this.toast.error(error.error, "Ошибка");
       }
     )
+  }
+
+  dragStudent(event) {
+    this.resultStudentList.push(event.dragData);
+    let indexOfDeletedElement = this.studentsOfSelectedGroup.indexOf(event.dragData);
+    this.studentsOfSelectedGroup.splice(indexOfDeletedElement, 1);
   }
 }

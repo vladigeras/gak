@@ -21,4 +21,8 @@ export class UserService {
   updateUser(userDto) {
     return this.http.post("/users/update", userDto);
   }
+
+  getUsersByRole(role) {
+    return this.http.get("/users/byRole" + "?role=" + role);
+  }
 }

@@ -1,19 +1,20 @@
-<div class="row">
-  <div class="pull-left">
-    <h4>Пользователи системы</h4>
+<div class="content">
+  <div class="row">
+    <div class="pull-left">
+      <h4>Пользователи системы</h4>
+    </div>
+    <div class="pull-right">
+      <button class="btn btn-default navbar-btn" data-toggle="modal" (click)="showEmptyModalForAdd()" type="submit">
+        Добавить пользователя
+      </button>
+    </div>
   </div>
-  <div class="pull-right">
-    <button class="btn btn-default navbar-btn" data-toggle="modal" (click)="showEmptyModalForAdd()" type="submit">
-      Добавить пользователя
-    </button>
-  </div>
+  <ngx-datatable
+    class="material" [rows]="users" [columns]="headers" [columnMode]="'force'"
+    [headerHeight]="40" [footerHeight]="40" [limit]="10"
+    [rowHeight]="'auto'" [selectionType]="'single'" (select)="selectUserToUpdate($event)">
+  </ngx-datatable>
+
+  <user-add-modal (userChangedOrAdded)="getUsers()" [user]="selectedUser" [selectedRoles]="roles"
+                  [isAddingNewUser]="isAddingNewUser"></user-add-modal>
 </div>
-<ngx-datatable
-  class="material" [rows]="users" [columns]="headers" [columnMode]="'force'"
-  [headerHeight]="40" [footerHeight]="40" [limit]="10"
-  [rowHeight]="'auto'" [selectionType]="'single'" (select)="selectUserToUpdate($event)">
-</ngx-datatable>
-
-<user-add-modal (userChangedOrAdded)="getUsers()" [user]="selectedUser" [selectedRoles]="roles"
-                [isAddingNewUser]="isAddingNewUser"></user-add-modal>
-

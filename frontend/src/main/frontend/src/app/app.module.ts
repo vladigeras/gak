@@ -27,6 +27,8 @@ import { PresidentPanelComponent } from './pages/president-panel/president-panel
 import {DndModule} from 'ng2-dnd';
 import { StudentSpeechByDateComponent } from './component/student-speech-by-date/student-speech-by-date.component';
 import {StudentService} from "./service/student.service";
+import { StudentAddModalComponent } from './component/modal/student-add-modal/student-add-modal.component';
+import { StudentsTableComponent } from './component/students-table/students-table.component';
 
 
 export class CustomToastOptions extends ToastOptions {
@@ -58,7 +60,9 @@ const routes: Routes =[
     MemberPanelComponent,
     SecretaryPanelComponent,
     PresidentPanelComponent,
-    StudentSpeechByDateComponent
+    StudentSpeechByDateComponent,
+    StudentAddModalComponent,
+    StudentsTableComponent
   ],
   imports: [
     BrowserModule,

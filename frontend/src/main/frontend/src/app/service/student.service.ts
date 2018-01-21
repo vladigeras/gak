@@ -14,4 +14,8 @@ export class StudentService {
     return this.http.get("/students/ofGroup" + "?group=" + group);
   }
 
+  addStudent(studentDto) {
+    return this.http.post("/students/add", studentDto);
+  }
+
 }
