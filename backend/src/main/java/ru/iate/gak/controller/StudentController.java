@@ -31,7 +31,7 @@ public class StudentController {
         return result;
     }
 
-    @PostMapping(value = "/add", consumes = "application/json")
+    @PostMapping(value = "/save", consumes = "application/json")
     @GakSecured(roles = {Roles.ADMIN})
     public void saveStudent(@RequestBody StudentDto studentDto) {
         if (StringUtil.isStringNullOrEmptyTrim(studentDto.firstname) || StringUtil.isStringNullOrEmptyTrim(studentDto.lastname)
@@ -46,6 +46,4 @@ public class StudentController {
 
         studentService.saveStudent(studentDto.toStudent());
     }
-
-
 }

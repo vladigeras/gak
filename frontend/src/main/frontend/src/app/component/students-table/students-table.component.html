@@ -19,7 +19,10 @@
 
   <ngx-datatable class="material" [rows]="students" [columns]="headers" [columnMode]="'force'"
                  [headerHeight]="40" [footerHeight]="40" [limit]="10"
-                 [rowHeight]="'auto'" [selectionType]="'single'"></ngx-datatable>
+                 [rowHeight]="'auto'" [selectionType]="'single'"
+                 (select)="selectStudentToUpdate($event)"></ngx-datatable>
 
-  <app-student-add-modal></app-student-add-modal>
+  <app-student-add-modal [isAddingNewStudent]="isAddingNewStudent" [student]="selectedStudent"
+                         [selectedGroup]="selectedGroup" [selectedMentor]="selectedMentor"
+                         [selectedReviewer]="selectedReviewer"></app-student-add-modal>
 </div>

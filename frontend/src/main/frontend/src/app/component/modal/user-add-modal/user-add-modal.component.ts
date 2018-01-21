@@ -79,9 +79,9 @@ export class UserAddModalComponent implements OnInit {
     let roles = [];
     this.selectedRoles.forEach(object => roles.push(object.original));
     this.user.roles = roles;
-    this.userService.updateUser(this.user, ).subscribe(
+    this.userService.updateUser(this.user).subscribe(
       data => {
-        this.toast.success("Пользователь был обновлен", "Успешно");
+        this.toast.success("Данные обновлены", "Успешно");
         this.userChangedOrAdded.emit(true);
         this.confirmPassword = null;
         $('#userAddModal').modal('hide');

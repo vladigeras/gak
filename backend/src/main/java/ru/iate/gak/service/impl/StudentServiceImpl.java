@@ -64,14 +64,24 @@ public class StudentServiceImpl implements StudentService {
         UserEntity reviewerEntity = userRepository.findOne(student.getReviewer().getId());
         if (reviewerEntity == null) throw new RuntimeException("Рецензент с id " + student.getReviewer().getId() + "  не найден");
 
-        StudentEntity studentEntity = new StudentEntity();
+        StudentEntity studentEntity = null;
+        DiplomEntity diplomEntity = null;
+        if (student.getId() != null) {
+            studentEntity = studentRepository.findOne(student.getId());
+            if (studentEntity != null && studentEntity.getDiplom() != null) {
+                diplomEntity = studentEntity.getDiplom();
+            } else throw new RuntimeException("Студент с id " + student.getId() + " не найден");
+        } else {
+            studentEntity = new StudentEntity();
+            diplomEntity = new DiplomEntity();
+        }
+
         studentEntity.setFirstname(student.getFirstname());
         studentEntity.setLastname(student.getLastname());
         studentEntity.setMiddlename(student.getMiddlename());
         studentEntity.setGroup(groupEntity);
         studentRepository.save(studentEntity);
 
-        DiplomEntity diplomEntity = new DiplomEntity();
         diplomEntity.setTitle(student.getTitle());
         diplomEntity.setMentor(mentorEntity);
         diplomEntity.setReviewer(reviewerEntity);

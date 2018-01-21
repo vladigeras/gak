@@ -26,6 +26,7 @@ public class StudentDto extends LongIdentifiableDto {
 
     public Student toStudent() {
         Student student = new Student();
+        student.setId(this.id);
         student.setFirstname(this.firstname);
         student.setMiddlename(this.middlename);
         student.setLastname(this.lastname);

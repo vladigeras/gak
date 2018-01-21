@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {ToastsManager} from "ng2-toastr";
 import {UserService} from "../../../service/user.service";
 import {StudentService} from "../../../service/student.service";
@@ -12,13 +12,14 @@ declare var $: any;
 })
 export class StudentAddModalComponent implements OnInit {
 
-  student = {firstname: null, middlename: null, lastname: null, title: null, group: null, mentor: null, reviewer: null};
+  @Input() student = {id: null, firstname: null, middlename: null, lastname: null, title: null, group: null, mentor: null, reviewer: null};
+  @Input() isAddingNewStudent = true;
   availableGroups = [];
-  selectedGroup = null;
+  @Input() selectedGroup = null;
   availableMentors = [];
-  selectedMentor = null;
+  @Input() selectedMentor = null;
   availableReviewers = [];
-  selectedReviewer = null;
+  @Input() selectedReviewer = null;
 
   groupSelectDropdownSettings = {
     singleSelection: true,
@@ -89,22 +90,22 @@ export class StudentAddModalComponent implements OnInit {
   }
 
   clearWindow() {
-    this.student = {firstname: null, middlename: null, lastname: null, title: null, group: null, mentor: null, reviewer: null};
-    this.selectedGroup = null;
-    this.selectedMentor = null;
-    this.selectedReviewer = null;
+    this.student = {id: null, firstname: null, middlename: null, lastname: null, title: null, group: null, mentor: null, reviewer: null};
+    this.selectedGroup = [];
+    this.selectedMentor = [];
+    this.selectedReviewer = [];
   }
 
-  add() {
+  save() {
     let group = {title: this.selectedGroup[0].itemName};
     let mentor = {id: this.selectedMentor[0].userId};
     let reviewer = {id: this.selectedReviewer[0].userId};
     this.student.group = group;
     this.student.mentor = mentor;
     this.student.reviewer = reviewer;
-    this.studentService.addStudent(this.student).subscribe(
+    this.studentService.saveStudent(this.student).subscribe(
       data => {
-        this.toast.success("Студент был добавлен", "Успешно");
+        this.toast.success("Успешно");
         $('#studentAddModal').modal('hide');
         this.clearWindow();
       },

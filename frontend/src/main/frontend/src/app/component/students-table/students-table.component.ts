@@ -10,9 +10,12 @@ declare var $: any;
   styleUrls: ['./students-table.component.scss']
 })
 export class StudentsTableComponent implements OnInit {
-
   availableGroups = [];
-  selectedGroup = null;
+  selectedGroup = [];
+  selectedMentor = [];
+  selectedReviewer = [];
+  selectedStudent = {id: null, firstname: null, middlename: null, lastname: null, title: null, group: null, mentor: null, reviewer: null};
+  isAddingNewStudent;
   headers = [
     {prop: "fio", name: "ФИО"},
     {prop: "title", name: "Тема работы"},
@@ -33,6 +36,7 @@ export class StudentsTableComponent implements OnInit {
   }
 
   showEmptyModalForAdd() {
+    this.isAddingNewStudent = true;
     $('#studentAddModal').modal('show');
   }
 
@@ -79,5 +83,28 @@ export class StudentsTableComponent implements OnInit {
 
   reloadTable() {
     this.students = [...this.students];
+  }
+
+  selectStudentToUpdate(event) {
+    let row = event.selected[0];
+    let fio = row.fio;
+    fio = fio.trim().split(" ");
+    this.selectedStudent.id = row.id;
+    this.selectedStudent.lastname = fio[0];
+    this.selectedStudent.firstname = fio[1];
+    this.selectedStudent.middlename = fio[2];
+    this.selectedStudent.title = row.title;
+    this.selectedMentor.push({
+      id: 1,
+      itemName: row.mentor,
+      userId: row.mentorId,
+    });
+    this.selectedReviewer.push({
+      id: 1,
+      itemName: row.reviewer,
+      userId: row.reviewerId
+    });
+    this.isAddingNewStudent = false;
+    $('#studentAddModal').modal('show');
   }
 }

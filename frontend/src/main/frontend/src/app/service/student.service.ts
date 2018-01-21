@@ -14,8 +14,7 @@ export class StudentService {
     return this.http.get("/students/ofGroup" + "?group=" + group);
   }
 
-  addStudent(studentDto) {
-    return this.http.post("/students/add", studentDto);
+  saveStudent(studentDto) {
+    return this.http.post("/students/save", studentDto);
   }
-
 }
