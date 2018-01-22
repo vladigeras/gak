@@ -89,6 +89,8 @@ export class StudentsTableComponent implements OnInit {
       this.studentService.getStudentsOfGroup(this.selectedGroup[0].itemName).subscribe(
         (data: any) => {
           data.forEach(student => {
+            let isHaveReport = (student.report != null);
+            let isHavePresentation = (student.presentation != null);
             this.students.push({
               id: student.id,
               fio: student.lastname + " " + student.firstname + " " + student.middlename,

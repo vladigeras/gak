@@ -9,6 +9,8 @@ import ru.iate.gak.security.Roles;
 import ru.iate.gak.service.StudentService;
 import ru.iate.gak.util.StringUtil;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +59,24 @@ public class StudentController {
         if (id > 0) {
             try {
                 studentService.saveFiles(id, reportFile, presentationFile);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else throw new RuntimeException("Некорректный id");
+    }
+
+    @GetMapping(value = "/readFile")
+    @GakSecured(roles = {Roles.ADMIN})
+    public void readFile (@RequestParam(name = "student", required = true) Long id,
+                          @RequestParam(name = "isReport", required = true) boolean isReport,
+                          HttpServletResponse response) {
+        if (id > 0) {
+            byte[] content = studentService.readFile(id, isReport);
+            String contentType = "application/pdf";
+            response.setContentType(contentType);
+            try (BufferedOutputStream fos = new BufferedOutputStream(response.getOutputStream())) {
+                fos.write(content);
+                fos.flush();
             } catch (IOException e) {
                 e.printStackTrace();
             }

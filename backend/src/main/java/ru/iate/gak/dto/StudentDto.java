@@ -27,6 +27,8 @@ public class StudentDto extends LongIdentifiableDto {
         this.group = student.getGroup() == null ? null : new GroupDto(student.getGroup());
         this.mentor = student.getMentor() == null ? null : new UserDto(student.getMentor());
         this.reviewer = student.getReviewer() == null ? null : new UserDto(student.getReviewer());
+        this.report = student.getReport() == null ? null : "".getBytes();
+        this.presentation = student.getPresentation() == null ? null : "".getBytes();
     }
 
     public Student toStudent() {

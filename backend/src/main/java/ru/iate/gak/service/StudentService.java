@@ -9,5 +9,6 @@ import java.util.List;
 public interface StudentService {
     List<Student> getStudentOfCurrentGroup(String group);
     Long saveStudent(Student student);
-    void saveFiles(Long id, MultipartFile reportFile, MultipartFile presentationFile) throws IOException;
+    void saveFiles(Long studentId, MultipartFile reportFile, MultipartFile presentationFile) throws IOException;
+    byte[] readFile(Long studentId, boolean isReport);
 }

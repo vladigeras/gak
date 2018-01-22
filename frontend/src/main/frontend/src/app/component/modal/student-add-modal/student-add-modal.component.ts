@@ -119,6 +119,8 @@ export class StudentAddModalComponent implements OnInit {
     this.selectedGroup = [];
     this.selectedMentor = [];
     this.selectedReviewer = [];
+    this.reportFile = null;
+    this.presentationFile = null;
   }
 
   save() {

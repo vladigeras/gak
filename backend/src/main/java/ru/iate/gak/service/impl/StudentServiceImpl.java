@@ -48,6 +48,8 @@ public class StudentServiceImpl implements StudentService {
             student.setTitle(s.getDiplom().getTitle());
             student.setMentor(new User(s.getDiplom().getMentor()));
             student.setReviewer(new User(s.getDiplom().getReviewer()));
+            student.setReport(s.getDiplom().getReport() == null ? null : "".getBytes());
+            student.setPresentation(s.getDiplom().getPresentation() == null ? null : "".getBytes());
             result.add(student);
         });
 
@@ -97,12 +99,30 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     @Transactional
-    public void saveFiles(Long id, MultipartFile reportFile, MultipartFile presentationFile) throws IOException{
-        StudentEntity studentEntity = studentRepository.findOne(id);
+    public void saveFiles(Long studentId, MultipartFile reportFile, MultipartFile presentationFile) throws IOException{
+        StudentEntity studentEntity = studentRepository.findOne(studentId);
         if (studentEntity == null) throw new RuntimeException("Произошла ошибка");
 
         studentEntity.getDiplom().setReport(reportFile.getBytes());
         studentEntity.getDiplom().setPresentation(presentationFile.getBytes());
         studentRepository.save(studentEntity);
+    }
+
+    @Override
+    @Transactional
+    public byte[] readFile(Long studentId, boolean isReport) {
+        StudentEntity studentEntity = studentRepository.findOne(studentId);
+        if (studentEntity == null) throw new RuntimeException("Произошла ошибка");
+
+        if (isReport) {
+            if (studentEntity.getDiplom().getReport() != null) {
+                return studentEntity.getDiplom().getReport();
+            } else throw new RuntimeException("У этого студента еще не загружен данный фаил");
+
+        } else {
+            if (studentEntity.getDiplom().getPresentation() != null) {
+                return studentEntity.getDiplom().getPresentation();
+            } else throw new RuntimeException("У этого студента еще не загружен данный фаил");
+        }
     }
 }
