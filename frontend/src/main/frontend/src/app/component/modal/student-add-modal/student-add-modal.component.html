@@ -48,6 +48,14 @@
             <angular2-multiselect [data]="availableReviewers" [(ngModel)]="selectedReviewer" name="reviewer"
                                   [settings]="reviewerSelectDropdownSettings"></angular2-multiselect>
           </div>
+          <div class="form-group">
+            <label>Отчет о проделанной работе (.pdf)</label>
+            <input id="reportFile" type="file" name="report" (change)="getReportFile($event)">
+          </div>
+          <div class="form-group">
+            <label>Презентация для выступления (.pdf)</label>
+            <input type="file" name="presentation" (change)="getPresentationFile($event)">
+          </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default pull-left" (click)="clearWindow()" data-dismiss="modal">
               Закрыть

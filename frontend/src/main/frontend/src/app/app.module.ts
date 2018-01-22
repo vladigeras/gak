@@ -16,20 +16,19 @@ import {FormsModule} from "@angular/forms";
 import {UsersTableComponent} from './component/users-table/users-table.component';
 import {NgxDatatableModule} from '@swimlane/ngx-datatable';
 import {AuthService} from "./security/auth.service";
-import { CookieService } from 'ngx-cookie-service';
-import { AdminPanelComponent } from './pages/admin-panel/admin-panel.component';
-import { MainPageComponent } from './pages/main-page/main-page.component';
+import {CookieService} from 'ngx-cookie-service';
+import {AdminPanelComponent} from './pages/admin-panel/admin-panel.component';
+import {MainPageComponent} from './pages/main-page/main-page.component';
 import {RouterModule, Routes} from "@angular/router";
-import { NotFoundPageComponent } from './pages/not-found-page/not-found-page.component';
-import { MemberPanelComponent } from './pages/member-panel/member-panel.component';
-import { SecretaryPanelComponent } from './pages/secretary-panel/secretary-panel.component';
-import { PresidentPanelComponent } from './pages/president-panel/president-panel.component';
+import {NotFoundPageComponent} from './pages/not-found-page/not-found-page.component';
+import {MemberPanelComponent} from './pages/member-panel/member-panel.component';
+import {SecretaryPanelComponent} from './pages/secretary-panel/secretary-panel.component';
+import {PresidentPanelComponent} from './pages/president-panel/president-panel.component';
 import {DndModule} from 'ng2-dnd';
-import { StudentSpeechByDateComponent } from './component/student-speech-by-date/student-speech-by-date.component';
+import {StudentSpeechByDateComponent} from './component/student-speech-by-date/student-speech-by-date.component';
 import {StudentService} from "./service/student.service";
-import { StudentAddModalComponent } from './component/modal/student-add-modal/student-add-modal.component';
-import { StudentsTableComponent } from './component/students-table/students-table.component';
-
+import {StudentAddModalComponent} from './component/modal/student-add-modal/student-add-modal.component';
+import {StudentsTableComponent} from './component/students-table/students-table.component';
 
 export class CustomToastOptions extends ToastOptions {
   showCloseButton = true;
@@ -37,13 +36,13 @@ export class CustomToastOptions extends ToastOptions {
   maxShown = 20;
 }
 
-const routes: Routes =[
-  { path: '', component: MainPageComponent},
-  { path: 'president', component: PresidentPanelComponent},
-  { path: 'member', component: MemberPanelComponent},
-  { path: 'secretary', component: SecretaryPanelComponent},
-  { path: 'admin', component: AdminPanelComponent},
-  { path: '**', component: NotFoundPageComponent }
+const routes: Routes = [
+  {path: '', component: MainPageComponent},
+  {path: 'president', component: PresidentPanelComponent},
+  {path: 'member', component: MemberPanelComponent},
+  {path: 'secretary', component: SecretaryPanelComponent},
+  {path: 'admin', component: AdminPanelComponent},
+  {path: '**', component: NotFoundPageComponent}
 ];
 
 @NgModule({

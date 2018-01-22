@@ -2,6 +2,7 @@ package ru.iate.gak.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import ru.iate.gak.domain.Group;
 import ru.iate.gak.domain.Student;
 import ru.iate.gak.domain.User;
@@ -16,6 +17,7 @@ import ru.iate.gak.repository.UserRepository;
 import ru.iate.gak.service.StudentService;
 
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,7 +56,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     @Transactional
-    public void saveStudent(Student student) {
+    public Long saveStudent(Student student) {
         GroupEntity groupEntity = groupRepository.findOne(student.getGroup().getTitle());
         if (groupEntity == null) throw new RuntimeException("Группа с названием " + student.getGroup().getTitle() + "  не найдена");
 
@@ -85,7 +87,22 @@ public class StudentServiceImpl implements StudentService {
         diplomEntity.setTitle(student.getTitle());
         diplomEntity.setMentor(mentorEntity);
         diplomEntity.setReviewer(reviewerEntity);
+        diplomEntity.setReport(student.getReport());
+        diplomEntity.setPresentation(student.getPresentation());
         diplomEntity.setStudent(studentEntity);
         diplomRepository.save(diplomEntity);
+
+        return studentEntity.getId();
+    }
+
+    @Override
+    @Transactional
+    public void saveFiles(Long id, MultipartFile reportFile, MultipartFile presentationFile) throws IOException{
+        StudentEntity studentEntity = studentRepository.findOne(id);
+        if (studentEntity == null) throw new RuntimeException("Произошла ошибка");
+
+        studentEntity.getDiplom().setReport(reportFile.getBytes());
+        studentEntity.getDiplom().setPresentation(presentationFile.getBytes());
+        studentRepository.save(studentEntity);
     }
 }

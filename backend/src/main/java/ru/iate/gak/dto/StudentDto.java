@@ -1,6 +1,9 @@
 package ru.iate.gak.dto;
 
+import org.springframework.web.multipart.MultipartFile;
 import ru.iate.gak.domain.Student;
+
+import java.io.IOException;
 
 public class StudentDto extends LongIdentifiableDto {
     public String firstname;
@@ -10,6 +13,8 @@ public class StudentDto extends LongIdentifiableDto {
     public GroupDto group;
     public UserDto mentor;
     public UserDto reviewer;
+    public byte[] report;
+    public byte[] presentation;
 
     public StudentDto() {}
 
@@ -34,6 +39,8 @@ public class StudentDto extends LongIdentifiableDto {
         student.setGroup(this.group.toGroup());
         student.setMentor(this.mentor.toUser());
         student.setReviewer(this.reviewer.toUser());
+        student.setReport(this.report);
+        student.setPresentation(this.presentation);
         return student;
     }
 }

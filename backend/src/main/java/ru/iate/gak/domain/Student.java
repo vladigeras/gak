@@ -10,6 +10,8 @@ public class Student extends LongIdentifiable {
     private Group group;
     private User mentor;
     private User reviewer;
+    private byte[] report;
+    private byte[] presentation;
 
     public Student() {}
 
@@ -74,5 +76,22 @@ public class Student extends LongIdentifiable {
 
     public void setGroup(Group group) {
         this.group = group;
+    }
+
+
+    public byte[] getReport() {
+        return report;
+    }
+
+    public void setReport(byte[] report) {
+        this.report = report;
+    }
+
+    public byte[] getPresentation() {
+        return presentation;
+    }
+
+    public void setPresentation(byte[] presentation) {
+        this.presentation = presentation;
     }
 }

@@ -18,6 +18,12 @@ public class DiplomEntity extends LongIdentifiableEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private UserEntity reviewer;
 
+    @Column(name = "report")
+    private byte[] report;
+
+    @Column(name = "presentation")
+    private byte[] presentation;
+
     public String getTitle() {
         return title;
     }
@@ -48,5 +54,21 @@ public class DiplomEntity extends LongIdentifiableEntity {
 
     public void setReviewer(UserEntity reviewer) {
         this.reviewer = reviewer;
+    }
+
+    public byte[] getReport() {
+        return report;
+    }
+
+    public void setReport(byte[] report) {
+        this.report = report;
+    }
+
+    public byte[] getPresentation() {
+        return presentation;
+    }
+
+    public void setPresentation(byte[] presentation) {
+        this.presentation = presentation;
     }
 }

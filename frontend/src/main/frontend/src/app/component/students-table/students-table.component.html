@@ -24,5 +24,6 @@
 
   <app-student-add-modal [isAddingNewStudent]="isAddingNewStudent" [student]="selectedStudent"
                          [selectedGroup]="selectedGroup" [selectedMentor]="selectedMentor"
-                         [selectedReviewer]="selectedReviewer"></app-student-add-modal>
+                         [selectedReviewer]="selectedReviewer"
+                         (studentSaved)="getStudentsOfGroup()"></app-student-add-modal>
 </div>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {ToastsManager} from "ng2-toastr";
 import {StudentService} from "../../service/student.service";
 
@@ -14,13 +14,26 @@ export class StudentsTableComponent implements OnInit {
   selectedGroup = [];
   selectedMentor = [];
   selectedReviewer = [];
-  selectedStudent = {id: null, firstname: null, middlename: null, lastname: null, title: null, group: null, mentor: null, reviewer: null};
+  selectedStudent = {
+    id: null,
+    firstname: null,
+    middlename: null,
+    lastname: null,
+    title: null,
+    group: null,
+    mentor: null,
+    reviewer: null,
+    presentation: null,
+    report: null
+  };
   isAddingNewStudent;
   headers = [
     {prop: "fio", name: "ФИО"},
     {prop: "title", name: "Тема работы"},
     {prop: "mentor", name: "Руководитель"},
-    {prop: "reviewer", name: "Рецензент"}
+    {prop: "reviewer", name: "Рецензент"},
+    {prop: "report", name: "Отчет (.pdf)"},
+    {prop: "presentation", name: "Презентация (.pdf)"}
   ];
   students = [];
   groupSelectDropdownSettings = {
@@ -29,13 +42,26 @@ export class StudentsTableComponent implements OnInit {
     text: "Выберите группу"
   };
 
-  constructor(private toast: ToastsManager, private studentService: StudentService) { }
+  constructor(private toast: ToastsManager, private studentService: StudentService) {
+  }
 
   ngOnInit() {
     this.getAvailableGroups();
   }
 
   showEmptyModalForAdd() {
+    this.selectedStudent = {
+      id: null,
+      firstname: null,
+      middlename: null,
+      lastname: null,
+      title: null,
+      group: null,
+      mentor: null,
+      reviewer: null,
+      presentation: null,
+      report: null
+    };
     this.isAddingNewStudent = true;
     $('#studentAddModal').modal('show');
   }
@@ -58,11 +84,12 @@ export class StudentsTableComponent implements OnInit {
   }
 
   getStudentsOfGroup() {
-    this.students = [];
-    this.studentService.getStudentsOfGroup(this.selectedGroup[0].itemName).subscribe(
-      (data: any) => {
-        data.forEach(student => {
-          this.students.push({
+    if (this.selectedGroup[0] != undefined) {
+      this.students = [];
+      this.studentService.getStudentsOfGroup(this.selectedGroup[0].itemName).subscribe(
+        (data: any) => {
+          data.forEach(student => {
+            this.students.push({
               id: student.id,
               fio: student.lastname + " " + student.firstname + " " + student.middlename,
               title: student.title,
@@ -71,14 +98,15 @@ export class StudentsTableComponent implements OnInit {
               reviewer: student.reviewer.lastname + " " + student.reviewer.firstname + " " + student.reviewer.middlename,
               reviewerId: student.reviewer.id
             });
-        });
-        this.reloadTable();
-      },
-      error => {
-        if (error.error.message != undefined) this.toast.error(error.error.message, "Ошибка");
-        else this.toast.error(error.error, "Ошибка");
-      }
-    )
+          });
+          this.reloadTable();
+        },
+        error => {
+          if (error.error.message != undefined) this.toast.error(error.error.message, "Ошибка");
+          else this.toast.error(error.error, "Ошибка");
+        }
+      )
+    }
   }
 
   reloadTable() {

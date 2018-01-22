@@ -17,4 +17,12 @@ export class StudentService {
   saveStudent(studentDto) {
     return this.http.post("/students/save", studentDto);
   }
+
+  saveFiles(studentId, reportFile, presentationFile) {
+    let params = new FormData();
+    params.append("student", studentId);
+    params.append("reportFile", reportFile);
+    params.append("presentationFile", presentationFile);
+    return this.http.post("/students/files", params)
+  }
 }
