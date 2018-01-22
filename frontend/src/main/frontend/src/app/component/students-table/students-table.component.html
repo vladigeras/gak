@@ -17,10 +17,29 @@
     </angular2-multiselect>
   </div>
 
-  <ngx-datatable class="material" [rows]="students" [columns]="headers" [columnMode]="'force'"
+  <ngx-datatable class="material" [rows]="students" [columnMode]="'force'"
                  [headerHeight]="40" [footerHeight]="40" [limit]="10"
                  [rowHeight]="'auto'" [selectionType]="'single'"
-                 (select)="selectStudentToUpdate($event)"></ngx-datatable>
+                 (select)="selectStudentToUpdate($event)">
+    <ngx-datatable-column prop="fio" name="ФИО"></ngx-datatable-column>
+    <ngx-datatable-column prop="title" name="Тема работы"></ngx-datatable-column>
+    <ngx-datatable-column prop="mentor" name="Руководитель"></ngx-datatable-column>
+    <ngx-datatable-column prop="reviewer" name="Рецензент"></ngx-datatable-column>
+    <ngx-datatable-column prop="report" name="Отчет (.pdf)">
+      <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+        <button *ngIf="value == true" type="button" class="btn btn-default" (click)="readFile(row, true)">
+          <i class="glyphicon glyphicon-play-circle" aria-hidden="true"></i> Посмотреть
+        </button>
+      </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column prop="presentation" name="Презентация (.pdf)">
+      <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+        <button *ngIf="value == true" type="button" class="btn btn-default" (click)="readFile(row, false)">
+          <i class="glyphicon glyphicon-play-circle" aria-hidden="true"></i> Посмотреть
+        </button>
+      </ng-template>
+    </ngx-datatable-column>
+  </ngx-datatable>
 
   <app-student-add-modal [isAddingNewStudent]="isAddingNewStudent" [student]="selectedStudent"
                          [selectedGroup]="selectedGroup" [selectedMentor]="selectedMentor"

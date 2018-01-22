@@ -20,9 +20,7 @@ export class StudentAddModalComponent implements OnInit {
     title: null,
     group: null,
     mentor: null,
-    reviewer: null,
-    presentation: null,
-    report: null
+    reviewer: null
   };
   presentationFile: File = null;
   reportFile: File = null;
@@ -112,9 +110,7 @@ export class StudentAddModalComponent implements OnInit {
       title: null,
       group: null,
       mentor: null,
-      reviewer: null,
-      presentation: null,
-      report: null
+      reviewer: null
     };
     this.selectedGroup = [];
     this.selectedMentor = [];

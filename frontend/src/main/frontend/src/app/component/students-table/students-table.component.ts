@@ -22,19 +22,9 @@ export class StudentsTableComponent implements OnInit {
     title: null,
     group: null,
     mentor: null,
-    reviewer: null,
-    presentation: null,
-    report: null
+    reviewer: null
   };
   isAddingNewStudent;
-  headers = [
-    {prop: "fio", name: "ФИО"},
-    {prop: "title", name: "Тема работы"},
-    {prop: "mentor", name: "Руководитель"},
-    {prop: "reviewer", name: "Рецензент"},
-    {prop: "report", name: "Отчет (.pdf)"},
-    {prop: "presentation", name: "Презентация (.pdf)"}
-  ];
   students = [];
   groupSelectDropdownSettings = {
     singleSelection: true,
@@ -58,9 +48,7 @@ export class StudentsTableComponent implements OnInit {
       title: null,
       group: null,
       mentor: null,
-      reviewer: null,
-      presentation: null,
-      report: null
+      reviewer: null
     };
     this.isAddingNewStudent = true;
     $('#studentAddModal').modal('show');
@@ -98,7 +86,9 @@ export class StudentsTableComponent implements OnInit {
               mentor: student.mentor.lastname + " " + student.mentor.firstname + " " + student.mentor.middlename,
               mentorId: student.mentor.id,
               reviewer: student.reviewer.lastname + " " + student.reviewer.firstname + " " + student.reviewer.middlename,
-              reviewerId: student.reviewer.id
+              reviewerId: student.reviewer.id,
+              report: isHaveReport,
+              presentation: isHavePresentation
             });
           });
           this.reloadTable();
@@ -136,5 +126,10 @@ export class StudentsTableComponent implements OnInit {
     });
     this.isAddingNewStudent = false;
     $('#studentAddModal').modal('show');
+  }
+
+  readFile (row, isReport: boolean) {
+    let studentId = row.id;
+    this.studentService.readFile(studentId, isReport);
   }
 }
