@@ -29,6 +29,8 @@ import {StudentSpeechByDateComponent} from './component/student-speech-by-date/s
 import {StudentService} from "./service/student.service";
 import {StudentAddModalComponent} from './component/modal/student-add-modal/student-add-modal.component';
 import {StudentsTableComponent} from './component/students-table/students-table.component';
+import {OWL_DATE_TIME_LOCALE, OwlDateTimeModule, OwlNativeDateTimeModule} from 'ng-pick-datetime';
+import {SpeakerService} from "./service/speaker.service";
 
 export class CustomToastOptions extends ToastOptions {
   showCloseButton = true;
@@ -73,14 +75,18 @@ const routes: Routes = [
     AngularMultiSelectModule,
     NgxDatatableModule,
     RouterModule.forRoot(routes),
-    DndModule.forRoot()
+    DndModule.forRoot(),
+    OwlDateTimeModule,
+    OwlNativeDateTimeModule
   ],
   providers: [
     {provide: ToastOptions, useClass: CustomToastOptions},
     UserService,
     AuthService,
     CookieService,
-    StudentService
+    StudentService,
+    SpeakerService,
+    {provide: OWL_DATE_TIME_LOCALE, useValue: 'ru'}
   ],
   bootstrap: [AppComponent]
 })

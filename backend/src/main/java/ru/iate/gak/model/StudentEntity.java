@@ -22,6 +22,9 @@ public class StudentEntity extends LongIdentifiableEntity {
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "student")
     private DiplomEntity diplom;
 
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "student")
+    private SpeakerEntity speaker;
+
     public String getFirstname() {
         return firstname;
     }
@@ -60,5 +63,13 @@ public class StudentEntity extends LongIdentifiableEntity {
 
     public void setDiplom(DiplomEntity diplom) {
         this.diplom = diplom;
+    }
+
+    public SpeakerEntity getSpeaker() {
+        return speaker;
+    }
+
+    public void setSpeaker(SpeakerEntity speaker) {
+        this.speaker = speaker;
     }
 }

@@ -10,6 +10,7 @@ public class DiplomEntity extends LongIdentifiableEntity {
     private String title;
 
     @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "student_id", referencedColumnName = "id")
     private StudentEntity student;
 
     @ManyToOne(fetch = FetchType.LAZY)

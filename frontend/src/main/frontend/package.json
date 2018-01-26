@@ -32,7 +32,9 @@
     "angular2-multiselect-dropdown": "^2.3.0",
     "@swimlane/ngx-datatable": "^11.1.7",
     "ngx-cookie-service": "^1.0.10",
-    "ng2-dnd": "^5.0.2"
+    "ng2-dnd": "^5.0.2",
+    "ng-pick-datetime": "^5.1.1",
+    "moment": "^2.20.1"
   },
   "devDependencies": {
     "@angular/cli": "1.2.5",

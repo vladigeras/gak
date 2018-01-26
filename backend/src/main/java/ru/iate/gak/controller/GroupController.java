@@ -9,8 +9,8 @@ import ru.iate.gak.security.GakSecured;
 import ru.iate.gak.security.Roles;
 import ru.iate.gak.service.GroupService;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/groups")
@@ -22,9 +22,8 @@ public class GroupController {
     @GetMapping(value = "/get")
     @GakSecured(roles = {Roles.ADMIN})
     public List<GroupDto> getGroups() {
-        List<GroupDto> result = new ArrayList<>();
-        groupService.getGroups().forEach(g -> result.add(new GroupDto(g)));
-        return result;
+        return groupService.getGroups().stream().map(GroupDto::new).collect(Collectors.toList());
+
     }
 
 }

@@ -14,6 +14,7 @@ import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/students")
@@ -25,14 +26,8 @@ public class StudentController {
     @GetMapping(value = "/ofGroup")
     @GakSecured(roles = {Roles.ADMIN})
     public List<StudentDto> getStudentsOfGroup(@RequestParam(value = "group") String group) {
-
         if (StringUtil.isStringNullOrEmptyTrim(group)) throw new RuntimeException("Неверное значение для группы");
-
-        List<StudentDto> result = new ArrayList<>();
-        studentService.getStudentOfCurrentGroup(group).forEach(s -> {
-            result.add(new StudentDto(s));
-        });
-        return result;
+        return studentService.getStudentOfCurrentGroup(group).stream().map(StudentDto::new).collect(Collectors.toList());
     }
 
     @PostMapping(value = "/save", consumes = "application/json")

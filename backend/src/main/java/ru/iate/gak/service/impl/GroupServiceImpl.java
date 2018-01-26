@@ -9,6 +9,7 @@ import ru.iate.gak.service.GroupService;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class GroupServiceImpl implements GroupService {
@@ -19,8 +20,6 @@ public class GroupServiceImpl implements GroupService {
     @Override
     @Transactional
     public List<Group> getGroups() {
-        List<Group> result = new ArrayList<>();
-        groupRepository.getAllOrderByTitleAsc().forEach(g -> result.add(new Group(g)));
-        return result;
+        return groupRepository.getAllOrderByTitleAsc().stream().map(Group::new).collect(Collectors.toList());
     }
 }

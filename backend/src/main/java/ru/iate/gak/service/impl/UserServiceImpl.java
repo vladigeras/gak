@@ -5,6 +5,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.iate.gak.domain.Role;
 import ru.iate.gak.domain.User;
+import ru.iate.gak.model.RoleEntity;
 import ru.iate.gak.model.UserEntity;
 import ru.iate.gak.repository.RoleRepository;
 import ru.iate.gak.repository.UserRepository;
@@ -12,10 +13,10 @@ import ru.iate.gak.service.UserService;
 import ru.iate.gak.util.StringUtil;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -32,23 +33,15 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public List<User> getAllUsers() {
-        List<User> result = new ArrayList<>();
-        userRepository.findAll().forEach(u -> {
-            result.add(new User(u));
-        });
-        return result;
+        return userRepository.findAll().stream().map(User::new).collect(Collectors.toList());
     }
 
     @Override
     @Transactional
     public List<User> getAllUsersByRole(Role role) {
-        List<User> result = new ArrayList<>();
         Set<Role> roles = new HashSet<>();
         roles.add(role);
-        userRepository.findAllByRoles(roles).forEach(u -> {
-            result.add(new User(u));
-        });
-        return result;
+        return userRepository.findAllByRoles(roles).stream().map(User::new).collect(Collectors.toList());
     }
 
     @Override
@@ -86,10 +79,6 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public List<Role> getAllRoles() {
-        List<Role> result = new ArrayList<>();
-        roleRepository.findAll().forEach(r -> {
-            result.add(r.getRole());
-        });
-        return result;
+        return roleRepository.findAll().stream().map(RoleEntity::getRole).collect(Collectors.toList());
     }
 }

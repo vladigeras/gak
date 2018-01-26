@@ -3,20 +3,42 @@
     <div class="pull-left">
       <h4>Расписание и порядок защиты студентов</h4>
     </div>
-    <div class="pull-right">
-      <button class="btn btn-default navbar-btn">Сохранить</button>
+    <div class="pull-right" *ngIf="selectedGroup[0] != null">
+      <button class="btn btn-default navbar-btn" (click)="save()">Сохранить</button>
     </div>
   </div>
 
   <div class="form-group">
     <angular2-multiselect [data]="availableGroups" [(ngModel)]="selectedGroup"
                           [settings]="groupSelectDropdownSettings"
-                          (onSelect)="getStudentsOfGroup()">
+                          (onSelect)="getStudentsOfGroup();">
     </angular2-multiselect>
   </div>
 
-  <div class="row">
-    <div class="col-sm-4 col-md-5 left-block">
+  <div class="row datepicker-block" *ngIf="selectedGroup[0] != null">
+    <div class="datepickers">
+      <label>
+        Дата выступления:
+        <input [owlDateTimeTrigger]="mainDatepicker" [owlDateTime]="mainDatepicker" class="form-control"
+               name="mainDate" [(ngModel)]="mainDate">
+      </label>
+      <owl-date-time [pickerType]="'calendar'" #mainDatepicker></owl-date-time>
+      <i class="glyphicon glyphicon-calendar datepicker-icon"></i>
+    </div>
+
+    <div class="datepickers right-datepicker" *ngIf="mainDate != null">
+      <label>
+        Дополнительная дата:
+        <input [owlDateTimeTrigger]="subDatepicker" [owlDateTime]="subDatepicker" class="form-control" name="subDate"
+               [(ngModel)]="subDate">
+      </label>
+      <owl-date-time [pickerType]="'calendar'" #subDatepicker></owl-date-time>
+      <i class="glyphicon glyphicon-calendar datepicker-icon"></i>
+    </div>
+  </div>
+
+  <div class="row" *ngIf="selectedGroup[0] != null">
+    <div class="col-sm-4 col-md-4 left-table">
       <div class="panel panel-success">
         <div class="panel-heading">Студенты</div>
         <div class="panel-body">
@@ -30,13 +52,27 @@
         </div>
       </div>
     </div>
-    <div class="col-sm-8 col-md-7 right-block">
-      <div dnd-droppable class="panel panel-info" (onDropSuccess)="dragStudent($event)">
-        <div class="panel-heading">Расписание</div>
+    <div class="col-sm-4 col-md-4 middle-table" *ngIf="mainDate != null">
+      <div dnd-droppable class="panel panel-info" (onDropSuccess)="dragStudent($event, true)">
+        <div class="panel-heading">Расписание на <strong>{{mainDate | date: "dd.MM.yyyy"}}</strong></div>
         <div class="panel-body">
-          <div *ngFor="let student of resultStudentList" class="panel panel-default">
+          <div *ngFor="let student of resultStudentMainList" class="panel panel-default">
             <div class="panel-body">
-              <div>{{student.name}}</div>
+              <div>{{student.name}} <i class="glyphicon glyphicon-remove pull-right"
+                                       (click)="deleteFromTable(student, true)"></i></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-4 col-md-4 right-table" *ngIf="mainDate != null && subDate != null">
+      <div dnd-droppable class="panel panel-info" (onDropSuccess)="dragStudent($event, false)">
+        <div class="panel-heading">Расписание на <strong>{{subDate | date: "dd.MM.yyyy"}}</strong></div>
+        <div class="panel-body">
+          <div *ngFor="let student of resultStudentSubList" class="panel panel-default">
+            <div class="panel-body">
+              <div>{{student.name}} <i class="glyphicon glyphicon-remove pull-right"
+                                       (click)="deleteFromTable(student, false)"></i></div>
             </div>
           </div>
         </div>

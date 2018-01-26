@@ -6,11 +6,31 @@
   margin: 0 0 0 0;
 }
 
-.right-block {
+.left-table {
+  padding-left: 0;
+}
+
+.middle-table {
+  padding-left: 0;
+}
+
+.right-table {
   padding-right: 0;
   padding-left: 0;
 }
 
-.left-block {
-  padding-left: 0;
+.datepickers {
+  display: inline-block;
+}
+
+.datepicker-block {
+  margin-bottom: 12px;
+}
+
+.right-datepicker {
+  margin-left: 40px;
+}
+
+.datepicker-icon {
+  margin-left: 5px;
 }

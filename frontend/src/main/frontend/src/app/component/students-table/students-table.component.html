@@ -17,7 +17,7 @@
     </angular2-multiselect>
   </div>
 
-  <ngx-datatable class="material" [rows]="students" [columnMode]="'force'"
+  <ngx-datatable *ngIf="selectedGroup[0] != null" class="material" [rows]="students" [columnMode]="'force'"
                  [headerHeight]="40" [footerHeight]="40" [limit]="10"
                  [rowHeight]="'auto'" [selectionType]="'single'"
                  (select)="selectStudentToUpdate($event)">
