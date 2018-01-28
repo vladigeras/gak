@@ -11,7 +11,7 @@
   <div class="form-group">
     <angular2-multiselect [data]="availableGroups" [(ngModel)]="selectedGroup"
                           [settings]="groupSelectDropdownSettings"
-                          (onSelect)="getStudentsOfGroup();">
+                          (onSelect)="fillSpeakersList();">
     </angular2-multiselect>
   </div>
 

@@ -13,7 +13,7 @@ import java.util.List;
 @Repository
 public interface SpeakerRepository extends JpaRepository<SpeakerEntity, Long> {
 
-    @Query(value = "SELECT s FROM SpeakerEntity s WHERE s.student.group = :group")
+    @Query(value = "SELECT s FROM SpeakerEntity s WHERE s.student.group = :group ORDER BY s.date ASC, s.orderOfSpeaking ASC")
     List<SpeakerEntity> getSpeakersListOfCurrentGroup(@Param("group") GroupEntity group);
 
     void deleteByStudent(StudentEntity student);

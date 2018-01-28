@@ -12,7 +12,7 @@ export class SpeakerService {
   }
 
   getSpeakersListOfGroup(group) {
-    return this.http.get("/speakers/ofGroup" + "?group= " + group);
+    return this.http.get("/speakers/ofGroup" + "?group=" + group);
   }
 }
 

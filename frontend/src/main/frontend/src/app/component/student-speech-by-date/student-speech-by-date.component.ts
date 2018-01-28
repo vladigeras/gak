@@ -26,7 +26,8 @@ export class StudentSpeechByDateComponent implements OnInit {
   mainDate = null;
   subDate = null;
 
-  constructor(private toast: ToastsManager, private studentService: StudentService, private speakerService: SpeakerService) {}
+  constructor(private toast: ToastsManager, private studentService: StudentService, private speakerService: SpeakerService) {
+  }
 
   ngOnInit() {
     this.getAvailableGroups();
@@ -49,41 +50,76 @@ export class StudentSpeechByDateComponent implements OnInit {
     )
   }
 
-  getStudentsOfGroup() {
-    if (this.selectedGroup[0] != null) {
+  /**
+   * Method for getting speakers list of group.
+   * 1. Get all student of group.
+   * 2. Get speakers of this group by date
+   * 3. Delete from result of step 1 elements, which was get by step 2.
+   */
+  fillSpeakersList() {
+    let group = this.selectedGroup[0].itemName;
+    if (group != null) {
       this.studentsOfSelectedGroup = [];
-      this.studentService.getStudentsOfGroup(this.selectedGroup[0].itemName).subscribe(
-        (data: any) => {
-          data.forEach(student => {
-            this.studentsOfSelectedGroup.push(
-              {
-                id: student.id,
-                name: student.lastname + " " + student.firstname + " " + student.middlename
-              }
-            )
-          })
-        },
-        error => {
-          if (error.error.message != undefined) this.toast.error(error.error.message, "Ошибка");
-          else this.toast.error(error.error, "Ошибка");
-        }
-      )
+      this.resultStudentMainList = [];
+      this.resultStudentSubList = [];
+      this.mainDate = null;
+      this.subDate = null;
+      this.getStudentsOfGroup(group, () => this.getSpeakersListOfGroup(group));
     }
   }
 
-  getSpeakersListOfGroup() {
-    if (this.selectedGroup[0] != null) {
-      this.speakerService.getSpeakersListOfGroup(this.selectedGroup[0].itemName).subscribe(
-        (data: any) => {
-          data.forEach(speaker => {
-          })
-        },
-        error => {
-          if (error.error.message != undefined) this.toast.error(error.error.message, "Ошибка");
-          else this.toast.error(error.error, "Ошибка");
-        }
-      )
-    }
+  getStudentsOfGroup(group, callback) {
+    this.studentService.getStudentsOfGroup(this.selectedGroup[0].itemName).subscribe(
+      (data: any) => {
+        data.forEach(student => {
+          let studentObj = {
+            id: student.id,
+            name: student.lastname + " " + student.firstname + " " + student.middlename
+          };
+          this.studentsOfSelectedGroup.push(studentObj)
+        });
+        if (typeof callback === "function") callback();
+      },
+      error => {
+        if (error.error.message != undefined) this.toast.error(error.error.message, "Ошибка");
+        else this.toast.error(error.error, "Ошибка");
+      }
+    )
+  }
+
+  getSpeakersListOfGroup(group) {
+    this.speakerService.getSpeakersListOfGroup(group).subscribe(
+      (data: any) => {
+        let dateList = [];
+        data.forEach(speaker => {
+          if (!dateList.includes(speaker.date)) dateList.push(speaker.date);
+        });
+        data.forEach(speaker => {
+          let speakerObj = {
+            id: speaker.student.id,
+            name: speaker.student.lastname + " " + speaker.student.firstname + " " + speaker.student.middlename
+          };
+          switch (speaker.date) {
+            case dateList[0]: {
+              this.resultStudentMainList.push(speakerObj);
+              break;
+            }
+            case dateList[1]: {
+              this.resultStudentSubList.push(speakerObj);
+              break;
+            }
+          }
+          let indexOfDeletedElement = this.studentsOfSelectedGroup.findIndex(i => i.id == speakerObj.id);
+          this.studentsOfSelectedGroup.splice(indexOfDeletedElement, 1);
+
+        });
+        if (dateList[0] != null) this.mainDate = dateList[0];
+        if (dateList[1] != null) this.subDate = dateList[1];
+      },
+      error => {
+        if (error.error.message != undefined) this.toast.error(error.error.message, "Ошибка");
+        else this.toast.error(error.error, "Ошибка");
+      })
   }
 
   dragStudent(event, isToMainTable) {
@@ -135,7 +171,10 @@ export class StudentSpeechByDateComponent implements OnInit {
         })
       });
       this.speakerService.saveSpeakersList(speakersDto).subscribe(
-        data => { this.toast.success("Данные были сохранены", "Успешно")},
+        data => {
+          this.toast.success("Данные были сохранены", "Успешно");
+          this.fillSpeakersList();
+        },
         error => {
           if (error.error.message != undefined) this.toast.error(error.error.message, "Ошибка");
           else this.toast.error(error.error, "Ошибка");
