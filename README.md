@@ -13,6 +13,8 @@ If you need run project with HOT LOAD classes automatically, then run
   $ cd backend
   $ mvn spring-boot:run
   ```
+### Note: after upgrading to java 9 spring-boot devtools, which provide a auto update Java code, not working. I hope, next upgrades Spring-Boot repair it !!! 
+  
 # Run as Production
 #### 1. From root module:
   ```
