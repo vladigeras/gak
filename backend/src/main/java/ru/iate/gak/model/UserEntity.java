@@ -4,6 +4,7 @@ import ru.iate.gak.domain.Role;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -40,6 +41,18 @@ public class UserEntity extends LongIdentifiableEntity {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "reviewer")
     private Set<DiplomEntity> diplomsWhereUserIsReviewer;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "consultant")
+    private Set<DiplomEntity> diplomsWhereUserIsConsultant;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "ruleController")
+    private Set<DiplomEntity> diplomsWhereUserIsRuleController;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    private Set<CommissionEntity> commissionsWhereUserInclude;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    private List<CriteriaEntity> criteriaCreatedByUser;
 
     public String getLogin() {
         return login;
@@ -89,19 +102,4 @@ public class UserEntity extends LongIdentifiableEntity {
         this.roles = roles;
     }
 
-    public Set<DiplomEntity> getDiplomsWhereUserIsMentor() {
-        return diplomsWhereUserIsMentor;
-    }
-
-    public void setDiplomsWhereUserIsMentor(Set<DiplomEntity> diplomsWhereUserIsMentor) {
-        this.diplomsWhereUserIsMentor = diplomsWhereUserIsMentor;
-    }
-
-    public Set<DiplomEntity> getDiplomsWhereUserIsReviewer() {
-        return diplomsWhereUserIsReviewer;
-    }
-
-    public void setDiplomsWhereUserIsReviewer(Set<DiplomEntity> diplomsWhereUserIsReviewer) {
-        this.diplomsWhereUserIsReviewer = diplomsWhereUserIsReviewer;
-    }
 }

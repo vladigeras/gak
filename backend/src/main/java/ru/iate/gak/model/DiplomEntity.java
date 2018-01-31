@@ -1,6 +1,9 @@
 package ru.iate.gak.model;
 
+import ru.iate.gak.domain.Status;
+
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "diplom")
@@ -19,11 +22,36 @@ public class DiplomEntity extends LongIdentifiableEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private UserEntity reviewer;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private UserEntity consultant;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private UserEntity ruleController;
+
+    @Column(name = "result_mark")
+    private Integer resultMark;
+
+    @Enumerated(value = EnumType.STRING)
+    @Column(name = "status")
+    private Status status;
+
+    @Column(name = "execution_place")
+    private String executionPlace;
+
     @Column(name = "report")
     private byte[] report;
 
     @Column(name = "presentation")
     private byte[] presentation;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "diplom")
+    private Set<TimestampEntity> timestamps;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "diplom")
+    private Set<QuestionEntity> questions;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "diplom")
+    private Set<CriteriaEntity> criteria;
 
     public String getTitle() {
         return title;
@@ -71,5 +99,45 @@ public class DiplomEntity extends LongIdentifiableEntity {
 
     public void setPresentation(byte[] presentation) {
         this.presentation = presentation;
+    }
+
+    public UserEntity getRuleController() {
+        return ruleController;
+    }
+
+    public void setRuleController(UserEntity ruleController) {
+        this.ruleController = ruleController;
+    }
+
+    public Integer getResultMark() {
+        return resultMark;
+    }
+
+    public void setResultMark(Integer resultMark) {
+        this.resultMark = resultMark;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public UserEntity getConsultant() {
+        return consultant;
+    }
+
+    public void setConsultant(UserEntity consultant) {
+        this.consultant = consultant;
+    }
+
+    public String getExecutionPlace() {
+        return executionPlace;
+    }
+
+    public void setExecutionPlace(String executionPlace) {
+        this.executionPlace = executionPlace;
     }
 }
