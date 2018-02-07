@@ -1,0 +1,40 @@
+<div class="content">
+  <div class="row">
+    <div class="pull-left">
+      <h4>Состав комиссии</h4>
+    </div>
+  </div>
+  <ngx-datatable
+    class="material" [rows]="commissions" [columnMode]="'force'"
+    [headerHeight]="40" [footerHeight]="40" [limit]="15"
+    [rowHeight]="'auto'" [selectionType]="'single'">
+    <ngx-datatable-column prop="firstname" name="Имя"></ngx-datatable-column>
+    <ngx-datatable-column prop="lastname" name="Фамилия"></ngx-datatable-column>
+    <ngx-datatable-column prop="middlename" name="Отчество"></ngx-datatable-column>
+    <ngx-datatable-column prop="roles" name="Роль"></ngx-datatable-column>
+    <ngx-datatable-column prop="transferRole" name="">
+      <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+          <i class="glyphicon glyphicon-circle-arrow-up transfer-role-button text-info" aria-hidden="true" (click)="showTransferRoleModal(row)"></i>
+      </ng-template>
+    </ngx-datatable-column>
+  </ngx-datatable>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="transferRoleConfirmModal" aria-hidden="true" id="transferRoleConfirmModal">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+        <h4 class="modal-title" id="myModalLabel">Подтверждение</h4>
+      </div>
+      <div class="modal-body">
+        <h5>Сделать выбранного члена комиссии временно исполняющим обязанности председателя комиссии?</h5>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="transferRole()">Согласиться</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Отказаться</button>
+      </div>
+    </div>
+  </div>
+</div>
+
