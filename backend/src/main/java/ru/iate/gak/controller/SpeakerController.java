@@ -8,6 +8,9 @@ import ru.iate.gak.security.Roles;
 import ru.iate.gak.service.SpeakerService;
 import ru.iate.gak.util.StringUtil;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,10 +27,12 @@ public class SpeakerController {
         speakerService.fillList(speakers.stream().map(SpeakerDto::toSpeaker).collect(Collectors.toList()));
     }
 
-    @GetMapping(value = "/ofGroup")
-    @GakSecured(roles = {Roles.ADMIN} )
-    public List<SpeakerDto> getSpeakerListOfGroup(@RequestParam(value = "group") String group) {
+    @GetMapping(value = "/ofGroupOfDay")
+    public List<SpeakerDto> getSpeakerListOfGroupToday(@RequestParam(value = "group") String group,
+                                                       @RequestParam(value = "date", required = false) Long date) {
         if (StringUtil.isStringNullOrEmptyTrim(group)) throw new RuntimeException("Неверное значение для группы");
-        return speakerService.getSpeakerListOfCurrentGroup(group).stream().map(SpeakerDto::new).collect(Collectors.toList());
+        LocalDateTime localDateTime = (date == null) ? null : LocalDateTime.ofInstant(Instant.ofEpochMilli(date), ZoneOffset.UTC);
+
+        return speakerService.getSpeakerListOfCurrentGroupOfDay(group, localDateTime).stream().map(SpeakerDto::new).collect(Collectors.toList());
     }
 }

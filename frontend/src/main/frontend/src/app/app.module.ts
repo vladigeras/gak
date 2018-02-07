@@ -33,6 +33,7 @@ import {OWL_DATE_TIME_LOCALE, OwlDateTimeModule, OwlNativeDateTimeModule} from '
 import {SpeakerService} from "./service/speaker.service";
 import {CommissionsTableComponent} from './component/commissions-table/commissions-table.component';
 import {CommissionService} from "./service/commission.service";
+import { SpeakersStudentTableComponent } from './component/speakers-student-table/speakers-student-table.component';
 
 export class CustomToastOptions extends ToastOptions {
   showCloseButton = true;
@@ -66,7 +67,8 @@ const routes: Routes = [
     StudentSpeechByDateComponent,
     StudentAddModalComponent,
     StudentsTableComponent,
-    CommissionsTableComponent
+    CommissionsTableComponent,
+    SpeakersStudentTableComponent
   ],
   imports: [
     BrowserModule,

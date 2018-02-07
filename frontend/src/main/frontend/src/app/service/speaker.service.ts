@@ -11,8 +11,13 @@ export class SpeakerService {
     return this.http.post("/speakers/save", speakersList);
   }
 
-  getSpeakersListOfGroup(group) {
-    return this.http.get("/speakers/ofGroup" + "?group=" + group);
+  getSpeakersListOfGroupOfDay(group, date) {
+    if (date == null) {
+      return this.http.get("/speakers/ofGroupOfDay" + "?group=" + group);
+    } else {
+      return this.http.get("/speakers/ofGroupOfDay" + "?group=" + group + "&date=" + date);
+    }
   }
 }
+
 

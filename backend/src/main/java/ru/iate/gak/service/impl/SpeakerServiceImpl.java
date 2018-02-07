@@ -12,6 +12,7 @@ import ru.iate.gak.repository.StudentRepository;
 import ru.iate.gak.service.SpeakerService;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -61,10 +62,15 @@ public class SpeakerServiceImpl implements SpeakerService {
 
     @Override
     @Transactional
-    public List<Speaker> getSpeakerListOfCurrentGroup(String group) {
+    public List<Speaker> getSpeakerListOfCurrentGroupOfDay(String group, LocalDateTime date) {
         GroupEntity groupEntity = groupRepository.findOne(group);
         if (groupEntity == null) throw new RuntimeException("Группа с названием " + group + "  не найдена");
 
-        return speakerRepository.getSpeakersListOfCurrentGroup(groupEntity).stream().map(Speaker::new).collect(Collectors.toList());
+        if (date == null) {
+            return speakerRepository.getSpeakersListOfCurrentGroup(groupEntity).stream().map(Speaker::new).collect(Collectors.toList());
+        } else {
+            return speakerRepository.getSpeakersListOfCurrentGroupOfDay(groupEntity, date).stream().map(Speaker::new).collect(Collectors.toList());
+        }
     }
+
 }
