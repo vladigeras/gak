@@ -21,10 +21,8 @@ public class SecurityServiceImpl implements SecurityService{
     public Authentication auth(String login, String password) {
         try {
 
-            //Достаем юзера
             UserDetails userDetails = userDetailsService.loadUserByUsername(login);
 
-            //Проверяем пароль
             String passwordHash = userDetails.getPassword();
 
             if (password == null
@@ -32,7 +30,6 @@ public class SecurityServiceImpl implements SecurityService{
                 return null;
             }
 
-            //Возвращаем объект аутентификации
             return new CustomAuthentication(userDetails);
 
         } catch (UsernameNotFoundException e) {

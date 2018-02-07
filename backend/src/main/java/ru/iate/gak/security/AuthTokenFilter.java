@@ -44,7 +44,7 @@ public class AuthTokenFilter implements Filter {
 
         if (token != null && !token.trim().isEmpty()) {
             try {
-                //Попытка создания объекта аутентификации
+                //Try to create auth object
                 String login = authTokenService.parseStringFromToken(token);
                 UserDetails userDetails = userDetailsService.loadUserByUsername(login);
                 Authentication authentication = new CustomAuthentication(userDetails);
@@ -52,13 +52,13 @@ public class AuthTokenFilter implements Filter {
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
 
-                //Кладем объект пользователя в собственный контекст безопасности
+                //Set auth object to self security context
                 fillSecurityContext(userDetails);
             } catch (Exception e) {
                 if (e instanceof UsernameNotFoundException
                         || e instanceof SignatureException
                         || e instanceof MalformedJwtException) {
-                    //Сбрасываем куки
+                    //reset cookie
                     resetAuthToken(servletResponse);
                 } else {
                     throw e;
@@ -70,10 +70,10 @@ public class AuthTokenFilter implements Filter {
     }
 
     private String extractTokenFromRequest(HttpServletRequest request) {
-        //Ищем в куках токен аутентификации
+        //Find in cookie auth token
         String token = extractTokenFromCookies(request.getCookies());
 
-        //Если не нашли токен в куках, то ищем в заголовках
+        //Find in headers
         if (token == null) {
             token = request.getHeader(SecurityConstants.X_AUTH_TOKEN);
         }

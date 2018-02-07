@@ -37,13 +37,13 @@ public class SecurityController {
         UserDetails userDetails = (UserDetails)auth.getDetails();
         String authToken = authTokenService.generateTokenFromString(userDetails.getUsername());
 
-        //Заполняем куки
+        //fill cookie
         Cookie cookie = new Cookie(SecurityConstants.X_AUTH_TOKEN, authToken);
         cookie.setPath("/");
-        cookie.setMaxAge(10 * 24 * 60 * 60); //10 дней
+        cookie.setMaxAge(SecurityConstants.EXPIRATION_TIME);
         response.addCookie(cookie);
 
-        //Заполняем результат
+        //fill result
         AuthTokenDto authTokenDto = new AuthTokenDto();
         authTokenDto.token = authToken;
         return authTokenDto;

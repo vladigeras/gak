@@ -30,7 +30,6 @@ public class GakSecuredAspect {
 
         GakSecured secured = method.getAnnotation(GakSecured.class);
 
-        //Проверяемая роль
         Set<String> roles = Arrays.stream(secured.roles())
                 .collect(Collectors.toSet());
 
