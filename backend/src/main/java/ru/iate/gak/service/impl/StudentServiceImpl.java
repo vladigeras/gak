@@ -3,7 +3,6 @@ package ru.iate.gak.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import ru.iate.gak.domain.Group;
 import ru.iate.gak.domain.Student;
 import ru.iate.gak.domain.User;
 import ru.iate.gak.model.DiplomEntity;
@@ -103,8 +102,8 @@ public class StudentServiceImpl implements StudentService {
         StudentEntity studentEntity = studentRepository.findOne(studentId);
         if (studentEntity == null) throw new RuntimeException("Произошла ошибка");
 
-        studentEntity.getDiplom().setReport(reportFile.getBytes());
-        studentEntity.getDiplom().setPresentation(presentationFile.getBytes());
+        studentEntity.getDiplom().setReport(reportFile == null ? null : reportFile.getBytes());
+        studentEntity.getDiplom().setPresentation(presentationFile == null ? null : presentationFile.getBytes());
         studentRepository.save(studentEntity);
     }
 
