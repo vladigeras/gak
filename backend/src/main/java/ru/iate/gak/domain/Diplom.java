@@ -21,11 +21,11 @@ public class Diplom extends LongIdentifiable {
     public Diplom(DiplomEntity diplomEntity) {
         super(diplomEntity.getId());
         this.title = diplomEntity.getTitle();
-        this.student = new Student(diplomEntity.getStudent());
-        this.mentor = new User(diplomEntity.getMentor());
-        this.reviewer = new User(diplomEntity.getReviewer());
-        this.consultant = new User(diplomEntity.getConsultant());
-        this.ruleController = new User(diplomEntity.getRuleController());
+        this.student = (diplomEntity.getStudent() == null) ? null : new Student(diplomEntity.getStudent());
+        this.mentor = (diplomEntity.getMentor() == null) ? null : new User(diplomEntity.getMentor());
+        this.reviewer = (diplomEntity.getReviewer() == null) ? null : new User(diplomEntity.getReviewer());
+        this.consultant = (diplomEntity.getConsultant()) == null ? null : new User(diplomEntity.getConsultant());
+        this.ruleController = (diplomEntity.getRuleController() == null) ? null :new User(diplomEntity.getRuleController());
         this.resultMark = diplomEntity.getResultMark();
         this.status = diplomEntity.getStatus();
         this.executionPlace = diplomEntity.getExecutionPlace();

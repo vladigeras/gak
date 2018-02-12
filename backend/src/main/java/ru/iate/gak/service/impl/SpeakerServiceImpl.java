@@ -7,6 +7,7 @@ import ru.iate.gak.model.GroupEntity;
 import ru.iate.gak.model.SpeakerEntity;
 import ru.iate.gak.model.StudentEntity;
 import ru.iate.gak.repository.GroupRepository;
+import ru.iate.gak.repository.QuestionRepository;
 import ru.iate.gak.repository.SpeakerRepository;
 import ru.iate.gak.repository.StudentRepository;
 import ru.iate.gak.service.SpeakerService;
@@ -29,6 +30,8 @@ public class SpeakerServiceImpl implements SpeakerService {
     @Autowired
     private GroupRepository groupRepository;
 
+    @Autowired
+    private QuestionRepository questionRepository;
 
     /**
      * Clean existing speakers and fill new:
@@ -72,5 +75,4 @@ public class SpeakerServiceImpl implements SpeakerService {
             return speakerRepository.getSpeakersListOfCurrentGroupOfDay(groupEntity, date).stream().map(Speaker::new).collect(Collectors.toList());
         }
     }
-
 }

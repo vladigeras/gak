@@ -22,11 +22,11 @@ public class DiplomDto extends LongIdentifiableDto {
     public DiplomDto(Diplom diplom) {
         super(diplom.getId());
         this.title = diplom.getTitle();
-        this.student = new StudentDto(diplom.getStudent());
-        this.mentor = new UserDto(diplom.getMentor());
-        this.reviewer = new UserDto(diplom.getReviewer());
-        this.consultant = new UserDto(diplom.getConsultant());
-        this.ruleController = new UserDto(diplom.getRuleController());
+        this.student = (diplom.getStudent() == null) ? null : new StudentDto(diplom.getStudent());
+        this.mentor = (diplom.getMentor() == null) ? null : new UserDto(diplom.getMentor());
+        this.reviewer = (diplom.getReviewer() == null) ? null : new UserDto(diplom.getReviewer());
+        this.consultant = (diplom.getConsultant() == null) ? null : new UserDto(diplom.getConsultant());
+        this.ruleController = (diplom.getRuleController() == null) ? null : new UserDto(diplom.getRuleController());
         this.resultMark = diplom.getResultMark();
         this.status = diplom.getStatus();
         this.executionPlace = diplom.getExecutionPlace();

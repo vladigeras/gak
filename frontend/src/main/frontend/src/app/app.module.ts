@@ -34,6 +34,7 @@ import {SpeakerService} from "./service/speaker.service";
 import {CommissionsTableComponent} from './component/commissions-table/commissions-table.component';
 import {CommissionService} from "./service/commission.service";
 import { SpeakersStudentTableComponent } from './component/speakers-student-table/speakers-student-table.component';
+import {QuestionService} from "./service/question.service";
 
 export class CustomToastOptions extends ToastOptions {
   showCloseButton = true;
@@ -92,6 +93,7 @@ const routes: Routes = [
     StudentService,
     SpeakerService,
     CommissionService,
+    QuestionService,
     {provide: OWL_DATE_TIME_LOCALE, useValue: 'ru'}
   ],
   bootstrap: [AppComponent]

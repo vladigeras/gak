@@ -3,6 +3,7 @@ import {ToastsManager} from "ng2-toastr";
 import {StudentService} from "../../service/student.service";
 import {SpeakerService} from "../../service/speaker.service";
 import * as moment from 'moment';
+import {QuestionService} from "../../service/question.service";
 
 declare var $: any;
 
@@ -13,9 +14,13 @@ declare var $: any;
 })
 export class SpeakersStudentTableComponent implements OnInit {
 
-  activeSpeakerDto = null;
+  activeSpeaker = null;
+  selectedSpeaker = null;
   availableGroups = [];
   today = moment().startOf('day');
+
+  questionsToActiveStudent = [];
+
   selectedGroup = [];
   speakerStudents = [];
   groupSelectDropdownSettings = {
@@ -24,7 +29,8 @@ export class SpeakersStudentTableComponent implements OnInit {
     text: "Выберите группу"
   };
 
-  constructor(private toast: ToastsManager, private studentService: StudentService, private speakerService: SpeakerService) {
+  constructor(private toast: ToastsManager, private studentService: StudentService, private speakerService: SpeakerService,
+              private  questionService: QuestionService) {
   }
 
   ngOnInit() {
@@ -48,21 +54,27 @@ export class SpeakersStudentTableComponent implements OnInit {
     )
   }
 
-  showSetActiveStudentModal(speakerDto) {
+  showSetActiveStudentModal(speaker) {
     $('#setActiveStudentConfirmModal').modal('show');
-    this.activeSpeakerDto = speakerDto;
+    this.selectedSpeaker = speaker;
   }
 
   setActiveStudent() {
-    if (this.activeSpeakerDto != null) {
+    if (this.selectedSpeaker != null) {
+      this.activeSpeaker = {
+        id: this.selectedSpeaker.id,
+        fio: this.selectedSpeaker.fio
+      };
+      this.getQuestionsOfSpeaker();
       $('#setActiveStudentConfirmModal').modal('hide');
     }
   }
 
   getSpeakersStudentsOfGroup() {
     if (this.selectedGroup[0] != undefined) {
+      this.activeSpeaker = null;
       this.speakerStudents = [];
-      this.speakerService.getSpeakersListOfGroupOfDay(this.selectedGroup[0].itemName, this.today.unix()*1000).subscribe(
+      this.speakerService.getSpeakersListOfGroupOfDay(this.selectedGroup[0].itemName, this.today.unix() * 1000).subscribe(
         (data: any) => {
           data.forEach(speakerStudent => {
             this.speakerStudents.push({
@@ -83,5 +95,48 @@ export class SpeakersStudentTableComponent implements OnInit {
 
   reloadTable() {
     this.speakerStudents = [...this.speakerStudents];
+  }
+
+  createQuestion() {
+    this.questionsToActiveStudent.push({
+      index: this.questionsToActiveStudent.length + 1,
+      text: ""
+    })
+  }
+
+  removeQuestion(index) {
+    let ind = this.questionsToActiveStudent.findIndex(q => {
+      return q.index == index
+    });
+    this.questionsToActiveStudent.splice(ind, 1);
+  }
+
+  saveQuestions() {
+    if (this.selectedGroup[0] != undefined) {
+      let questions = [];
+      this.questionsToActiveStudent.forEach(q => {
+        questions.push({id: q.id, questionText: q.text})
+      });
+      this.questionService.saveQuestions(this.activeSpeaker.id, questions).subscribe(
+        data => {this.toast.success("Сохранено", "Успешно")}
+      );
+    }
+  }
+
+  getQuestionsOfSpeaker() {
+    if (this.selectedGroup[0] != undefined) {
+      this.questionsToActiveStudent = [];
+      this.questionService.getQuestionsOfSpeaker(this.activeSpeaker.id).subscribe(
+        (data: any) => {
+          data.forEach(q => {
+            this.questionsToActiveStudent.push({
+              id: q.id,
+              index: this.questionsToActiveStudent.length + 1,
+              text: q.questionText
+            })
+          });
+        }
+      )
+    }
   }
 }
