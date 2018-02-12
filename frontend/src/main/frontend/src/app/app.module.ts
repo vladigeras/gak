@@ -31,6 +31,10 @@ import {StudentAddModalComponent} from './component/modal/student-add-modal/stud
 import {StudentsTableComponent} from './component/students-table/students-table.component';
 import {OWL_DATE_TIME_LOCALE, OwlDateTimeModule, OwlNativeDateTimeModule} from 'ng-pick-datetime';
 import {SpeakerService} from "./service/speaker.service";
+import {CommissionsTableComponent} from './component/commissions-table/commissions-table.component';
+import {CommissionService} from "./service/commission.service";
+import { SpeakersStudentTableComponent } from './component/speakers-student-table/speakers-student-table.component';
+import {QuestionService} from "./service/question.service";
 
 export class CustomToastOptions extends ToastOptions {
   showCloseButton = true;
@@ -63,7 +67,9 @@ const routes: Routes = [
     PresidentPanelComponent,
     StudentSpeechByDateComponent,
     StudentAddModalComponent,
-    StudentsTableComponent
+    StudentsTableComponent,
+    CommissionsTableComponent,
+    SpeakersStudentTableComponent
   ],
   imports: [
     BrowserModule,
@@ -86,6 +92,8 @@ const routes: Routes = [
     CookieService,
     StudentService,
     SpeakerService,
+    CommissionService,
+    QuestionService,
     {provide: OWL_DATE_TIME_LOCALE, useValue: 'ru'}
   ],
   bootstrap: [AppComponent]

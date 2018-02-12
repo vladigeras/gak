@@ -1,0 +1,74 @@
+<div class="content">
+  <div class="row">
+    <div class="pull-left">
+      <h4>Выступающие сегодня (<strong class="text-danger">{{today.format("DD.MM.YYYY")}}</strong>) студенты</h4>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <angular2-multiselect [data]="availableGroups" [(ngModel)]="selectedGroup"
+                          [settings]="groupSelectDropdownSettings"
+                          (onSelect)="getSpeakersStudentsOfGroup()">
+    </angular2-multiselect>
+  </div>
+
+  <ngx-datatable *ngIf="selectedGroup[0] != null"
+                 class="material" [rows]="speakerStudents" [columnMode]="'force'"
+                 [headerHeight]="40" [footerHeight]="40" [limit]="20"
+                 [rowHeight]="'auto'">
+    <ngx-datatable-column prop="fio" name="ФИО"></ngx-datatable-column>
+    <ngx-datatable-column prop="title" name="Тема"></ngx-datatable-column>
+    <ngx-datatable-column prop="setActiveStudent" name="">
+      <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+        <i class="glyphicon glyphicon-education set-active-student-button text-info" aria-hidden="true"
+           (click)="showSetActiveStudentModal(row)"></i>
+      </ng-template>
+    </ngx-datatable-column>
+  </ngx-datatable>
+
+  <div class="questions-block" *ngIf="selectedGroup[0] != null && activeSpeaker != null">
+    <div class="row">
+      <div class="pull-left">
+        <h4>Вопросы к студенту <strong class="text-danger">{{activeSpeaker.fio}}</strong></h4>
+        <h5 *ngIf="questionsToActiveStudent.length == 0">Вопросов еще нет. Хотите <a (click)="createQuestion()"
+                                                                                     class="link">создать</a>
+          новый? </h5>
+        <h5 *ngIf="questionsToActiveStudent.length != 0">Вопросов задано: <span class="questions-count">{{questionsToActiveStudent.length}}</span>
+          Хотите <a
+            (click)="createQuestion()" class="link">создать</a> новый? </h5>
+      </div>
+      <div class="pull-right" *ngIf="questionsToActiveStudent.length != 0">
+        <button class="btn btn-default navbar-btn" (click)="saveQuestions()">Сохранить</button>
+      </div>
+    </div>
+    <div *ngFor="let question of questionsToActiveStudent">
+      <div class="input-group">
+        <input type="text" class="form-control" [(ngModel)]="question.text">
+        <span class="input-group-addon remove-question-button" (click)="removeQuestion(question.index)">
+            <i class="glyphicon glyphicon-remove-circle"></i>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="setActiveStudentConfirmModal" aria-hidden="true"
+     id="setActiveStudentConfirmModal">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+        <h4 class="modal-title">Подтверждение</h4>
+      </div>
+      <div class="modal-body">
+        <h5>Выбрать текущего студента для защиты?</h5>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="setActiveStudent()">Согласиться</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Отказаться</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+

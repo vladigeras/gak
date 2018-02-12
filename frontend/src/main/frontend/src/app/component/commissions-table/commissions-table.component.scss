@@ -1,0 +1,16 @@
+.content {
+  margin-top: 35px;
+}
+
+.row {
+  margin: 0;
+}
+
+:host /deep/ .datatable-body-row.active .datatable-row-group {
+  background-color: rgb(255, 251, 0) !important;
+}
+
+.transfer-role-button {
+  font-size: 19px;
+  cursor: pointer;
+}

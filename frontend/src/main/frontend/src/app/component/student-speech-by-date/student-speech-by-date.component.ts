@@ -88,7 +88,7 @@ export class StudentSpeechByDateComponent implements OnInit {
   }
 
   getSpeakersListOfGroup(group) {
-    this.speakerService.getSpeakersListOfGroup(group).subscribe(
+    this.speakerService.getSpeakersListOfGroupOfDay(group, null).subscribe(
       (data: any) => {
         let dateList = [];
         data.forEach(speaker => {

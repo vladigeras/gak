@@ -20,6 +20,7 @@ public class Student extends LongIdentifiable {
         this.firstname = studentEntity.getFirstname();
         this.middlename = studentEntity.getMiddlename();
         this.lastname = studentEntity.getLastname();
+        this.title = (studentEntity.getDiplom() == null) ? null : studentEntity.getDiplom().getTitle();
     }
 
     public String getFirstname() {

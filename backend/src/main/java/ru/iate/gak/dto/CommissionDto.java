@@ -19,7 +19,7 @@ public class CommissionDto extends LongIdentifiableDto {
         Commission commission = new Commission();
         commission.setId(this.id);
         commission.setListId(this.listId);
-        commission.setUser(this.user.toUser());
+        commission.setUser((this.user == null) ? null : this.user.toUser());
         return commission;
     }
 }

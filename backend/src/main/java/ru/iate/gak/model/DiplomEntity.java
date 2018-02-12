@@ -140,4 +140,12 @@ public class DiplomEntity extends LongIdentifiableEntity {
     public void setExecutionPlace(String executionPlace) {
         this.executionPlace = executionPlace;
     }
+
+    public Set<QuestionEntity> getQuestions() {
+        return questions;
+    }
+
+    public void setQuestions(Set<QuestionEntity> questions) {
+        this.questions = questions;
+    }
 }

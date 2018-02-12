@@ -18,7 +18,7 @@ public class QuestionDto extends LongIdentifiableDto {
     public Question toQuestion() {
         Question question = new Question();
         question.setQuestionText(this.questionText);
-        question.setDiplom(this.diplom.toDiplom());
+        question.setDiplom((this.diplom == null) ? null : this.diplom.toDiplom());
         return question;
     }
 }

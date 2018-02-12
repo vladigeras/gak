@@ -1,0 +1,37 @@
+.content {
+  margin-top: 35px;
+}
+
+.row {
+  margin: 0;
+}
+
+:host /deep/ .datatable-body-row.active .datatable-row-group {
+  background-color: rgb(255, 251, 0) !important;
+}
+
+.set-active-student-button {
+  font-size: 19px;
+  cursor: pointer;
+}
+
+.questions-block{
+  margin-top: 35px;
+}
+
+.link {
+  cursor: pointer;
+}
+
+.questions-count{
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.remove-question-button{
+  cursor: pointer;
+}
+
+.input-group {
+  margin-top: 8px;
+}
