@@ -80,7 +80,7 @@ const routes: Routes = [
     ToastModule.forRoot(),
     AngularMultiSelectModule,
     NgxDatatableModule,
-    RouterModule.forRoot(routes),
+    RouterModule.forRoot(routes, {useHash: true}),
     DndModule.forRoot(),
     OwlDateTimeModule,
     OwlNativeDateTimeModule
