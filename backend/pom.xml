@@ -74,8 +74,10 @@
 			<version>2.3.0</version>
 		</dependency>
 		<dependency>
-			<groupId></groupId>
-			<artifactId></artifactId>
+			<groupId>de.nixosoft.jlr</groupId>
+			<artifactId>jlr</artifactId>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/resources/jlr.jar</systemPath>
 		</dependency>
 	</dependencies>
 
