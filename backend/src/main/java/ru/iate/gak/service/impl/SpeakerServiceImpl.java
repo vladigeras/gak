@@ -7,15 +7,18 @@ import ru.iate.gak.model.GroupEntity;
 import ru.iate.gak.model.SpeakerEntity;
 import ru.iate.gak.model.StudentEntity;
 import ru.iate.gak.repository.GroupRepository;
-import ru.iate.gak.repository.QuestionRepository;
 import ru.iate.gak.repository.SpeakerRepository;
 import ru.iate.gak.repository.StudentRepository;
 import ru.iate.gak.service.SpeakerService;
+import ru.iate.gak.service.TexService;
 
 import javax.transaction.Transactional;
+import java.io.File;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,7 +34,7 @@ public class SpeakerServiceImpl implements SpeakerService {
     private GroupRepository groupRepository;
 
     @Autowired
-    private QuestionRepository questionRepository;
+    private TexService texService;
 
     /**
      * Clean existing speakers and fill new:
@@ -74,5 +77,25 @@ public class SpeakerServiceImpl implements SpeakerService {
         } else {
             return speakerRepository.getSpeakersListOfCurrentGroupOfDay(groupEntity, date).stream().map(Speaker::new).collect(Collectors.toList());
         }
+    }
+
+    @Override
+    @Transactional
+    public List<File> getSpeakerProtocolsOfGroup(String group) {
+        GroupEntity groupEntity = groupRepository.findOne(group);
+        if (groupEntity == null) throw new RuntimeException("Группа с названием " + group + "  не найдена");
+
+        List<File> result = new ArrayList<>();
+        List<SpeakerEntity> speakers = speakerRepository.getSpeakersListOfCurrentGroup(groupEntity);
+        speakers.forEach(s -> {
+            Map<String, String> params = new HashMap<>();
+            params.put("lastname", s.getStudent().getLastname());
+            params.put("firstname", s.getStudent().getFirstname());
+            params.put("middlename", s.getStudent().getMiddlename());
+
+            result.add(texService.exportDocuments(params));
+        });
+
+        return result;
     }
 }

@@ -73,6 +73,10 @@
 			<artifactId>jaxb-api</artifactId>
 			<version>2.3.0</version>
 		</dependency>
+		<dependency>
+			<groupId></groupId>
+			<artifactId></artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>
