@@ -18,6 +18,12 @@ export class SpeakerService {
       return this.http.get("/speakers/ofGroupOfDay" + "?group=" + group + "&date=" + date);
     }
   }
+
+  getProtocolsForGroup(group) {
+    let a = document.createElement("a");
+    a.href = "/speakers/zippedProtocols" + "?group=" + group;
+    a.click()
+  }
 }
 
 

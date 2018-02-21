@@ -118,7 +118,9 @@ export class SpeakersStudentTableComponent implements OnInit {
         questions.push({id: q.id, questionText: q.text})
       });
       this.questionService.saveQuestions(this.activeSpeaker.id, questions).subscribe(
-        data => {this.toast.success("Сохранено", "Успешно")}
+        data => {
+          this.toast.success("Сохранено", "Успешно")
+        }
       );
     }
   }
@@ -137,6 +139,12 @@ export class SpeakersStudentTableComponent implements OnInit {
           });
         }
       )
+    }
+  }
+
+  downloadProtocols() {
+    if (this.selectedGroup[0] != undefined) {
+      this.speakerService.getProtocolsForGroup(this.selectedGroup[0].itemName);
     }
   }
 }

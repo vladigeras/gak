@@ -3,6 +3,9 @@
     <div class="pull-left">
       <h4>Выступающие сегодня (<strong class="text-danger">{{today.format("DD.MM.YYYY")}}</strong>) студенты</h4>
     </div>
+    <div class="pull-right" *ngIf="selectedGroup[0] != null">
+      <button class="btn btn-info navbar-btn" (click)="downloadProtocols()">Получить протоколы для всей группы</button>
+    </div>
   </div>
 
   <div class="form-group">
