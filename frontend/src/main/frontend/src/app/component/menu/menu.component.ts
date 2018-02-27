@@ -1,8 +1,8 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {ToastsManager} from 'ng2-toastr/ng2-toastr';
-import {AuthService} from "../../security/auth.service";
-import {currentPrincipal} from "../../security/auth.service";
+import {AuthService, currentPrincipal} from "../../security/auth.service";
 import {HelperService} from "../../service/helper.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-menu',
@@ -14,7 +14,7 @@ export class MenuComponent {
   principal = currentPrincipal;
   rolesAndLinks = [];
 
-  constructor(private toast: ToastsManager, private authService: AuthService) {
+  constructor(private toast: ToastsManager, private authService: AuthService, private router: Router) {
     this.authService.principalReady.subscribe(item => this.generateMenuLink())
   };
 
@@ -22,6 +22,7 @@ export class MenuComponent {
     this.authService.logout().subscribe(
       data => {
         this.toast.warning("Вы вышли из аккаунта", "Внимание");
+        this.router.navigate(['']);
         setTimeout(function () {
           location.reload()
         }, 500)
