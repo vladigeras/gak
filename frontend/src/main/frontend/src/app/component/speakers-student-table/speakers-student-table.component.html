@@ -3,7 +3,8 @@
     <div class="pull-left">
       <h4>Выступающие сегодня (<strong class="text-danger">{{today.format("DD.MM.YYYY")}}</strong>) студенты</h4>
     </div>
-    <div class="pull-right" *ngIf="selectedGroup[0] != null">
+    <div class="pull-right"
+         *ngIf="selectedGroup[0] != null && principal != null && principal.roles.indexOf('SECRETARY') != -1">
       <button class="btn btn-info navbar-btn" (click)="downloadProtocols()">Получить протоколы для всей группы</button>
     </div>
   </div>
@@ -23,8 +24,10 @@
     <ngx-datatable-column prop="title" name="Тема"></ngx-datatable-column>
     <ngx-datatable-column prop="setActiveStudent" name="">
       <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
-        <i class="glyphicon glyphicon-education set-active-student-button text-info" aria-hidden="true"
-           (click)="showSetActiveStudentModal(row)"></i>
+        <div *ngIf="principal != null && principal.roles.indexOf('SECRETARY') != -1">
+          <i class="glyphicon glyphicon-education set-active-student-button text-info" aria-hidden="true"
+             (click)="showSetActiveStudentModal(row)"></i>
+        </div>
       </ng-template>
     </ngx-datatable-column>
   </ngx-datatable>
