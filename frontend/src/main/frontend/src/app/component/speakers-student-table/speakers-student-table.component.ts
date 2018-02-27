@@ -4,6 +4,7 @@ import {StudentService} from "../../service/student.service";
 import {SpeakerService} from "../../service/speaker.service";
 import * as moment from 'moment';
 import {QuestionService} from "../../service/question.service";
+import {currentPrincipal} from "../../security/auth.service";
 
 declare var $: any;
 
@@ -14,6 +15,7 @@ declare var $: any;
 })
 export class SpeakersStudentTableComponent implements OnInit {
 
+  principal = currentPrincipal;
   activeSpeaker = null;
   selectedSpeaker = null;
   availableGroups = [];
