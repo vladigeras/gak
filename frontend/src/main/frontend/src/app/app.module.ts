@@ -35,6 +35,7 @@ import {CommissionsTableComponent} from './component/commissions-table/commissio
 import {CommissionService} from "./service/commission.service";
 import { SpeakersStudentTableComponent } from './component/speakers-student-table/speakers-student-table.component';
 import {QuestionService} from "./service/question.service";
+import {GuardService} from "./security/guard.service";
 
 export class CustomToastOptions extends ToastOptions {
   showCloseButton = true;
@@ -44,10 +45,10 @@ export class CustomToastOptions extends ToastOptions {
 
 const routes: Routes = [
   {path: '', component: MainPageComponent},
-  {path: 'president', component: PresidentPanelComponent},
-  {path: 'member', component: MemberPanelComponent},
-  {path: 'secretary', component: SecretaryPanelComponent},
-  {path: 'admin', component: AdminPanelComponent},
+  {path: 'president', component: PresidentPanelComponent, data: {roles: ["PRESIDENT"]}, canActivate: [GuardService]},
+  {path: 'member', component: MemberPanelComponent, data: {roles: ["MEMBER"]}, canActivate: [GuardService]},
+  {path: 'secretary', component: SecretaryPanelComponent, data: {roles: ["SECRETARY"]}, canActivate: [GuardService]},
+  {path: 'admin', component: AdminPanelComponent, data: {roles: ["ADMIN"]}, canActivate: [GuardService]},
   {path: '**', component: NotFoundPageComponent}
 ];
 
@@ -94,7 +95,8 @@ const routes: Routes = [
     SpeakerService,
     CommissionService,
     QuestionService,
-    {provide: OWL_DATE_TIME_LOCALE, useValue: 'ru'}
+    {provide: OWL_DATE_TIME_LOCALE, useValue: 'ru'},
+    GuardService
   ],
   bootstrap: [AppComponent]
 })

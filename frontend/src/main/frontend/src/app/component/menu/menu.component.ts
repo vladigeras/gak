@@ -15,8 +15,8 @@ export class MenuComponent {
   rolesAndLinks = [];
 
   constructor(private toast: ToastsManager, private authService: AuthService, private router: Router) {
-    this.authService.principalReady.subscribe(item => this.generateMenuLink())
-  };
+    this.authService.principalReady.subscribe(item => this.generateMenuLink());
+  }
 
   logout() {
     this.authService.logout().subscribe(
