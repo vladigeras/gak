@@ -14,7 +14,7 @@ export class GuardService implements CanActivate {
     let needRoles = route.data['roles'] as Array<string>;
     if (this.principal != null && this.principal.id != null) {
       for (let r of this.principal.roles) {
-        if (!needRoles || r == "ADMIN" || needRoles.indexOf(r) != -1) return true;    //ADMIN has access to all resources
+        if (!needRoles || needRoles.indexOf(r) != -1) return true;
       }
       this.router.navigate(['']);
       return false;
