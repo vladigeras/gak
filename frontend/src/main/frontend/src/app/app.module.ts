@@ -35,6 +35,8 @@ import {CommissionsTableComponent} from './component/commissions-table/commissio
 import {CommissionService} from "./service/commission.service";
 import { SpeakersStudentTableComponent } from './component/speakers-student-table/speakers-student-table.component';
 import {QuestionService} from "./service/question.service";
+import { CriteriaComponent } from './component/criteria/criteria.component';
+import {CriteriaService} from "./service/criteria.service";
 
 export class CustomToastOptions extends ToastOptions {
   showCloseButton = true;
@@ -69,7 +71,8 @@ const routes: Routes = [
     StudentAddModalComponent,
     StudentsTableComponent,
     CommissionsTableComponent,
-    SpeakersStudentTableComponent
+    SpeakersStudentTableComponent,
+    CriteriaComponent
   ],
   imports: [
     BrowserModule,
@@ -94,6 +97,7 @@ const routes: Routes = [
     SpeakerService,
     CommissionService,
     QuestionService,
+    CriteriaService,
     {provide: OWL_DATE_TIME_LOCALE, useValue: 'ru'}
   ],
   bootstrap: [AppComponent]

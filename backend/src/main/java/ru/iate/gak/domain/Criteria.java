@@ -5,7 +5,7 @@ import ru.iate.gak.model.CriteriaEntity;
 public class Criteria extends LongIdentifiable {
 
     private Diplom diplom;
-    private User user;
+    private Commission commission;
     private String title;
     private Integer rating;
     private String comment;
@@ -15,7 +15,7 @@ public class Criteria extends LongIdentifiable {
     public Criteria(CriteriaEntity criteriaEntity) {
         super(criteriaEntity.getId());
         this.diplom = new Diplom(criteriaEntity.getDiplom());
-        this.user = new User(criteriaEntity.getUser());
+        this.commission = new Commission(criteriaEntity.getCommission());
         this.title = criteriaEntity.getTitle();
         this.rating = criteriaEntity.getRating();
         this.comment = criteriaEntity.getComment();
@@ -29,12 +29,12 @@ public class Criteria extends LongIdentifiable {
         this.diplom = diplom;
     }
 
-    public User getUser() {
-        return user;
+    public Commission getCommission() {
+        return commission;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setCommission(Commission commission) {
+        this.commission = commission;
     }
 
     public String getTitle() {

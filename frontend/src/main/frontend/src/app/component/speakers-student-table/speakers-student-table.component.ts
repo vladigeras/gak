@@ -4,7 +4,7 @@ import {StudentService} from "../../service/student.service";
 import {SpeakerService} from "../../service/speaker.service";
 import * as moment from 'moment';
 import {QuestionService} from "../../service/question.service";
-import {currentPrincipal} from "../../security/auth.service";
+import {CURRENT_PRINCIPAL} from "../../security/auth.service";
 
 declare var $: any;
 
@@ -15,13 +15,13 @@ declare var $: any;
 })
 export class SpeakersStudentTableComponent implements OnInit {
 
-  principal = currentPrincipal;
-  activeSpeaker = null;
+  principal = CURRENT_PRINCIPAL;
+  activeSpeaker = ACTIVE_SPEAKER;
   selectedSpeaker = null;
   availableGroups = [];
   today = moment().startOf('day');
 
-  questionsToActiveStudent = [];
+  criteria = [];
 
   selectedGroup = [];
   speakerStudents = [];
@@ -63,7 +63,7 @@ export class SpeakersStudentTableComponent implements OnInit {
 
   setActiveStudent() {
     if (this.selectedSpeaker != null) {
-      this.activeSpeaker = {
+      ACTIVE_SPEAKER = {
         id: this.selectedSpeaker.id,
         fio: this.selectedSpeaker.fio
       };
@@ -74,7 +74,7 @@ export class SpeakersStudentTableComponent implements OnInit {
 
   getSpeakersStudentsOfGroup() {
     if (this.selectedGroup[0] != undefined) {
-      this.activeSpeaker = null;
+      ACTIVE_SPEAKER = null;
       this.speakerStudents = [];
       this.speakerService.getSpeakersListOfGroupOfDay(this.selectedGroup[0].itemName, this.today.unix() * 1000).subscribe(
         (data: any) => {
@@ -100,26 +100,26 @@ export class SpeakersStudentTableComponent implements OnInit {
   }
 
   createQuestion() {
-    this.questionsToActiveStudent.push({
-      index: this.questionsToActiveStudent.length + 1,
+    this.criteria.push({
+      index: this.criteria.length + 1,
       text: ""
     })
   }
 
   removeQuestion(index) {
-    let ind = this.questionsToActiveStudent.findIndex(q => {
+    let ind = this.criteria.findIndex(q => {
       return q.index == index
     });
-    this.questionsToActiveStudent.splice(ind, 1);
+    this.criteria.splice(ind, 1);
   }
 
   saveQuestions() {
     if (this.selectedGroup[0] != undefined) {
       let questions = [];
-      this.questionsToActiveStudent.forEach(q => {
+      this.criteria.forEach(q => {
         questions.push({id: q.id, questionText: q.text})
       });
-      this.questionService.saveQuestions(this.activeSpeaker.id, questions).subscribe(
+      this.questionService.saveQuestions(ACTIVE_SPEAKER.id, questions).subscribe(
         data => {
           this.toast.success("Сохранено", "Успешно")
         }
@@ -129,13 +129,13 @@ export class SpeakersStudentTableComponent implements OnInit {
 
   getQuestionsOfSpeaker() {
     if (this.selectedGroup[0] != undefined) {
-      this.questionsToActiveStudent = [];
-      this.questionService.getQuestionsOfSpeaker(this.activeSpeaker.id).subscribe(
+      this.criteria = [];
+      this.questionService.getQuestionsOfSpeaker(ACTIVE_SPEAKER.id).subscribe(
         (data: any) => {
           data.forEach(q => {
-            this.questionsToActiveStudent.push({
+            this.criteria.push({
               id: q.id,
-              index: this.questionsToActiveStudent.length + 1,
+              index: this.criteria.length + 1,
               text: q.questionText
             })
           });
@@ -150,3 +150,5 @@ export class SpeakersStudentTableComponent implements OnInit {
     }
   }
 }
+
+export var ACTIVE_SPEAKER = null;

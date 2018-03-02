@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ToastsManager} from 'ng2-toastr/ng2-toastr';
 import {AuthService} from "../../security/auth.service";
-import {currentPrincipal} from "../../security/auth.service";
+import {CURRENT_PRINCIPAL} from "../../security/auth.service";
 import {HelperService} from "../../service/helper.service";
 
 @Component({
@@ -11,7 +11,7 @@ import {HelperService} from "../../service/helper.service";
 })
 export class MenuComponent {
 
-  principal = currentPrincipal;
+  principal = CURRENT_PRINCIPAL;
   rolesAndLinks = [];
 
   constructor(private toast: ToastsManager, private authService: AuthService) {
