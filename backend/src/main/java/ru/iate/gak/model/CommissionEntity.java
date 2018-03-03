@@ -1,6 +1,7 @@
 package ru.iate.gak.model;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "commissions")
@@ -12,6 +13,9 @@ public class CommissionEntity extends LongIdentifiableEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private UserEntity user;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "commission")
+    private List<CriteriaEntity> criteriaCreatedByCommission;
 
     public Integer getListId() {
         return listId;

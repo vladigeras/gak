@@ -32,22 +32,22 @@
     </ngx-datatable-column>
   </ngx-datatable>
 
-  <div class="questions-block" *ngIf="selectedGroup[0] != null && activeSpeaker != null">
+  <div class="question-block" *ngIf="selectedGroup[0] != null && activeSpeaker != null">
     <div class="row">
       <div class="pull-left">
         <h4>Вопросы к студенту <strong class="text-danger">{{activeSpeaker.fio}}</strong></h4>
-        <h5 *ngIf="questionsToActiveStudent.length == 0">Вопросов еще нет. Хотите <a (click)="createQuestion()"
-                                                                                     class="link">создать</a>
+        <h5 *ngIf="criteria.length == 0">Вопросов еще нет. Хотите <a (click)="createQuestion()"
+                                                                     class="link">создать</a>
           новый? </h5>
-        <h5 *ngIf="questionsToActiveStudent.length != 0">Вопросов задано: <span class="questions-count">{{questionsToActiveStudent.length}}</span>
+        <h5 *ngIf="criteria.length != 0">Вопросов задано: <span class="question-count">{{criteria.length}}</span>
           Хотите <a
             (click)="createQuestion()" class="link">создать</a> новый? </h5>
       </div>
-      <div class="pull-right" *ngIf="questionsToActiveStudent.length != 0">
+      <div class="pull-right" *ngIf="criteria.length != 0">
         <button class="btn btn-default navbar-btn" (click)="saveQuestions()">Сохранить</button>
       </div>
     </div>
-    <div *ngFor="let question of questionsToActiveStudent">
+    <div *ngFor="let question of criteria">
       <div class="input-group">
         <input type="text" class="form-control" [(ngModel)]="question.text">
         <span class="input-group-addon remove-question-button" (click)="removeQuestion(question.index)">

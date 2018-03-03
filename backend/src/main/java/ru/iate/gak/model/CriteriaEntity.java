@@ -11,8 +11,8 @@ public class CriteriaEntity extends LongIdentifiableEntity {
     private DiplomEntity diplom;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private UserEntity user;
+    @JoinColumn(name = "commission_id", referencedColumnName = "id")
+    private CommissionEntity commission;
 
     @Column(name = "title")
     private String title;
@@ -55,11 +55,11 @@ public class CriteriaEntity extends LongIdentifiableEntity {
         this.comment = comment;
     }
 
-    public UserEntity getUser() {
-        return user;
+    public CommissionEntity getCommission() {
+        return commission;
     }
 
-    public void setUser(UserEntity user) {
-        this.user = user;
+    public void setCommission(CommissionEntity commission) {
+        this.commission = commission;
     }
 }

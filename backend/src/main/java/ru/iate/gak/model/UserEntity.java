@@ -4,7 +4,6 @@ import ru.iate.gak.domain.Role;
 
 import javax.persistence.*;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -50,9 +49,6 @@ public class UserEntity extends LongIdentifiableEntity {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private Set<CommissionEntity> commissionsWhereUserInclude;
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-    private List<CriteriaEntity> criteriaCreatedByUser;
 
     public String getLogin() {
         return login;

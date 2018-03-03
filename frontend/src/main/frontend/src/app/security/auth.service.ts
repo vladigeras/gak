@@ -14,7 +14,7 @@ export class AuthService {
   }
 
   isLoggedIn() {
-    return currentPrincipal.roles.length > 0
+    return CURRENT_PRINCIPAL.roles.length > 0
   }
 
   logout() {
@@ -26,9 +26,9 @@ export class AuthService {
     if (cookie && !this.isLoggedIn()) {
       this.http.get("/auth/principal").subscribe(
         (data: any) => {
-          currentPrincipal.id = data.id;
-          currentPrincipal.name = data.name;
-          currentPrincipal.roles = data.roles;
+          CURRENT_PRINCIPAL.id = data.id;
+          CURRENT_PRINCIPAL.name = data.name;
+          CURRENT_PRINCIPAL.roles = data.roles;
           this.principalReady.emit()
         }
       )
@@ -36,5 +36,5 @@ export class AuthService {
   }
 }
 
-export var currentPrincipal = {id: null, name: null, roles: []};
+export var CURRENT_PRINCIPAL = {id: null, name: null, roles: []};
 

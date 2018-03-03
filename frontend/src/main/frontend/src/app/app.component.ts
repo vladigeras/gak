@@ -1,7 +1,7 @@
 import {Component, OnInit, ViewContainerRef} from '@angular/core';
 import {ToastsManager} from "ng2-toastr";
 import {AuthService} from "./security/auth.service";
-import {currentPrincipal} from "./security/auth.service";
+import {CURRENT_PRINCIPAL} from "./security/auth.service";
 
 @Component({
   selector: 'app-root',
@@ -10,7 +10,7 @@ import {currentPrincipal} from "./security/auth.service";
 })
 export class AppComponent implements OnInit {
 
-  principal = currentPrincipal;
+  principal = CURRENT_PRINCIPAL;
 
   constructor(private toast: ToastsManager, private vcr: ViewContainerRef, private authService: AuthService) {
     this.toast.setRootViewContainerRef(vcr);

@@ -1,0 +1,46 @@
+<div class="criteria-block" *ngIf="activeSpeaker != null">
+  <div class="row">
+    <div class="pull-left">
+      <h4>Оценки студента <strong class="text-danger">{{activeSpeaker.fio}}</strong> по критериям</h4>
+      <h5 *ngIf="criteriaToActiveSpeaker.length != 0">Всего критериев: <span class="criteria-count">{{criteriaToActiveSpeaker.length}}</span>
+        <button class="btn btn-default add-criteria-button" (click)="createCriteria()"><i
+          class="glyphicon glyphicon-plus"></i></button>
+      </h5>
+    </div>
+    <div class="pull-right" *ngIf="criteriaToActiveSpeaker.length != 0">
+      <button class="btn btn-default navbar-btn" (click)="saveCriteria()">Сохранить</button>
+    </div>
+  </div>
+  <div *ngFor="let criteria of criteriaToActiveSpeaker">
+    <div class="input-group">
+      <input placeholder="Критерий" type="text" class="form-control input-text-black" [(ngModel)]="criteria.title">
+      <select class="form-control input-text-blue" [(ngModel)]="criteria.rating">
+        <option>0</option>
+        <option>1</option>
+        <option>2</option>
+        <option>3</option>
+        <option>4</option>
+        <option>5</option>
+      </select>
+      <input placeholder="Комментарий" type="text" class="form-control input-text-black" [(ngModel)]="criteria.comment">
+      <span class="input-group-addon remove-criteria-button" (click)="removeCriteria(criteria.index)">
+            <i class="glyphicon glyphicon-remove-circle"></i>
+        </span>
+    </div>
+  </div>
+
+  <div class="result-mark row">
+    <div class="pull-left">
+      <label class="result-mark-inline" for="result-mark">Выставить результирующую оценку студенту (в баллах):</label>
+      <select class="form-control result-mark-inline result-mark-inline-select" id="result-mark" [(ngModel)]="resultMark">
+        <option>2</option>
+        <option>3</option>
+        <option>4</option>
+        <option>5</option>
+      </select>
+      <button class="btn btn-default navbar-btn result-mark-inline button-save-result" (click)="saveResult()">
+        Сохранить
+      </button>
+    </div>
+  </div>
+</div>
