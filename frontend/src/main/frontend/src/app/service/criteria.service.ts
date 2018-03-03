@@ -15,7 +15,7 @@ export class CriteriaService {
     return this.http.post("/criteria/saveResult", data);
   }
 
-  saveCriteriaWithData(criteriaList) {
-    return this.http.post("/criteria/save", criteriaList);
+  saveCriteriaWithData(criteriaDtoWithResult) {
+    return this.http.post("/criteria/save", criteriaDtoWithResult);
   }
 }

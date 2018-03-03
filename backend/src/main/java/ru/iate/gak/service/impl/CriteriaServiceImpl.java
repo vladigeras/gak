@@ -9,6 +9,7 @@ import ru.iate.gak.dto.CriteriaDtoListWithResult;
 import ru.iate.gak.model.*;
 import ru.iate.gak.repository.*;
 import ru.iate.gak.service.CriteriaService;
+import ru.iate.gak.util.StringUtil;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -82,15 +83,17 @@ public class CriteriaServiceImpl implements CriteriaService {
                                 criteriaRepository.deleteByCommission(commissionEntity);
 
                                 criteriaList.forEach(c -> {
-                                    CriteriaEntity criteriaEntity = new CriteriaEntity();
-                                    criteriaEntity.setComment(c.getComment());
-                                    criteriaEntity.setCommission(commissionEntity);
-                                    criteriaEntity.setDiplom(diplomEntity);
-                                    criteriaEntity.setRating(c.getRating());
-                                    criteriaEntity.setTitle(c.getTitle());
-                                    criteriaRepository.save(criteriaEntity);
+                                    if (!StringUtil.isStringNullOrEmptyTrim(c.getTitle()) && c.getRating() != null) {
+                                        CriteriaEntity criteriaEntity = new CriteriaEntity();
+                                        criteriaEntity.setComment(c.getComment());
+                                        criteriaEntity.setCommission(commissionEntity);
+                                        criteriaEntity.setDiplom(diplomEntity);
+                                        criteriaEntity.setRating(c.getRating());
+                                        criteriaEntity.setTitle(c.getTitle());
+                                        criteriaRepository.save(criteriaEntity);
+                                    }
                                 });
-                            }
+                            } else throw new RuntimeException("Пользователь не найден в списке коммисии");
                         }
                     }
                 }

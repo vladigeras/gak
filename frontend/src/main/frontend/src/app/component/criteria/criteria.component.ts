@@ -36,13 +36,21 @@ export class CriteriaComponent implements OnInit {
   }
 
   saveCriteria() {
-
+    if (ACTIVE_SPEAKER != null) {
+      let criteriaDtoWithResult = {
+        criteriaDtoList: this.criteriaToActiveSpeaker,
+        speakerId: ACTIVE_SPEAKER.id
+      };
+      this.criteriaService.saveCriteriaWithData(criteriaDtoWithResult).subscribe(
+        data => {this.toast.success("Критерии и оценки сохранены", "Успешно")}
+      )
+    }
   }
 
   saveResult() {
     if (ACTIVE_SPEAKER != null) {
       this.criteriaService.saveResultMarkFromUserToSpeaker(this.resultMark, ACTIVE_SPEAKER.id).subscribe(
-        () => {
+        data => {
           this.toast.success("Оценка сохранена", "Успешно")
         })
     }
