@@ -3,6 +3,7 @@ import {ToastsManager} from 'ng2-toastr/ng2-toastr';
 import {AuthService} from "../../security/auth.service";
 import {CURRENT_PRINCIPAL} from "../../security/auth.service";
 import {HelperService} from "../../service/helper.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-menu',

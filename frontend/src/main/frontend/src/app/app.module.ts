@@ -1,7 +1,7 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 
-import {AppComponent} from './app.component';
+import {AppComponent} from "./app.component";
 import {MenuComponent} from './component/menu/menu.component';
 import {FooterComponent} from './component/footer/footer.component';
 import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
@@ -36,6 +36,8 @@ import {CommissionService} from "./service/commission.service";
 import { SpeakersStudentTableComponent } from './component/speakers-student-table/speakers-student-table.component';
 import {QuestionService} from "./service/question.service";
 import {GuardService} from "./security/guard.service";
+import {CriteriaComponent} from "./component/criteria/criteria.component";
+import {CriteriaService} from "./service/criteria.service";
 
 export class CustomToastOptions extends ToastOptions {
   showCloseButton = true;
@@ -70,7 +72,8 @@ const routes: Routes = [
     StudentAddModalComponent,
     StudentsTableComponent,
     CommissionsTableComponent,
-    SpeakersStudentTableComponent
+    SpeakersStudentTableComponent,
+    CriteriaComponent
   ],
   imports: [
     BrowserModule,
@@ -96,9 +99,9 @@ const routes: Routes = [
     CommissionService,
     QuestionService,
     {provide: OWL_DATE_TIME_LOCALE, useValue: 'ru'},
-    GuardService
+    GuardService,
+    CriteriaService
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {
-}
+export class AppModule {}
