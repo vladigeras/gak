@@ -75,13 +75,6 @@
 			<artifactId>jaxb-api</artifactId>
 			<version>2.3.0</version>
 		</dependency>
-		<dependency>
-			<groupId>de.nixosoft.jlr</groupId>
-			<artifactId>jlr</artifactId>
-			<version>1.0.0</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/src/main/resources/jlr.jar</systemPath>
-		</dependency>
 	</dependencies>
 
 	<build>

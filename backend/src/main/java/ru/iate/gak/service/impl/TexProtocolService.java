@@ -1,13 +1,11 @@
 package ru.iate.gak.service.impl;
 
-import de.nixosoft.jlr.JLRConverter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ru.iate.gak.service.TexService;
 import ru.iate.gak.util.TranslitUtil;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.Map;
 import java.util.Random;
 
@@ -46,27 +44,38 @@ public class TexProtocolService implements TexService {
             tempDirectory.mkdir();
         }
 
-        String lastName = params.get("lastname");
+        String lastName = params.get("@studentLastname");
         String fileName = String.valueOf(new Random().nextInt(100));
         if (lastName != null) {
             fileName += TranslitUtil.cyr2latin(lastName);
         }
 
-        File template = new File(workingDirectory.getAbsolutePath() + File.separator + this.templateFile);
-        File result = new File(tempDirectory.getAbsolutePath() + File.separator + fileName + ".tex");
+        try {
+            //get string from template, replace data and save in new file
+            BufferedReader template = new BufferedReader(new InputStreamReader(new
+                    FileInputStream(workingDirectory.getAbsolutePath() + File.separator + this.templateFile), "utf-8"));
+            BufferedWriter result = new BufferedWriter(new OutputStreamWriter(new
+                    FileOutputStream(tempDirectory.getAbsolutePath() + File.separator + fileName + ".tex"), "utf-8"));
 
-        JLRConverter converter = new JLRConverter(workingDirectory);
+            String line;
+            while ((line = template.readLine()) != null) {
+                final String[] resultLine = {line};
+                params.forEach((k, v) -> {
+                    String replaceOnThis = "";
+                    if (v != null && !v.isEmpty()) replaceOnThis = v;
+                    resultLine[0] = resultLine[0].replaceAll(k, replaceOnThis);
+                });
+                result.write(resultLine[0]);
+                result.newLine();
+            }
 
-        params.forEach((k, v) -> {
-            if (v == null || v.isEmpty()) converter.replace(k, "");
-            else converter.replace(k, v);
-        });
+            template.close();
+            result.close();
 
-        if (!converter.parse(template, result)) {
-            System.out.println(converter.getErrorMessage());
+            return fileName + ".tex";
+        } catch (Exception e) {
+            throw new RuntimeException("Ошибка в файле");
         }
-
-        return result.getName();
     }
 
     private File generateReport(String fileName) throws InterruptedException, IOException {
