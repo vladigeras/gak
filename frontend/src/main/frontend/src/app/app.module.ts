@@ -38,6 +38,8 @@ import {QuestionService} from "./service/question.service";
 import {GuardService} from "./security/guard.service";
 import {CriteriaComponent} from "./component/criteria/criteria.component";
 import {CriteriaService} from "./service/criteria.service";
+import { BlockUIModule } from 'ng-block-ui';
+
 
 export class CustomToastOptions extends ToastOptions {
   showCloseButton = true;
@@ -87,7 +89,8 @@ const routes: Routes = [
     RouterModule.forRoot(routes, {useHash: true}),
     DndModule.forRoot(),
     OwlDateTimeModule,
-    OwlNativeDateTimeModule
+    OwlNativeDateTimeModule,
+    BlockUIModule
   ],
   providers: [
     {provide: ToastOptions, useClass: CustomToastOptions},

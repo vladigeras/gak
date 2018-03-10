@@ -34,7 +34,8 @@
     "ngx-cookie-service": "^1.0.10",
     "ng2-dnd": "^5.0.2",
     "ng-pick-datetime": "^5.1.1",
-    "moment": "^2.20.1"
+    "moment": "^2.20.1",
+    "ng-block-ui": "^1.0.0-beta.19"
   },
   "devDependencies": {
     "@angular/cli": "1.2.5",
