@@ -7,7 +7,6 @@ import ru.iate.gak.dto.SpeakerDto;
 import ru.iate.gak.security.GakSecured;
 import ru.iate.gak.security.Roles;
 import ru.iate.gak.service.SpeakerService;
-import ru.iate.gak.util.FilesUtil;
 import ru.iate.gak.util.StringUtil;
 import ru.iate.gak.util.TranslitUtil;
 
@@ -63,6 +62,7 @@ public class SpeakerController {
             ZipOutputStream zos = new ZipOutputStream(new BufferedOutputStream(out));
 
             for (File file : files) {
+                System.out.println(file.getAbsolutePath());
                 if (file != null) {
                     zos.putNextEntry(new ZipEntry(file.getName()));
 
@@ -87,7 +87,7 @@ public class SpeakerController {
 
             zos.close();
 
-            FilesUtil.deleteDirectory(new File(this.protocolsTempDirectory));
+//            FilesUtil.deleteDirectory(new File(this.protocolsTempDirectory));
 
         } catch (IOException e) {
             e.printStackTrace();

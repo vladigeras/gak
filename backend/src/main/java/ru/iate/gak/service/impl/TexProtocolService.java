@@ -79,8 +79,7 @@ public class TexProtocolService implements TexService {
     }
 
     private File generateReport(String fileName) throws InterruptedException, IOException {
-        Process p;
-        p = Runtime.getRuntime().exec(this.latexExeFile + " -synctex=1 -interaction=nonstopmode -output-directory=" + this.tempDirectory + " " + this.tempDirectory + fileName);
+        Process p = Runtime.getRuntime().exec(this.latexExeFile + " -interaction=nonstopmode -output-directory=" + this.tempDirectory + " " + this.tempDirectory + fileName);
         p.waitFor();
 
         return selectFile(new File(this.tempDirectory), fileName);
@@ -89,6 +88,7 @@ public class TexProtocolService implements TexService {
     private File selectFile(File directory, String filename) {
         if (directory.isDirectory()) {
             for (File file : directory.listFiles()) {
+                System.out.println(file.getAbsolutePath());
                 if (file.getName().equals(filename.replace(".tex", ".pdf"))) return file;
             }
         }
