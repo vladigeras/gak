@@ -5,6 +5,8 @@ import {CURRENT_PRINCIPAL} from "../../security/auth.service";
 import {HelperService} from "../../service/helper.service";
 import {Router} from "@angular/router";
 
+declare var $: any;
+
 @Component({
   selector: 'app-menu',
   templateUrl: './menu.component.html',
@@ -26,7 +28,7 @@ export class MenuComponent {
         this.router.navigate(['']);
         setTimeout(function () {
           location.reload()
-        }, 500)
+        }, 400)
       },
       error => {
         if (error.error.message != undefined) this.toast.error(error.error.message, "Ошибка");
@@ -43,5 +45,9 @@ export class MenuComponent {
           link: "/" + r.toLowerCase()
         })
     });
+  }
+
+  showLogoutModal() {
+    $('#logoutConfirmModal').modal('show');
   }
 }
