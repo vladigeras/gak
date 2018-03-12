@@ -27,6 +27,9 @@ export class CriteriaComponent implements OnInit {
     this.blockUI.start(WAIT_STRING);
     this.criteriaService.getDefaultCriteria().subscribe(
       (data: any) => {
+        if (data.length == 0) {
+          this.toast.warning("Оптимальные (общие) критерии не заполнены на сервере", "Внимание")
+        }
         data.forEach(c => {
           this.criteriaToActiveSpeaker.push({    //fill list an empty criteria
             index: this.criteriaToActiveSpeaker.length + 1,
@@ -53,7 +56,11 @@ export class CriteriaComponent implements OnInit {
           this.blockUI.stop();
           this.toast.success("Критерии и оценки сохранены", "Успешно")
         },
-        error => {this.blockUI.stop()}
+        error => {
+          this.blockUI.stop();
+          if (error.error.message != undefined) this.toast.error(error.error.message, "Ошибка");
+          else this.toast.error(error.error, "Ошибка");
+        }
       )
     }
   }
@@ -66,7 +73,11 @@ export class CriteriaComponent implements OnInit {
           this.blockUI.stop();
           this.toast.success("Оценка сохранена", "Успешно")
         },
-        error => {this.blockUI.stop()})
+        error => {
+          this.blockUI.stop();
+          if (error.error.message != undefined) this.toast.error(error.error.message, "Ошибка");
+          else this.toast.error(error.error, "Ошибка");
+        })
     }
   }
 

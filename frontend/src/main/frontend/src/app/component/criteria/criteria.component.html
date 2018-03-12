@@ -2,7 +2,7 @@
   <div class="row">
     <div class="pull-left">
       <h4>Оценки студента <strong class="text-danger">{{activeSpeaker.fio}}</strong> по критериям</h4>
-      <h5 *ngIf="criteriaToActiveSpeaker.length != 0">Всего критериев: <span class="criteria-count">{{criteriaToActiveSpeaker.length}}</span>
+      <h5>Всего критериев: <span class="criteria-count">{{criteriaToActiveSpeaker.length}}</span>
         <button class="btn btn-default add-criteria-button" (click)="createCriteria()"><i
           class="glyphicon glyphicon-plus"></i></button>
       </h5>
