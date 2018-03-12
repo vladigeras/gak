@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {HelperService} from "../../service/helper.service";
 import {ToastsManager} from "ng2-toastr";
 import {CommissionService} from "../../service/commission.service";
+import {BlockUI, NgBlockUI} from "ng-block-ui";
+import {WAIT_STRING} from "../../app.module";
 
 declare var $: any;
 
@@ -14,6 +16,8 @@ export class CommissionsTableComponent implements OnInit {
 
   commissions = [];
   commissionDtoForTransferRole = null;
+  @BlockUI() blockUI: NgBlockUI;
+
 
   constructor(private toast: ToastsManager, private commissionService: CommissionService) { }
 
@@ -22,6 +26,7 @@ export class CommissionsTableComponent implements OnInit {
   }
 
   getCommissionsList() {
+    this.blockUI.start(WAIT_STRING);
     this.commissions = [];
     this.commissionService.getCommissionsByListId(1).subscribe(
       (data: any[]) => {
@@ -40,8 +45,10 @@ export class CommissionsTableComponent implements OnInit {
           });
         });
         this.reloadTable();
+        this.blockUI.stop();
       },
       error => {
+        this.blockUI.stop();
         if (error.error.message != undefined) this.toast.error(error.error.message, "Ошибка");
         else this.toast.error(error.error, "Ошибка");
       }
@@ -55,12 +62,15 @@ export class CommissionsTableComponent implements OnInit {
 
   transferRole() {
     if (this.commissionDtoForTransferRole != null) {
+      this.blockUI.start(WAIT_STRING);
       this.commissionService.transferPresidentRole(this.commissionDtoForTransferRole).subscribe(
         data => {
+          this.blockUI.stop();
           this.toast.success("Временная передача роли проведена", "Успешно");
           $('#transferRoleConfirmModal').modal('hide');
           this.getCommissionsList();
-        }
+        },
+        error => {this.blockUI.stop()}
       )
     }
   }

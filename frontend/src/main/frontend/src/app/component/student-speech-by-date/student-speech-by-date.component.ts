@@ -3,6 +3,8 @@ import {ToastsManager} from "ng2-toastr";
 import {StudentService} from "../../service/student.service";
 import {SpeakerService} from "../../service/speaker.service";
 import * as moment from 'moment';
+import {BlockUI, NgBlockUI} from "ng-block-ui";
+import {WAIT_STRING} from "../../app.module";
 
 @Component({
   selector: 'app-student-speech-by-date',
@@ -26,6 +28,9 @@ export class StudentSpeechByDateComponent implements OnInit {
   mainDate = null;
   subDate = null;
 
+  @BlockUI() blockUI: NgBlockUI;
+
+
   constructor(private toast: ToastsManager, private studentService: StudentService, private speakerService: SpeakerService) {
   }
 
@@ -34,6 +39,7 @@ export class StudentSpeechByDateComponent implements OnInit {
   }
 
   getAvailableGroups() {
+    this.blockUI.start(WAIT_STRING);
     this.studentService.getAvailableGroups().subscribe(
       (data: any) => {
         data.forEach(group => this.availableGroups.push(
@@ -41,9 +47,11 @@ export class StudentSpeechByDateComponent implements OnInit {
             id: this.availableGroups.length + 1,
             itemName: group.title
           }
-        ))
+        ));
+        this.blockUI.stop();
       },
       error => {
+        this.blockUI.stop();
         if (error.error.message != undefined) this.toast.error(error.error.message, "Ошибка");
         else this.toast.error(error.error, "Ошибка");
       }
@@ -69,6 +77,7 @@ export class StudentSpeechByDateComponent implements OnInit {
   }
 
   getStudentsOfGroup(group, callback) {
+    this.blockUI.start(WAIT_STRING);
     this.studentService.getStudentsOfGroup(this.selectedGroup[0].itemName).subscribe(
       (data: any) => {
         data.forEach(student => {
@@ -78,9 +87,11 @@ export class StudentSpeechByDateComponent implements OnInit {
           };
           this.studentsOfSelectedGroup.push(studentObj)
         });
+        this.blockUI.stop();
         if (typeof callback === "function") callback();
       },
       error => {
+        this.blockUI.stop();
         if (error.error.message != undefined) this.toast.error(error.error.message, "Ошибка");
         else this.toast.error(error.error, "Ошибка");
       }
@@ -88,6 +99,7 @@ export class StudentSpeechByDateComponent implements OnInit {
   }
 
   getSpeakersListOfGroup(group) {
+    this.blockUI.start(WAIT_STRING);
     this.speakerService.getSpeakersListOfGroupOfDay(group, null).subscribe(
       (data: any) => {
         let dateList = [];
@@ -115,8 +127,10 @@ export class StudentSpeechByDateComponent implements OnInit {
         });
         if (dateList[0] != null) this.mainDate = dateList[0];
         if (dateList[1] != null) this.subDate = dateList[1];
+        this.blockUI.stop();
       },
       error => {
+        this.blockUI.stop();
         if (error.error.message != undefined) this.toast.error(error.error.message, "Ошибка");
         else this.toast.error(error.error, "Ошибка");
       })
@@ -170,12 +184,15 @@ export class StudentSpeechByDateComponent implements OnInit {
           student: s
         })
       });
+      this.blockUI.start(WAIT_STRING);
       this.speakerService.saveSpeakersList(speakersDto).subscribe(
         data => {
           this.toast.success("Данные были сохранены", "Успешно");
           this.fillSpeakersList();
+          this.blockUI.stop();
         },
         error => {
+          this.blockUI.stop();
           if (error.error.message != undefined) this.toast.error(error.error.message, "Ошибка");
           else this.toast.error(error.error, "Ошибка");
         }

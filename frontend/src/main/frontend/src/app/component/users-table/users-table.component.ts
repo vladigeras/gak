@@ -2,6 +2,8 @@ import {Component, Input, OnInit} from '@angular/core';
 import {UserService} from "../../service/user.service";
 import {ToastsManager} from "ng2-toastr";
 import {HelperService} from "../../service/helper.service";
+import {BlockUI, NgBlockUI} from "ng-block-ui";
+import {WAIT_STRING} from "../../app.module";
 
 declare var $: any;
 
@@ -22,6 +24,7 @@ export class UsersTableComponent implements OnInit {
   selectedUser = {firstname: null, middlename: null, lastname: null, login: null, password: null, roles: []};
   roles = [];
   isAddingNewUser;
+  @BlockUI() blockUI: NgBlockUI;
 
   constructor(private toast: ToastsManager, private userService: UserService) {
   }
@@ -32,6 +35,7 @@ export class UsersTableComponent implements OnInit {
 
   getUsers() {
     this.users = [];
+    this.blockUI.start(WAIT_STRING);
     this.userService.getUsers().subscribe(
       (data: any[]) => {
         data.forEach(u => {
@@ -49,8 +53,10 @@ export class UsersTableComponent implements OnInit {
           });
         });
         this.reloadTable();
+        this.blockUI.stop();
       },
       error => {
+        this.blockUI.stop();
         if (error.error.message != undefined) this.toast.error(error.error.message, "Ошибка");
         else this.toast.error(error.error, "Ошибка");
       }

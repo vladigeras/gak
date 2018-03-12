@@ -5,6 +5,8 @@ import {SpeakerService} from "../../service/speaker.service";
 import * as moment from 'moment';
 import {QuestionService} from "../../service/question.service";
 import {CURRENT_PRINCIPAL} from "../../security/auth.service";
+import {BlockUI, NgBlockUI} from "ng-block-ui";
+import {WAIT_STRING} from "../../app.module";
 
 declare var $: any;
 
@@ -30,6 +32,7 @@ export class SpeakersStudentTableComponent implements OnInit {
     enableCheckAll: false,
     text: "Выберите группу"
   };
+  @BlockUI() blockUI: NgBlockUI;
 
   constructor(private toast: ToastsManager, private studentService: StudentService, private speakerService: SpeakerService,
               private  questionService: QuestionService) {
@@ -40,6 +43,7 @@ export class SpeakersStudentTableComponent implements OnInit {
   }
 
   getAvailableGroups() {
+    this.blockUI.start(WAIT_STRING);
     this.studentService.getAvailableGroups().subscribe(
       (data: any) => {
         data.forEach(group => this.availableGroups.push(
@@ -47,9 +51,11 @@ export class SpeakersStudentTableComponent implements OnInit {
             id: this.availableGroups.length + 1,
             itemName: group.title
           }
-        ))
+        ));
+        this.blockUI.stop();
       },
       error => {
+        this.blockUI.stop();
         if (error.error.message != undefined) this.toast.error(error.error.message, "Ошибка");
         else this.toast.error(error.error, "Ошибка");
       }
@@ -76,6 +82,7 @@ export class SpeakersStudentTableComponent implements OnInit {
     if (this.selectedGroup[0] != undefined) {
       ACTIVE_SPEAKER = null;
       this.speakerStudents = [];
+      this.blockUI.start(WAIT_STRING);
       this.speakerService.getSpeakersListOfGroupOfDay(this.selectedGroup[0].itemName, this.today.unix() * 1000).subscribe(
         (data: any) => {
           data.forEach(speakerStudent => {
@@ -86,8 +93,10 @@ export class SpeakersStudentTableComponent implements OnInit {
             });
           });
           this.reloadTable();
+          this.blockUI.stop();
         },
         error => {
+          this.blockUI.stop();
           if (error.error.message != undefined) this.toast.error(error.error.message, "Ошибка");
           else this.toast.error(error.error, "Ошибка");
         }
@@ -119,10 +128,13 @@ export class SpeakersStudentTableComponent implements OnInit {
       this.criteria.forEach(q => {
         questions.push({id: q.id, questionText: q.text})
       });
+      this.blockUI.start(WAIT_STRING);
       this.questionService.saveQuestions(ACTIVE_SPEAKER.id, questions).subscribe(
         data => {
+          this.blockUI.stop();
           this.toast.success("Сохранено", "Успешно")
-        }
+        },
+        error => {this.blockUI.stop()}
       );
     }
   }
@@ -130,6 +142,7 @@ export class SpeakersStudentTableComponent implements OnInit {
   getQuestionsOfSpeaker() {
     if (this.selectedGroup[0] != undefined) {
       this.criteria = [];
+      this.blockUI.start(WAIT_STRING);
       this.questionService.getQuestionsOfSpeaker(ACTIVE_SPEAKER.id).subscribe(
         (data: any) => {
           data.forEach(q => {
@@ -139,7 +152,9 @@ export class SpeakersStudentTableComponent implements OnInit {
               text: q.questionText
             })
           });
-        }
+          this.blockUI.stop();
+        },
+        error => {this.blockUI.stop()}
       )
     }
   }

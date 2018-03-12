@@ -2,6 +2,8 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {UserService} from "../../../service/user.service";
 import {ToastsManager} from "ng2-toastr";
 import {HelperService} from "../../../service/helper.service";
+import {BlockUI, NgBlockUI} from "ng-block-ui";
+import {WAIT_STRING} from "../../../app.module";
 
 declare var $: any;
 
@@ -22,10 +24,12 @@ export class UserAddModalComponent implements OnInit {
     classes: "selectRole",
     text: "Выберите роль"
   };
+  @BlockUI() blockUI: NgBlockUI;
 
   constructor(private toast: ToastsManager, private userService: UserService) {}
 
   ngOnInit() {
+    this.blockUI.start(WAIT_STRING);
     this.userService.getAvailableRoles().subscribe(
       (data: string[]) => {
         data.forEach(role => {
@@ -35,8 +39,10 @@ export class UserAddModalComponent implements OnInit {
             itemName: HelperService.convertOriginalToRole(role)
           });
         });
+        this.blockUI.stop();
       },
       error => {
+        this.blockUI.stop();
         if (error.error.message != undefined) this.toast.error(error.error.message, "Ошибка");
         else this.toast.error(error.error, "Ошибка")
       }
@@ -51,14 +57,17 @@ export class UserAddModalComponent implements OnInit {
     let roles = [];
     this.selectedRoles.forEach(object => roles.push(object.original));
     this.user.roles = roles;
+    this.blockUI.start(WAIT_STRING);
     this.userService.addUser(this.user).subscribe(
       data => {
+        this.blockUI.stop();
         this.toast.success("Пользователь был добавлен", "Успешно");
         this.userChangedOrAdded.emit(true);
         $('#userAddModal').modal('hide');
         this.confirmPassword = null;
       },
       error => {
+        this.blockUI.stop();
         if (error.error.message != undefined) this.toast.error(error.error.message, "Ошибка");
         else this.toast.error(error.error, "Ошибка");
       }
@@ -79,14 +88,17 @@ export class UserAddModalComponent implements OnInit {
     let roles = [];
     this.selectedRoles.forEach(object => roles.push(object.original));
     this.user.roles = roles;
+    this.blockUI.start(WAIT_STRING)
     this.userService.updateUser(this.user).subscribe(
       data => {
         this.toast.success("Данные обновлены", "Успешно");
         this.userChangedOrAdded.emit(true);
         this.confirmPassword = null;
         $('#userAddModal').modal('hide');
+        this.blockUI.stop()
       },
       error => {
+        this.blockUI.stop();
         if (error.error.message != undefined) this.toast.error(error.error.message, "Ошибка");
         else this.toast.error(error.error, "Ошибка");
       }

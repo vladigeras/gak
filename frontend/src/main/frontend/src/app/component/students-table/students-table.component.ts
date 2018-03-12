@@ -1,6 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {ToastsManager} from "ng2-toastr";
 import {StudentService} from "../../service/student.service";
+import {BlockUI, NgBlockUI} from "ng-block-ui";
+import {WAIT_STRING} from "../../app.module";
 
 declare var $: any;
 
@@ -31,6 +33,7 @@ export class StudentsTableComponent implements OnInit {
     enableCheckAll: false,
     text: "Выберите группу"
   };
+  @BlockUI() blockUI: NgBlockUI;
 
   constructor(private toast: ToastsManager, private studentService: StudentService) {
   }
@@ -55,6 +58,7 @@ export class StudentsTableComponent implements OnInit {
   }
 
   getAvailableGroups() {
+    this.blockUI.start(WAIT_STRING);
     this.studentService.getAvailableGroups().subscribe(
       (data: any) => {
         data.forEach(group => this.availableGroups.push(
@@ -62,9 +66,11 @@ export class StudentsTableComponent implements OnInit {
             id: this.availableGroups.length + 1,
             itemName: group.title
           }
-        ))
+        ));
+        this.blockUI.stop();
       },
       error => {
+        this.blockUI.stop();
         if (error.error.message != undefined) this.toast.error(error.error.message, "Ошибка");
         else this.toast.error(error.error, "Ошибка");
       }
@@ -74,6 +80,7 @@ export class StudentsTableComponent implements OnInit {
   getStudentsOfGroup() {
     if (this.selectedGroup[0] != undefined) {
       this.students = [];
+      this.blockUI.start(WAIT_STRING);
       this.studentService.getStudentsOfGroup(this.selectedGroup[0].itemName).subscribe(
         (data: any) => {
           data.forEach(student => {
@@ -92,8 +99,10 @@ export class StudentsTableComponent implements OnInit {
             });
           });
           this.reloadTable();
+          this.blockUI.stop();
         },
         error => {
+          this.blockUI.stop();
           if (error.error.message != undefined) this.toast.error(error.error.message, "Ошибка");
           else this.toast.error(error.error, "Ошибка");
         }

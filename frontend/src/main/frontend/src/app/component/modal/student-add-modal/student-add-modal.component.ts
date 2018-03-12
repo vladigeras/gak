@@ -2,6 +2,8 @@ import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angula
 import {ToastsManager} from "ng2-toastr";
 import {UserService} from "../../../service/user.service";
 import {StudentService} from "../../../service/student.service";
+import {BlockUI, NgBlockUI} from "ng-block-ui";
+import {WAIT_STRING} from "../../../app.module";
 
 declare var $: any;
 
@@ -32,6 +34,7 @@ export class StudentAddModalComponent implements OnInit {
   availableReviewers = [];
   @Input() selectedReviewer = null;
   @Output() studentSaved = new EventEmitter();
+  @BlockUI() blockUI: NgBlockUI;
 
   groupSelectDropdownSettings = {
     singleSelection: true,
@@ -55,6 +58,7 @@ export class StudentAddModalComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.blockUI.start(WAIT_STRING);
     this.studentService.getAvailableGroups().subscribe(
       (data: any) => {
         data.forEach(group => this.availableGroups.push(
@@ -62,13 +66,16 @@ export class StudentAddModalComponent implements OnInit {
             id: this.availableGroups.length + 1,
             itemName: group.title
           }
-        ))
+        ));
+        this.blockUI.stop();
       },
       error => {
+        this.blockUI.stop();
         if (error.error.message != undefined) this.toast.error(error.error.message, "Ошибка");
         else this.toast.error(error.error, "Ошибка");
       }
     );
+    this.blockUI.start(WAIT_STRING);
     this.userService.getUsersByRole("MENTOR").subscribe(
       (data: any) => {
         data.forEach(user => this.availableMentors.push(
@@ -77,13 +84,16 @@ export class StudentAddModalComponent implements OnInit {
             userId: user.id,
             itemName: user.lastname + " " + user.firstname + " " + user.middlename
           }
-        ))
+        ));
+        this.blockUI.stop();
       },
       error => {
+        this.blockUI.stop();
         if (error.error.message != undefined) this.toast.error(error.error.message, "Ошибка");
         else this.toast.error(error.error, "Ошибка");
       }
     );
+    this.blockUI.start(WAIT_STRING);
     this.userService.getUsersByRole("REVIEWER").subscribe(
       (data: any) => {
         data.forEach(user => this.availableReviewers.push(
@@ -92,9 +102,11 @@ export class StudentAddModalComponent implements OnInit {
             userId: user.id,
             itemName: user.lastname + " " + user.firstname + " " + user.middlename
           }
-        ))
+        ));
+        this.blockUI.stop();
       },
       error => {
+        this.blockUI.stop();
         if (error.error.message != undefined) this.toast.error(error.error.message, "Ошибка");
         else this.toast.error(error.error, "Ошибка");
       }
@@ -135,11 +147,15 @@ export class StudentAddModalComponent implements OnInit {
     this.student.group = group;
     this.student.mentor = mentor;
     this.student.reviewer = reviewer;
+    this.blockUI.start(WAIT_STRING);
     this.studentService.saveStudent(this.student).subscribe(
       studentId => {
+        this.blockUI.stop();
         if (studentId) {
+          this.blockUI.start(WAIT_STRING);
           this.studentService.saveFiles(studentId, this.reportFile, this.presentationFile).subscribe(
             data => {
+              this.blockUI.stop();
               this.toast.success("Успешно");
               $('#studentAddModal').modal('hide');
               this.studentSaved.emit();
@@ -147,6 +163,7 @@ export class StudentAddModalComponent implements OnInit {
         }
       },
       error => {
+        this.blockUI.stop();
         if (error.error.message != undefined) this.toast.error(error.error.message, "Ошибка");
         else this.toast.error(error.error, "Ошибка");
       }

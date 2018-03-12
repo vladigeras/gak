@@ -47,6 +47,8 @@ export class CustomToastOptions extends ToastOptions {
   maxShown = 20;
 }
 
+export let WAIT_STRING = "Подождите";
+
 const routes: Routes = [
   {path: '', component: MainPageComponent},
   {path: 'president', component: PresidentPanelComponent, data: {roles: ["PRESIDENT"]}, canActivate: [GuardService]},

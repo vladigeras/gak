@@ -2,6 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {ToastsManager} from "ng2-toastr";
 import {CriteriaService} from "../../service/criteria.service";
 import {ACTIVE_SPEAKER} from "../speakers-student-table/speakers-student-table.component";
+import {BlockUI, NgBlockUI} from "ng-block-ui";
+import {WAIT_STRING} from "../../app.module";
 
 @Component({
   selector: 'app-criteria',
@@ -13,6 +15,7 @@ export class CriteriaComponent implements OnInit {
   activeSpeaker = ACTIVE_SPEAKER;
   criteriaToActiveSpeaker = [];
   resultMark;
+  @BlockUI() blockUI: NgBlockUI;
 
   constructor(private toast: ToastsManager, private criteriaService: CriteriaService) { }
 
@@ -21,6 +24,7 @@ export class CriteriaComponent implements OnInit {
   }
 
   getDefaultCriteria() {
+    this.blockUI.start(WAIT_STRING);
     this.criteriaService.getDefaultCriteria().subscribe(
       (data: any) => {
         data.forEach(c => {
@@ -31,7 +35,9 @@ export class CriteriaComponent implements OnInit {
             comment: null
           })
         });
-      }
+        this.blockUI.stop();
+      },
+      error => {this.blockUI.stop()}
     )
   }
 
@@ -41,18 +47,26 @@ export class CriteriaComponent implements OnInit {
         criteriaDtoList: this.criteriaToActiveSpeaker,
         speakerId: ACTIVE_SPEAKER.id
       };
+      this.blockUI.start(WAIT_STRING);
       this.criteriaService.saveCriteriaWithData(criteriaDtoWithResult).subscribe(
-        data => {this.toast.success("Критерии и оценки сохранены", "Успешно")}
+        data => {
+          this.blockUI.stop();
+          this.toast.success("Критерии и оценки сохранены", "Успешно")
+        },
+        error => {this.blockUI.stop()}
       )
     }
   }
 
   saveResult() {
     if (ACTIVE_SPEAKER != null) {
+      this.blockUI.start(WAIT_STRING);
       this.criteriaService.saveResultMarkFromUserToSpeaker(this.resultMark, ACTIVE_SPEAKER.id).subscribe(
         data => {
+          this.blockUI.stop();
           this.toast.success("Оценка сохранена", "Успешно")
-        })
+        },
+        error => {this.blockUI.stop()})
     }
   }
 
