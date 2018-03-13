@@ -59,13 +59,16 @@ public class StudentServiceImpl implements StudentService {
     @Transactional
     public Long saveStudent(Student student) {
         GroupEntity groupEntity = groupRepository.findOne(student.getGroup().getTitle());
-        if (groupEntity == null) throw new RuntimeException("Группа с названием " + student.getGroup().getTitle() + "  не найдена");
+        if (groupEntity == null)
+            throw new RuntimeException("Группа с названием " + student.getGroup().getTitle() + "  не найдена");
 
         UserEntity mentorEntity = userRepository.findOne(student.getMentor().getId());
-        if (mentorEntity == null) throw new RuntimeException("Руководитель с id " + student.getMentor().getId() + "  не найден");
+        if (mentorEntity == null)
+            throw new RuntimeException("Руководитель с id " + student.getMentor().getId() + "  не найден");
 
         UserEntity reviewerEntity = userRepository.findOne(student.getReviewer().getId());
-        if (reviewerEntity == null) throw new RuntimeException("Рецензент с id " + student.getReviewer().getId() + "  не найден");
+        if (reviewerEntity == null)
+            throw new RuntimeException("Рецензент с id " + student.getReviewer().getId() + "  не найден");
 
         StudentEntity studentEntity = null;
         DiplomEntity diplomEntity = null;
@@ -98,7 +101,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     @Transactional
-    public void saveFiles(Long studentId, MultipartFile reportFile, MultipartFile presentationFile) throws IOException{
+    public void saveFiles(Long studentId, MultipartFile reportFile, MultipartFile presentationFile) throws IOException {
         StudentEntity studentEntity = studentRepository.findOne(studentId);
         if (studentEntity == null) throw new RuntimeException("Произошла ошибка");
 

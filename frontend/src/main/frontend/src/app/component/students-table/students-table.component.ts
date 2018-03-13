@@ -35,26 +35,16 @@ export class StudentsTableComponent implements OnInit {
   };
   @BlockUI() blockUI: NgBlockUI;
 
-  constructor(private toast: ToastsManager, private studentService: StudentService) {
-  }
+  constructor(private toast: ToastsManager, private studentService: StudentService) {}
 
   ngOnInit() {
     this.getAvailableGroups();
   }
 
   showEmptyModalForAdd() {
-    this.selectedStudent = {
-      id: null,
-      firstname: null,
-      middlename: null,
-      lastname: null,
-      title: null,
-      group: null,
-      mentor: null,
-      reviewer: null
-    };
+    this.clearSelected()
     this.isAddingNewStudent = true;
-    $('#studentAddModal').modal('show');
+    $('#studentAddModal').modal({backdrop: 'static', keyboard: false});
   }
 
   getAvailableGroups() {
@@ -115,6 +105,8 @@ export class StudentsTableComponent implements OnInit {
   }
 
   selectStudentToUpdate(event) {
+    this.clearSelected();
+
     let row = event.selected[0];
     let fio = row.fio;
     fio = fio.trim().split(" ");
@@ -134,11 +126,17 @@ export class StudentsTableComponent implements OnInit {
       userId: row.reviewerId
     });
     this.isAddingNewStudent = false;
-    $('#studentAddModal').modal('show');
+    $('#studentAddModal').modal({backdrop: 'static', keyboard: false});
   }
 
   readFile (row, isReport: boolean) {
     let studentId = row.id;
     this.studentService.readFile(studentId, isReport);
+  }
+
+  clearSelected() {
+    this.selectedStudent = {id: null, firstname: null, middlename: null, lastname: null, title: null, group: null, mentor: null, reviewer: null};
+    this.selectedReviewer = [];
+    this.selectedMentor = [];
   }
 }

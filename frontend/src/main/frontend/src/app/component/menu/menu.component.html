@@ -26,7 +26,7 @@
 
       <div class="nav navbar-nav navbar-right">
         <button *ngIf="principal.id == null" class="btn btn-default navbar-btn" data-toggle="modal"
-                data-target="#loginModal" type="submit">Вход в систему
+                data-target="#loginModal" data-backdrop="static" data-keyboard="false" type="submit">Вход в систему
         </button>
 
         <div *ngIf="principal.id != null">

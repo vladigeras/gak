@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, Output} from '@angular/core';
 import {UserService} from "../../service/user.service";
 import {ToastsManager} from "ng2-toastr";
 import {HelperService} from "../../service/helper.service";
@@ -68,9 +68,16 @@ export class UsersTableComponent implements OnInit {
   }
 
   selectUserToUpdate(event) {
-    this.roles = [];
     let row = event.selected[0];
-    row.roles.replace("/\s/ig", "").split(",").forEach(r => {
+
+    if (JSON.stringify(this.selectedUser) === JSON.stringify(row)) {
+      return;
+    }
+
+    this.clearSelected();
+
+    this.selectedUser = row;
+    row.roles.split(", ").forEach(r => {
       let originalRole = HelperService.convertRoleToOriginal(r);
       this.roles.push({
         id: this.roles.length + 1,
@@ -78,15 +85,18 @@ export class UsersTableComponent implements OnInit {
         itemName: r
       })
     });
-    this.selectedUser = row;
     this.isAddingNewUser = false;
-    $('#userAddModal').modal('show');
+    $('#userAddModal').modal({backdrop: 'static', keyboard: false});
   }
 
   showEmptyModalForAdd() {
+    this.clearSelected();
+    this.isAddingNewUser = true;
+    $('#userAddModal').modal({backdrop: 'static', keyboard: false});
+  }
+
+  clearSelected() {
     this.selectedUser = {firstname: null, middlename: null, lastname: null, login: null, password: null, roles: []};
     this.roles = [];
-    this.isAddingNewUser = true;
-    $('#userAddModal').modal('show');
   }
 }

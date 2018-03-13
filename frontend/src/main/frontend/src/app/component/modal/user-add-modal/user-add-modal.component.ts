@@ -88,7 +88,8 @@ export class UserAddModalComponent implements OnInit {
     let roles = [];
     this.selectedRoles.forEach(object => roles.push(object.original));
     this.user.roles = roles;
-    this.blockUI.start(WAIT_STRING)
+
+    this.blockUI.start(WAIT_STRING);
     this.userService.updateUser(this.user).subscribe(
       data => {
         this.toast.success("Данные обновлены", "Успешно");

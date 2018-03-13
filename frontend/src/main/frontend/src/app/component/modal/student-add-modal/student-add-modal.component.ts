@@ -124,7 +124,7 @@ export class StudentAddModalComponent implements OnInit {
       mentor: null,
       reviewer: null
     };
-    this.selectedGroup = [];
+    // this.selectedGroup = [];
     this.selectedMentor = [];
     this.selectedReviewer = [];
     this.reportFile = null;
