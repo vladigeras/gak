@@ -66,6 +66,9 @@
               </button>
             </div>
             <div *ngIf="!isAddingNewStudent">
+              <button type="submit" class="btn btn-danger"
+                      (click)="delete()">Удалить
+              </button>
               <button type="submit" class="btn btn-primary pull-right"
                       (click)="save()">Сохранить
               </button>

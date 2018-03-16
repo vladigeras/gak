@@ -33,4 +33,8 @@ export class StudentService {
     a.href = "/students/readFile" + "?student=" + studentId + "&isReport=" + isReport;
     a.click()
   }
+
+  deleteStudent(studentId) {
+    return this.http.post("/students/delete", studentId)
+  }
 }

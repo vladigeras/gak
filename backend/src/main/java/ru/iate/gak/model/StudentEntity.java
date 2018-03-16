@@ -19,10 +19,10 @@ public class StudentEntity extends LongIdentifiableEntity {
     @JoinColumn(name = "group_title")
     private GroupEntity group;
 
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "student")
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "student", cascade = CascadeType.REMOVE)
     private DiplomEntity diplom;
 
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "student")
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "student", cascade = CascadeType.REMOVE)
     private SpeakerEntity speaker;
 
     public String getFirstname() {

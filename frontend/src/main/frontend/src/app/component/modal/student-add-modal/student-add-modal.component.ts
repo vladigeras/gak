@@ -166,8 +166,24 @@ export class StudentAddModalComponent implements OnInit {
         this.blockUI.stop();
         if (error.error.message != undefined) this.toast.error(error.error.message, "Ошибка");
         else this.toast.error(error.error, "Ошибка");
-      }
-    )
+      })
+  }
+
+  delete() {
+    if (this.student.id != null) {
+      this.studentService.deleteStudent(this.student.id).subscribe(
+        data => {
+          this.blockUI.stop();
+          this.toast.success("Успешно");
+          $('#studentAddModal').modal('hide');
+          this.studentSaved.emit();
+        },
+        error => {
+          this.blockUI.stop();
+          if (error.error.message != undefined) this.toast.error(error.error.message, "Ошибка");
+          else this.toast.error(error.error, "Ошибка");
+        })
+    }
   }
 
   getReportFile(event) {

@@ -12,7 +12,6 @@ import ru.iate.gak.util.StringUtil;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -75,6 +74,14 @@ public class StudentController {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        } else throw new RuntimeException("Некорректный id");
+    }
+
+    @PostMapping(value = "/delete")
+    @GakSecured(roles = {Roles.ADMIN})
+    public void deleteStudent(@RequestBody Long id) {
+        if (id > 0) {
+            studentService.deleteStudent(id);
         } else throw new RuntimeException("Некорректный id");
     }
 }

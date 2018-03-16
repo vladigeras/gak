@@ -127,4 +127,10 @@ public class StudentServiceImpl implements StudentService {
             } else throw new RuntimeException("У этого студента еще не загружен данный фаил");
         }
     }
+
+    @Override
+    @Transactional
+    public void deleteStudent(Long id) {
+        studentRepository.delete(id);
+    }
 }

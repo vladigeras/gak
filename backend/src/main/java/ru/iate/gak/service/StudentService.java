@@ -11,4 +11,5 @@ public interface StudentService {
     Long saveStudent(Student student);
     void saveFiles(Long studentId, MultipartFile reportFile, MultipartFile presentationFile) throws IOException;
     byte[] readFile(Long studentId, boolean isReport);
+    void deleteStudent(Long id);
 }
