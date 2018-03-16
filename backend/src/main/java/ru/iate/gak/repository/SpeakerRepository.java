@@ -14,11 +14,11 @@ import java.util.List;
 @Repository
 public interface SpeakerRepository extends JpaRepository<SpeakerEntity, Long> {
 
-    @Query(value = "SELECT s FROM SpeakerEntity s WHERE s.student.group = :group ORDER BY s.date ASC, s.orderOfSpeaking ASC")
+    @Query(value = "SELECT s FROM SpeakerEntity s WHERE (s.student.deletedTime IS NULL) AND (s.student.group = :group) ORDER BY s.date ASC, s.orderOfSpeaking ASC")
     List<SpeakerEntity> getSpeakersListOfCurrentGroup(@Param("group") GroupEntity group);
 
     void deleteByStudent(StudentEntity student);
 
-    @Query(value = "SELECT s FROM SpeakerEntity s WHERE (s.student.group = :group) AND (s.date = :date) ORDER BY s.orderOfSpeaking ASC")
+    @Query(value = "SELECT s FROM SpeakerEntity s WHERE (s.student.deletedTime IS NULL) AND (s.student.group = :group) AND (s.date = :date) ORDER BY s.orderOfSpeaking ASC")
     List<SpeakerEntity> getSpeakersListOfCurrentGroupOfDay(@Param("group") GroupEntity group, @Param("date") LocalDateTime date);
 }

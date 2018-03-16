@@ -2,11 +2,14 @@ package ru.iate.gak.domain;
 
 import ru.iate.gak.model.StudentEntity;
 
+import java.time.LocalDateTime;
+
 public class Student extends LongIdentifiable {
     private String firstname;
     private String middlename;
     private String lastname;
     private String title;
+    private LocalDateTime deleteTime;
     private Group group;
     private User mentor;
     private User reviewer;
@@ -21,6 +24,7 @@ public class Student extends LongIdentifiable {
         this.middlename = studentEntity.getMiddlename();
         this.lastname = studentEntity.getLastname();
         this.title = (studentEntity.getDiplom() == null) ? null : studentEntity.getDiplom().getTitle();
+        this.deleteTime = studentEntity.getDeletedTime();
     }
 
     public String getFirstname() {
@@ -94,5 +98,13 @@ public class Student extends LongIdentifiable {
 
     public void setPresentation(byte[] presentation) {
         this.presentation = presentation;
+    }
+
+    public LocalDateTime getDeleteTime() {
+        return deleteTime;
+    }
+
+    public void setDeleteTime(LocalDateTime deleteTime) {
+        this.deleteTime = deleteTime;
     }
 }

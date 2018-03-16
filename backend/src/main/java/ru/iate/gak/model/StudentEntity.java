@@ -1,6 +1,7 @@
 package ru.iate.gak.model;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "students")
@@ -14,6 +15,9 @@ public class StudentEntity extends LongIdentifiableEntity {
 
     @Column(name = "lastname")
     private String lastname;
+
+    @Column(name = "deleted_time")
+    private LocalDateTime deletedTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "group_title")
@@ -71,5 +75,13 @@ public class StudentEntity extends LongIdentifiableEntity {
 
     public void setSpeaker(SpeakerEntity speaker) {
         this.speaker = speaker;
+    }
+
+    public LocalDateTime getDeletedTime() {
+        return deletedTime;
+    }
+
+    public void setDeletedTime(LocalDateTime deletedTime) {
+        this.deletedTime = deletedTime;
     }
 }

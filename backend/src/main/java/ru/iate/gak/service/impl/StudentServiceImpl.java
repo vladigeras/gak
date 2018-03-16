@@ -17,6 +17,8 @@ import ru.iate.gak.service.StudentService;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,7 +44,7 @@ public class StudentServiceImpl implements StudentService {
         if (groupEntity == null) throw new RuntimeException("Группа с названием " + group + "  не найдена");
 
         List<Student> result = new ArrayList<>();
-        studentRepository.getAllByGroup(groupEntity).forEach(s -> {
+        studentRepository.getAllByGroupAndDeletedTimeIsNull(groupEntity).forEach(s -> {
             Student student = new Student(s);
             student.setTitle(s.getDiplom().getTitle());
             student.setMentor(new User(s.getDiplom().getMentor()));
@@ -131,6 +133,10 @@ public class StudentServiceImpl implements StudentService {
     @Override
     @Transactional
     public void deleteStudent(Long id) {
-        studentRepository.delete(id);
+        StudentEntity student = studentRepository.findOne(id);
+        if (student == null) throw new RuntimeException("Произошла ошибка");
+
+        student.setDeletedTime(LocalDateTime.now(ZoneOffset.UTC));
+        studentRepository.save(student);
     }
 }

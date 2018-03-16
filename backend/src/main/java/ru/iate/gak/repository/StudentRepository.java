@@ -9,5 +9,5 @@ import java.util.List;
 
 @Repository
 public interface StudentRepository extends JpaRepository<StudentEntity, Long> {
-    List<StudentEntity> getAllByGroup(GroupEntity groupEntity);
+    List<StudentEntity> getAllByGroupAndDeletedTimeIsNull(GroupEntity groupEntity);
 }
