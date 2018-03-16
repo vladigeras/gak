@@ -32,7 +32,8 @@
     </ngx-datatable-column>
   </ngx-datatable>
 
-  <div class="question-block" *ngIf="selectedGroup[0] != null && activeSpeaker != null">
+  <div class="question-block"
+       *ngIf="selectedGroup[0] != null && activeSpeaker != null && principal != null && principal.roles.indexOf('SECRETARY') != -1">
     <div class="row">
       <div class="pull-left">
         <h4>Вопросы к студенту <strong class="text-danger">{{activeSpeaker.fio}}</strong></h4>

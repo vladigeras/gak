@@ -18,7 +18,7 @@ declare var $: any;
 export class SpeakersStudentTableComponent implements OnInit {
 
   principal = CURRENT_PRINCIPAL;
-  activeSpeaker = ACTIVE_SPEAKER;
+  activeSpeaker = {id: null, fio: null};
   selectedSpeaker = null;
   availableGroups = [];
   today = moment().startOf('day');
@@ -69,7 +69,7 @@ export class SpeakersStudentTableComponent implements OnInit {
 
   setActiveStudent() {
     if (this.selectedSpeaker != null) {
-      ACTIVE_SPEAKER = {
+      this.activeSpeaker = {
         id: this.selectedSpeaker.id,
         fio: this.selectedSpeaker.fio
       };
@@ -80,7 +80,7 @@ export class SpeakersStudentTableComponent implements OnInit {
 
   getSpeakersStudentsOfGroup() {
     if (this.selectedGroup[0] != undefined) {
-      ACTIVE_SPEAKER = null;
+      this.activeSpeaker = null;
       this.speakerStudents = [];
       this.blockUI.start(WAIT_STRING);
       this.speakerService.getSpeakersListOfGroupOfDay(this.selectedGroup[0].itemName, this.today.unix() * 1000).subscribe(
@@ -129,7 +129,7 @@ export class SpeakersStudentTableComponent implements OnInit {
         questions.push({id: q.id, questionText: q.text})
       });
       this.blockUI.start(WAIT_STRING);
-      this.questionService.saveQuestions(ACTIVE_SPEAKER.id, questions).subscribe(
+      this.questionService.saveQuestions(this.activeSpeaker.id, questions).subscribe(
         data => {
           this.blockUI.stop();
           this.toast.success("Сохранено", "Успешно")
@@ -143,7 +143,7 @@ export class SpeakersStudentTableComponent implements OnInit {
     if (this.selectedGroup[0] != undefined) {
       this.criteria = [];
       this.blockUI.start(WAIT_STRING);
-      this.questionService.getQuestionsOfSpeaker(ACTIVE_SPEAKER.id).subscribe(
+      this.questionService.getQuestionsOfSpeaker(this.activeSpeaker.id).subscribe(
         (data: any) => {
           data.forEach(q => {
             this.criteria.push({
@@ -165,5 +165,3 @@ export class SpeakersStudentTableComponent implements OnInit {
     }
   }
 }
-
-export var ACTIVE_SPEAKER = null;

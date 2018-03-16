@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ToastsManager} from "ng2-toastr";
 import {CriteriaService} from "../../service/criteria.service";
-import {ACTIVE_SPEAKER} from "../speakers-student-table/speakers-student-table.component";
 import {BlockUI, NgBlockUI} from "ng-block-ui";
 import {WAIT_STRING} from "../../app.module";
 
@@ -12,7 +11,7 @@ import {WAIT_STRING} from "../../app.module";
 })
 export class CriteriaComponent implements OnInit {
 
-  activeSpeaker = ACTIVE_SPEAKER;
+  activeSpeaker = {id: null, fio: null};
   criteriaToActiveSpeaker = [];
   resultMark;
   @BlockUI() blockUI: NgBlockUI;
@@ -45,10 +44,10 @@ export class CriteriaComponent implements OnInit {
   }
 
   saveCriteria() {
-    if (ACTIVE_SPEAKER != null) {
+    if (this.activeSpeaker != null) {
       let criteriaDtoWithResult = {
         criteriaDtoList: this.criteriaToActiveSpeaker,
-        speakerId: ACTIVE_SPEAKER.id
+        speakerId: this.activeSpeaker.id
       };
       this.blockUI.start(WAIT_STRING);
       this.criteriaService.saveCriteriaWithData(criteriaDtoWithResult).subscribe(
@@ -66,9 +65,9 @@ export class CriteriaComponent implements OnInit {
   }
 
   saveResult() {
-    if (ACTIVE_SPEAKER != null) {
+    if (this.activeSpeaker != null) {
       this.blockUI.start(WAIT_STRING);
-      this.criteriaService.saveResultMarkFromUserToSpeaker(this.resultMark, ACTIVE_SPEAKER.id).subscribe(
+      this.criteriaService.saveResultMarkFromUserToSpeaker(this.resultMark, this.activeSpeaker.id).subscribe(
         data => {
           this.blockUI.stop();
           this.toast.success("Оценка сохранена", "Успешно")
