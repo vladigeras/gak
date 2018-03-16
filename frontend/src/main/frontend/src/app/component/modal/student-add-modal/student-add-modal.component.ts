@@ -150,8 +150,7 @@ export class StudentAddModalComponent implements OnInit {
     this.blockUI.start(WAIT_STRING);
     this.studentService.saveStudent(this.student).subscribe(
       studentId => {
-        this.blockUI.stop();
-        if (studentId) {
+        if (studentId != null) {
           this.blockUI.start(WAIT_STRING);
           this.studentService.saveFiles(studentId, this.reportFile, this.presentationFile).subscribe(
             data => {
@@ -159,7 +158,15 @@ export class StudentAddModalComponent implements OnInit {
               this.toast.success("Успешно");
               $('#studentAddModal').modal('hide');
               this.studentSaved.emit();
-            });
+            },
+            error => {
+              this.blockUI.stop();
+              if (error.error.message != undefined) this.toast.error(error.error.message, "Ошибка");
+              else this.toast.error(error.error, "Ошибка");
+            })
+        } else {
+          this.blockUI.stop();
+          this.toast.error("Произошла ошибка")
         }
       },
       error => {
