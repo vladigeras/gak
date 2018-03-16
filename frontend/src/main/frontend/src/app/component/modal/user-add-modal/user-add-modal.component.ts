@@ -13,7 +13,7 @@ declare var $: any;
 })
 export class UserAddModalComponent implements OnInit {
   @Output() userChangedOrAdded = new EventEmitter<boolean>();
-  @Input() user = {firstname: null, middlename: null, lastname: null, login: null, password: null, roles: []};
+  @Input() user = {id: null, firstname: null, middlename: null, lastname: null, login: null, password: null, roles: []};
   confirmPassword = null;
   @Input() selectedRoles = [];
   availableRoles = [];
@@ -75,7 +75,7 @@ export class UserAddModalComponent implements OnInit {
   }
 
   clearWindow() {
-    this.user = {firstname: null, middlename: null, lastname: null, login: null, password: null, roles: []};
+    this.user = {id: null, firstname: null, middlename: null, lastname: null, login: null, password: null, roles: []};
     this.confirmPassword = null;
     this.selectedRoles = [];
   }

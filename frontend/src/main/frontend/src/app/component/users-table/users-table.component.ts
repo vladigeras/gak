@@ -21,7 +21,7 @@ export class UsersTableComponent implements OnInit {
     {prop: "login", name: "Логин"},
     {prop: "roles", name: "Роль"}
   ];
-  selectedUser = {firstname: null, middlename: null, lastname: null, login: null, password: null, roles: []};
+  selectedUser = {id: null, firstname: null, middlename: null, lastname: null, login: null, password: null, roles: []};
   roles = [];
   isAddingNewUser;
   @BlockUI() blockUI: NgBlockUI;
@@ -45,6 +45,7 @@ export class UsersTableComponent implements OnInit {
           });
           roles = roles.trim().replace(/.$/, "");
           this.users.push({
+            id: u.id,
             firstname: u.firstname,
             lastname: u.lastname,
             middlename: u.middlename,
@@ -69,7 +70,6 @@ export class UsersTableComponent implements OnInit {
 
   selectUserToUpdate(event) {
     let row = event.selected[0];
-
     if (JSON.stringify(this.selectedUser) === JSON.stringify(row)) {
       return;
     }
@@ -96,7 +96,7 @@ export class UsersTableComponent implements OnInit {
   }
 
   clearSelected() {
-    this.selectedUser = {firstname: null, middlename: null, lastname: null, login: null, password: null, roles: []};
+    this.selectedUser = {id: null, firstname: null, middlename: null, lastname: null, login: null, password: null, roles: []};
     this.roles = [];
   }
 }

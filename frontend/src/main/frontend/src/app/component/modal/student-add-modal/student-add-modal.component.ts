@@ -178,6 +178,7 @@ export class StudentAddModalComponent implements OnInit {
 
   delete() {
     if (this.student.id != null) {
+      this.blockUI.start(WAIT_STRING);
       this.studentService.deleteStudent(this.student.id).subscribe(
         data => {
           this.blockUI.stop();
