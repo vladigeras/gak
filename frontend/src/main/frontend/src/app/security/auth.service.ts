@@ -33,7 +33,7 @@ export class AuthService {
           CURRENT_PRINCIPAL.id = data.id;
           CURRENT_PRINCIPAL.name = data.name;
           CURRENT_PRINCIPAL.roles = data.roles;
-          this.principalReady.emit()
+          this.principalReady.emit();
           this.blockUI.stop();
         },
         error => {

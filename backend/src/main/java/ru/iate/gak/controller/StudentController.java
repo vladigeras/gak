@@ -51,6 +51,19 @@ public class StudentController {
                           @RequestParam(name = "reportFile", required = false) MultipartFile reportFile,
                           @RequestParam(name = "presentationFile", required = false) MultipartFile presentationFile) {
         if (id > 0) {
+            String fileFormat;
+            if (reportFile != null) {
+                fileFormat = getLastSplittingStringBySymbol(reportFile.getOriginalFilename(), "\\.");
+                if (!fileFormat.equals("pdf"))
+                    throw new RuntimeException("Отчет должен быть в pdf формате");
+            }
+
+            if (presentationFile != null) {
+                fileFormat = getLastSplittingStringBySymbol(presentationFile.getOriginalFilename(), "\\.");
+                if (!fileFormat.equals("pdf"))
+                    throw new RuntimeException("Презентация должна быть в pdf формате");
+            }
+
             try {
                 studentService.saveFiles(id, reportFile, presentationFile);
             } catch (IOException e) {
@@ -83,5 +96,18 @@ public class StudentController {
         if (id > 0) {
             studentService.deleteStudent(id);
         } else throw new RuntimeException("Некорректный id");
+    }
+
+    /**
+     * Split string by symbol and get last splitting
+     * @param input input string (reg. expression)
+     * @param symbol splitting symbol
+     * @return last splitting if input != null, else return empty
+     */
+    private String getLastSplittingStringBySymbol(String input, String symbol) {
+        if (input != null && symbol != null) {
+            Integer splittingCount = input.split(symbol).length - 1;
+            return input.split(symbol)[splittingCount];
+        } else return "";
     }
 }
