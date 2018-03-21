@@ -33,12 +33,12 @@ import {OWL_DATE_TIME_LOCALE, OwlDateTimeModule, OwlNativeDateTimeModule} from '
 import {SpeakerService} from "./service/speaker.service";
 import {CommissionsTableComponent} from './component/commissions-table/commissions-table.component';
 import {CommissionService} from "./service/commission.service";
-import { SpeakersStudentTableComponent } from './component/speakers-student-table/speakers-student-table.component';
+import {SpeakersStudentTableComponent} from './component/speakers-student-table/speakers-student-table.component';
 import {QuestionService} from "./service/question.service";
 import {GuardService} from "./security/guard.service";
 import {CriteriaComponent} from "./component/criteria/criteria.component";
 import {CriteriaService} from "./service/criteria.service";
-import { BlockUIModule } from 'ng-block-ui';
+import {BlockUIModule} from 'ng-block-ui';
 
 
 export class CustomToastOptions extends ToastOptions {
@@ -48,6 +48,7 @@ export class CustomToastOptions extends ToastOptions {
 }
 
 export let WAIT_STRING = "Подождите";
+export let SOCKET_PATH = "http://localhost:8080/socket";
 
 const routes: Routes = [
   {path: '', component: MainPageComponent},
@@ -105,7 +106,7 @@ const routes: Routes = [
     QuestionService,
     {provide: OWL_DATE_TIME_LOCALE, useValue: 'ru'},
     GuardService,
-    CriteriaService
+    CriteriaService,
   ],
   bootstrap: [AppComponent]
 })

@@ -7,7 +7,6 @@ import {QuestionService} from "../../service/question.service";
 import {CURRENT_PRINCIPAL} from "../../security/auth.service";
 import {BlockUI, NgBlockUI} from "ng-block-ui";
 import {WAIT_STRING} from "../../app.module";
-
 declare var $: any;
 
 @Component({
@@ -165,3 +164,5 @@ export class SpeakersStudentTableComponent implements OnInit {
     }
   }
 }
+
+

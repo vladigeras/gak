@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+
+</head>
+<body>
+<button onclick="send()">Send data</button>
+</body>
+</html>
+
+<script>
+  var socket = new SockJS("http://localhost:8080/socket");
+  let stomp = Stomp.over(socket);
+
+  stomp.connect({}, function () {
+    stomp.subscribe("/active", (message) => {
+      console.log("active")
+      if(message) {
+        console.log("active")
+        console.log(message);
+      }
+    });
+
+    stomp.subscribe("/done", (message) => {
+      console.log("done");
+      if(message) {
+        console.log("done");
+        console.log(message);
+      }
+    });
+  });
+
+  function send() {
+    stomp.send("/app/activeSpeaker", {}, 3);
+    stomp.send("/app/doneSpeaker", {}, 5);
+
+  }
+</script>

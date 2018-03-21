@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.iate.gak.domain.Role;
 import ru.iate.gak.domain.Speaker;
+import ru.iate.gak.domain.Status;
 import ru.iate.gak.model.*;
 import ru.iate.gak.repository.CommissionRepository;
 import ru.iate.gak.repository.GroupRepository;
@@ -158,5 +159,23 @@ public class SpeakerServiceImpl implements SpeakerService {
         });
 
         return result;
+    }
+
+    @Override
+    @Transactional
+    public Speaker updateDiplomStatus(Long speakerId, Status status) {
+        if (speakerId > 0) {
+            SpeakerEntity speakerEntity = speakerRepository.getOne(speakerId);
+            if (speakerEntity != null) {
+                if (speakerEntity.getStudent() != null) {
+                    if (speakerEntity.getStudent().getDiplom() != null) {
+                        speakerEntity.getStudent().getDiplom().setStatus(status);
+                        speakerRepository.save(speakerEntity);
+
+                        return new Speaker(speakerEntity);
+                    } else throw new RuntimeException("Произошла ошибка");
+                } else throw new RuntimeException("Произошла ошибка");
+            } else throw new RuntimeException("Произошла ошибка");
+        } else throw new RuntimeException("Произошла ошибка");
     }
 }
