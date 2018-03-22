@@ -7,3 +7,13 @@
 @import "~ng2-dnd/bundles/style.css";
 
 @import "~ng-pick-datetime/assets/style/picker.min.css";
+
+//styles for table row
+.active-student-row {
+  background: #08ebff;
+}
+
+.done-student-row {
+  background: #858885;
+}
+

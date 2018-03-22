@@ -13,6 +13,7 @@ public class Student extends LongIdentifiable {
     private Group group;
     private User mentor;
     private User reviewer;
+    private Status status;
     private byte[] report;
     private byte[] presentation;
 
@@ -25,6 +26,7 @@ public class Student extends LongIdentifiable {
         this.lastname = studentEntity.getLastname();
         this.title = (studentEntity.getDiplom() == null) ? null : studentEntity.getDiplom().getTitle();
         this.deleteTime = studentEntity.getDeletedTime();
+        this.status = (studentEntity.getDiplom() == null) ? null : studentEntity.getDiplom().getStatus();
     }
 
     public String getFirstname() {
@@ -106,5 +108,13 @@ public class Student extends LongIdentifiable {
 
     public void setDeleteTime(LocalDateTime deleteTime) {
         this.deleteTime = deleteTime;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 }

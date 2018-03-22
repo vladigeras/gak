@@ -3,7 +3,7 @@ import {ToastsManager} from "ng2-toastr";
 import {UserService} from "../../../service/user.service";
 import {StudentService} from "../../../service/student.service";
 import {BlockUI, NgBlockUI} from "ng-block-ui";
-import {WAIT_STRING} from "../../../app.module";
+import {waitString} from "../../../app.module";
 
 declare var $: any;
 
@@ -58,7 +58,7 @@ export class StudentAddModalComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.blockUI.start(WAIT_STRING);
+    this.blockUI.start(waitString);
     this.studentService.getAvailableGroups().subscribe(
       (data: any) => {
         data.forEach(group => this.availableGroups.push(
@@ -75,7 +75,7 @@ export class StudentAddModalComponent implements OnInit {
         else this.toast.error(error.error, "Ошибка");
       }
     );
-    this.blockUI.start(WAIT_STRING);
+    this.blockUI.start(waitString);
     this.userService.getUsersByRole("MENTOR").subscribe(
       (data: any) => {
         data.forEach(user => this.availableMentors.push(
@@ -93,7 +93,7 @@ export class StudentAddModalComponent implements OnInit {
         else this.toast.error(error.error, "Ошибка");
       }
     );
-    this.blockUI.start(WAIT_STRING);
+    this.blockUI.start(waitString);
     this.userService.getUsersByRole("REVIEWER").subscribe(
       (data: any) => {
         data.forEach(user => this.availableReviewers.push(
@@ -147,11 +147,11 @@ export class StudentAddModalComponent implements OnInit {
     this.student.group = group;
     this.student.mentor = mentor;
     this.student.reviewer = reviewer;
-    this.blockUI.start(WAIT_STRING);
+    this.blockUI.start(waitString);
     this.studentService.saveStudent(this.student).subscribe(
       studentId => {
         if (studentId != null) {
-          this.blockUI.start(WAIT_STRING);
+          this.blockUI.start(waitString);
           this.studentService.saveFiles(studentId, this.reportFile, this.presentationFile).subscribe(
             data => {
               this.blockUI.stop();
@@ -178,7 +178,7 @@ export class StudentAddModalComponent implements OnInit {
 
   delete() {
     if (this.student.id != null) {
-      this.blockUI.start(WAIT_STRING);
+      this.blockUI.start(waitString);
       this.studentService.deleteStudent(this.student.id).subscribe(
         data => {
           this.blockUI.stop();

@@ -1,11 +1,11 @@
 import {ActivatedRouteSnapshot, CanActivate, Router} from "@angular/router";
 import {Injectable} from "@angular/core";
-import {AuthService, CURRENT_PRINCIPAL} from "./auth.service";
+import {AuthService, currentPrincipal} from "./auth.service";
 
 @Injectable()
 export class GuardService implements CanActivate {
 
-  principal = CURRENT_PRINCIPAL;
+  principal = currentPrincipal;
 
   constructor(private authService: AuthService, private router: Router) {
   }

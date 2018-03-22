@@ -39,6 +39,7 @@ import {GuardService} from "./security/guard.service";
 import {CriteriaComponent} from "./component/criteria/criteria.component";
 import {CriteriaService} from "./service/criteria.service";
 import {BlockUIModule} from 'ng-block-ui';
+import {SocketService} from "./service/socket.service";
 
 
 export class CustomToastOptions extends ToastOptions {
@@ -47,8 +48,8 @@ export class CustomToastOptions extends ToastOptions {
   maxShown = 20;
 }
 
-export let WAIT_STRING = "Подождите";
-export let SOCKET_PATH = "http://localhost:8080/socket";
+export let waitString = "Подождите";
+export let socketPath = "http://localhost:8080/socket";
 
 const routes: Routes = [
   {path: '', component: MainPageComponent},
@@ -107,6 +108,7 @@ const routes: Routes = [
     {provide: OWL_DATE_TIME_LOCALE, useValue: 'ru'},
     GuardService,
     CriteriaService,
+    SocketService
   ],
   bootstrap: [AppComponent]
 })

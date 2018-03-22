@@ -24,4 +24,12 @@ public class WebsocketController {
             this.messagingTemplate.convertAndSend("/active", speakerDto);
         }
     }
+
+    @MessageMapping("/doneSpeaker")
+    public void saveDoneSpeaker(Long speakerId) {
+        if (speakerId > 0) {
+            SpeakerDto speakerDto = new SpeakerDto(speakerService.updateDiplomStatus(speakerId, Status.DONE));
+            this.messagingTemplate.convertAndSend("/done", speakerDto);
+        }
+    }
 }

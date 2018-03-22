@@ -4,7 +4,7 @@ import {StudentService} from "../../service/student.service";
 import {SpeakerService} from "../../service/speaker.service";
 import * as moment from 'moment';
 import {BlockUI, NgBlockUI} from "ng-block-ui";
-import {WAIT_STRING} from "../../app.module";
+import {waitString} from "../../app.module";
 
 @Component({
   selector: 'app-student-speech-by-date',
@@ -39,7 +39,7 @@ export class StudentSpeechByDateComponent implements OnInit {
   }
 
   getAvailableGroups() {
-    this.blockUI.start(WAIT_STRING);
+    this.blockUI.start(waitString);
     this.studentService.getAvailableGroups().subscribe(
       (data: any) => {
         data.forEach(group => this.availableGroups.push(
@@ -77,7 +77,7 @@ export class StudentSpeechByDateComponent implements OnInit {
   }
 
   getStudentsOfGroup(group, callback) {
-    this.blockUI.start(WAIT_STRING);
+    this.blockUI.start(waitString);
     this.studentService.getStudentsOfGroup(this.selectedGroup[0].itemName).subscribe(
       (data: any) => {
         data.forEach(student => {
@@ -99,7 +99,7 @@ export class StudentSpeechByDateComponent implements OnInit {
   }
 
   getSpeakersListOfGroup(group) {
-    this.blockUI.start(WAIT_STRING);
+    this.blockUI.start(waitString);
     this.speakerService.getSpeakersListOfGroupOfDay(group, null).subscribe(
       (data: any) => {
         let dateList = [];
@@ -184,7 +184,7 @@ export class StudentSpeechByDateComponent implements OnInit {
           student: s
         })
       });
-      this.blockUI.start(WAIT_STRING);
+      this.blockUI.start(waitString);
       this.speakerService.saveSpeakersList(speakersDto).subscribe(
         data => {
           this.toast.success("Данные были сохранены", "Успешно");

@@ -3,7 +3,7 @@ import {UserService} from "../../service/user.service";
 import {ToastsManager} from "ng2-toastr";
 import {HelperService} from "../../service/helper.service";
 import {BlockUI, NgBlockUI} from "ng-block-ui";
-import {WAIT_STRING} from "../../app.module";
+import {waitString} from "../../app.module";
 
 declare var $: any;
 
@@ -35,7 +35,7 @@ export class UsersTableComponent implements OnInit {
 
   getUsers() {
     this.users = [];
-    this.blockUI.start(WAIT_STRING);
+    this.blockUI.start(waitString);
     this.userService.getUsers().subscribe(
       (data: any[]) => {
         data.forEach(u => {

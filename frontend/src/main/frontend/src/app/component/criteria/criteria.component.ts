@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {ToastsManager} from "ng2-toastr";
 import {CriteriaService} from "../../service/criteria.service";
 import {BlockUI, NgBlockUI} from "ng-block-ui";
-import {WAIT_STRING} from "../../app.module";
+import {waitString} from "../../app.module";
 
 @Component({
   selector: 'app-criteria',
@@ -23,7 +23,7 @@ export class CriteriaComponent implements OnInit {
   }
 
   getDefaultCriteria() {
-    this.blockUI.start(WAIT_STRING);
+    this.blockUI.start(waitString);
     this.criteriaService.getDefaultCriteria().subscribe(
       (data: any) => {
         if (data.length == 0) {
@@ -49,7 +49,7 @@ export class CriteriaComponent implements OnInit {
         criteriaDtoList: this.criteriaToActiveSpeaker,
         speakerId: this.activeSpeaker.id
       };
-      this.blockUI.start(WAIT_STRING);
+      this.blockUI.start(waitString);
       this.criteriaService.saveCriteriaWithData(criteriaDtoWithResult).subscribe(
         data => {
           this.blockUI.stop();
@@ -66,7 +66,7 @@ export class CriteriaComponent implements OnInit {
 
   saveResult() {
     if (this.activeSpeaker != null) {
-      this.blockUI.start(WAIT_STRING);
+      this.blockUI.start(waitString);
       this.criteriaService.saveResultMarkFromUserToSpeaker(this.resultMark, this.activeSpeaker.id).subscribe(
         data => {
           this.blockUI.stop();

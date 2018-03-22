@@ -1,7 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpParams} from "@angular/common/http";
-import {ResponseContentType, ResponseType} from "@angular/http";
-import {Observable} from "rxjs/Observable";
+import {HttpClient} from "@angular/common/http";
 
 @Injectable()
 export class StudentService {

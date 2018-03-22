@@ -1,5 +1,6 @@
 package ru.iate.gak.dto;
 
+import ru.iate.gak.domain.Status;
 import ru.iate.gak.domain.Student;
 
 import java.time.Instant;
@@ -15,10 +16,12 @@ public class StudentDto extends LongIdentifiableDto {
     public GroupDto group;
     public UserDto mentor;
     public UserDto reviewer;
+    public Status status;
     public byte[] report;
     public byte[] presentation;
 
-    public StudentDto() {}
+    public StudentDto() {
+    }
 
     public StudentDto(Student student) {
         super(student.getId());
@@ -32,6 +35,8 @@ public class StudentDto extends LongIdentifiableDto {
         this.reviewer = student.getReviewer() == null ? null : new UserDto(student.getReviewer());
         this.report = student.getReport() == null ? null : "".getBytes();
         this.presentation = student.getPresentation() == null ? null : "".getBytes();
+        this.status = student.getStatus();
+
     }
 
     public Student toStudent() {
@@ -45,6 +50,7 @@ public class StudentDto extends LongIdentifiableDto {
         student.setGroup((this.group == null) ? null : this.group.toGroup());
         student.setMentor((this.mentor == null) ? null : this.mentor.toUser());
         student.setReviewer((this.reviewer == null) ? null : this.reviewer.toUser());
+        student.setStatus(this.status);
         student.setReport(this.report);
         student.setPresentation(this.presentation);
         return student;

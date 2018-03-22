@@ -3,7 +3,7 @@ import {HelperService} from "../../service/helper.service";
 import {ToastsManager} from "ng2-toastr";
 import {CommissionService} from "../../service/commission.service";
 import {BlockUI, NgBlockUI} from "ng-block-ui";
-import {WAIT_STRING} from "../../app.module";
+import {waitString} from "../../app.module";
 
 declare var $: any;
 
@@ -26,7 +26,7 @@ export class CommissionsTableComponent implements OnInit {
   }
 
   getCommissionsList() {
-    this.blockUI.start(WAIT_STRING);
+    this.blockUI.start(waitString);
     this.commissions = [];
     this.commissionService.getCommissionsByListId(1).subscribe(
       (data: any[]) => {
@@ -62,7 +62,7 @@ export class CommissionsTableComponent implements OnInit {
 
   transferRole() {
     if (this.commissionDtoForTransferRole != null) {
-      this.blockUI.start(WAIT_STRING);
+      this.blockUI.start(waitString);
       this.commissionService.transferPresidentRole(this.commissionDtoForTransferRole).subscribe(
         data => {
           this.blockUI.stop();
