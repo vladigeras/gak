@@ -2,7 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {ToastsManager} from "ng2-toastr";
 import {StudentService} from "../../service/student.service";
 import {BlockUI, NgBlockUI} from "ng-block-ui";
-import {WAIT_STRING} from "../../app.module";
+import {waitString} from "../../app.module";
 
 declare var $: any;
 
@@ -48,7 +48,7 @@ export class StudentsTableComponent implements OnInit {
   }
 
   getAvailableGroups() {
-    this.blockUI.start(WAIT_STRING);
+    this.blockUI.start(waitString);
     this.studentService.getAvailableGroups().subscribe(
       (data: any) => {
         data.forEach(group => this.availableGroups.push(
@@ -70,7 +70,7 @@ export class StudentsTableComponent implements OnInit {
   getStudentsOfGroup() {
     if (this.selectedGroup[0] != undefined) {
       this.students = [];
-      this.blockUI.start(WAIT_STRING);
+      this.blockUI.start(waitString);
       this.studentService.getStudentsOfGroup(this.selectedGroup[0].itemName).subscribe(
         (data: any) => {
           data.forEach(student => {

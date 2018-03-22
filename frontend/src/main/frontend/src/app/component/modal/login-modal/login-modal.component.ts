@@ -2,7 +2,7 @@ import {Component} from '@angular/core';
 import {ToastsManager} from "ng2-toastr";
 import {AuthService} from "../../../security/auth.service";
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
-import {WAIT_STRING} from "../../../app.module";
+import {waitString} from "../../../app.module";
 
 @Component({
   selector: 'login-modal',
@@ -16,7 +16,7 @@ export class LoginModalComponent {
   constructor(private toast: ToastsManager, private authService: AuthService) {}
 
   enter() {
-    this.blockUI.start(WAIT_STRING);
+    this.blockUI.start(waitString);
     this.authService.login(this.user).subscribe(
       data => {
         this.toast.success("Вы вошли в систему", "Успешно");

@@ -2,7 +2,7 @@ import {EventEmitter, Injectable, Output} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {CookieService} from 'ngx-cookie-service';
 import {BlockUI, NgBlockUI} from "ng-block-ui";
-import {WAIT_STRING} from "../app.module";
+import {waitString} from "../app.module";
 
 @Injectable()
 export class AuthService {
@@ -17,7 +17,7 @@ export class AuthService {
   }
 
   isLoggedIn() {
-    return CURRENT_PRINCIPAL.roles.length > 0
+    return currentPrincipal.roles.length > 0
   }
 
   logout() {
@@ -27,12 +27,12 @@ export class AuthService {
   getCurrentPrincipal() {
     let cookie = this.cookieService.get("X-AUTH-TOKEN");
     if (cookie && !this.isLoggedIn()) {
-      this.blockUI.start(WAIT_STRING);
+      this.blockUI.start(waitString);
       this.http.get("/auth/principal").subscribe(
         (data: any) => {
-          CURRENT_PRINCIPAL.id = data.id;
-          CURRENT_PRINCIPAL.name = data.name;
-          CURRENT_PRINCIPAL.roles = data.roles;
+          currentPrincipal.id = data.id;
+          currentPrincipal.name = data.name;
+          currentPrincipal.roles = data.roles;
           this.principalReady.emit();
           this.blockUI.stop();
         },
@@ -44,5 +44,5 @@ export class AuthService {
   }
 }
 
-export var CURRENT_PRINCIPAL = {id: null, name: null, roles: []};
+export var currentPrincipal = {id: null, name: null, roles: []};
 

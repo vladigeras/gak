@@ -18,7 +18,7 @@
 
   <ngx-datatable *ngIf="selectedGroup[0] != null"
                  class="material" [rows]="speakerStudents" [columnMode]="'force'"
-                 [headerHeight]="40" [footerHeight]="40" [limit]="20"
+                 [headerHeight]="40" [footerHeight]="40" [limit]="20" [rowClass]="getRowClass"
                  [rowHeight]="'auto'">
     <ngx-datatable-column prop="fio" name="ФИО"></ngx-datatable-column>
     <ngx-datatable-column prop="title" name="Тема"></ngx-datatable-column>

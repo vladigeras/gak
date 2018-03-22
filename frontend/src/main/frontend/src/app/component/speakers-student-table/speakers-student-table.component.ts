@@ -4,9 +4,13 @@ import {StudentService} from "../../service/student.service";
 import {SpeakerService} from "../../service/speaker.service";
 import * as moment from 'moment';
 import {QuestionService} from "../../service/question.service";
-import {CURRENT_PRINCIPAL} from "../../security/auth.service";
+import {currentPrincipal} from "../../security/auth.service";
 import {BlockUI, NgBlockUI} from "ng-block-ui";
-import {WAIT_STRING} from "../../app.module";
+import {waitString} from "../../app.module";
+import {SocketService, stomp} from "../../service/socket.service";
+import {Status} from "../../status";
+import {letProto} from "rxjs/operator/let";
+
 declare var $: any;
 
 @Component({
@@ -16,14 +20,12 @@ declare var $: any;
 })
 export class SpeakersStudentTableComponent implements OnInit {
 
-  principal = CURRENT_PRINCIPAL;
+  principal = currentPrincipal;
   activeSpeaker = {id: null, fio: null};
   selectedSpeaker = null;
   availableGroups = [];
   today = moment().startOf('day');
-
   criteria = [];
-
   selectedGroup = [];
   speakerStudents = [];
   groupSelectDropdownSettings = {
@@ -31,10 +33,26 @@ export class SpeakersStudentTableComponent implements OnInit {
     enableCheckAll: false,
     text: "Выберите группу"
   };
+  socket = stomp;
   @BlockUI() blockUI: NgBlockUI;
 
   constructor(private toast: ToastsManager, private studentService: StudentService, private speakerService: SpeakerService,
-              private  questionService: QuestionService) {
+              private questionService: QuestionService, private socketService: SocketService) {
+
+    socketService.activeSpeakerReady.subscribe(speaker => {
+      if (speaker != null) {
+        this.setStatusToStudentInList(speaker, Status[Status.ACTIVE]);
+        this.activeSpeaker = {
+          id: speaker.id,
+          fio: speaker.student.lastname + " " + speaker.student.firstname + " " + speaker.student.middlename
+        };
+        this.getQuestionsOfSpeaker();
+      }
+    });
+
+    socketService.doneSpeakerReady.subscribe(speaker => {
+      if (speaker != null) this.setStatusToStudentInList(speaker, Status[Status.DONE]);
+    })
   }
 
   ngOnInit() {
@@ -42,7 +60,7 @@ export class SpeakersStudentTableComponent implements OnInit {
   }
 
   getAvailableGroups() {
-    this.blockUI.start(WAIT_STRING);
+    this.blockUI.start(waitString);
     this.studentService.getAvailableGroups().subscribe(
       (data: any) => {
         data.forEach(group => this.availableGroups.push(
@@ -72,6 +90,8 @@ export class SpeakersStudentTableComponent implements OnInit {
         id: this.selectedSpeaker.id,
         fio: this.selectedSpeaker.fio
       };
+      this.setStatusToStudentInList(this.activeSpeaker, Status[Status.ACTIVE]);
+      this.socket.send("/app/activeSpeaker", {}, this.activeSpeaker.id);
       this.getQuestionsOfSpeaker();
       $('#setActiveStudentConfirmModal').modal('hide');
     }
@@ -81,15 +101,18 @@ export class SpeakersStudentTableComponent implements OnInit {
     if (this.selectedGroup[0] != undefined) {
       this.activeSpeaker = null;
       this.speakerStudents = [];
-      this.blockUI.start(WAIT_STRING);
+      this.blockUI.start(waitString);
       this.speakerService.getSpeakersListOfGroupOfDay(this.selectedGroup[0].itemName, this.today.unix() * 1000).subscribe(
         (data: any) => {
           data.forEach(speakerStudent => {
-            this.speakerStudents.push({
-              id: speakerStudent.id,
-              fio: speakerStudent.student.lastname + " " + speakerStudent.student.firstname + " " + speakerStudent.student.middlename,
-              title: speakerStudent.student.title
-            });
+            if (speakerStudent.student != null) {
+              this.speakerStudents.push({
+                id: speakerStudent.id,
+                fio: speakerStudent.student.lastname + " " + speakerStudent.student.firstname + " " + speakerStudent.student.middlename,
+                title: speakerStudent.student.title,
+                status: speakerStudent.student.status
+              });
+            }
           });
           this.reloadTable();
           this.blockUI.stop();
@@ -127,21 +150,23 @@ export class SpeakersStudentTableComponent implements OnInit {
       this.criteria.forEach(q => {
         questions.push({id: q.id, questionText: q.text})
       });
-      this.blockUI.start(WAIT_STRING);
+      this.blockUI.start(waitString);
       this.questionService.saveQuestions(this.activeSpeaker.id, questions).subscribe(
         data => {
           this.blockUI.stop();
           this.toast.success("Сохранено", "Успешно")
         },
-        error => {this.blockUI.stop()}
+        error => {
+          this.blockUI.stop()
+        }
       );
     }
   }
 
   getQuestionsOfSpeaker() {
-    if (this.selectedGroup[0] != undefined) {
+    if (this.selectedGroup[0] != undefined && this.principal.roles.indexOf('SECRETARY') != -1) {
       this.criteria = [];
-      this.blockUI.start(WAIT_STRING);
+      this.blockUI.start(waitString);
       this.questionService.getQuestionsOfSpeaker(this.activeSpeaker.id).subscribe(
         (data: any) => {
           data.forEach(q => {
@@ -153,7 +178,9 @@ export class SpeakersStudentTableComponent implements OnInit {
           });
           this.blockUI.stop();
         },
-        error => {this.blockUI.stop()}
+        error => {
+          this.blockUI.stop()
+        }
       )
     }
   }
@@ -163,6 +190,20 @@ export class SpeakersStudentTableComponent implements OnInit {
       this.speakerService.getProtocolsForGroup(this.selectedGroup[0].itemName);
     }
   }
+
+  getRowClass(row) {  //see classes in styles.scss file
+    return {
+      'active-student-row': row.status === Status[Status.ACTIVE],
+      'done-student-row': row.status === Status[Status.DONE]
+    };
+  }
+
+  setStatusToStudentInList(speaker, status: String) {
+    let object = this.speakerStudents.find(s => speaker.id === s.id);
+    this.speakerStudents[this.speakerStudents.indexOf(object)].status = status;
+    this.reloadTable();
+  }
 }
+
 
 

@@ -17,7 +17,7 @@ public class WebsocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-        registry.setApplicationDestinationPrefixes("/app").enableSimpleBroker("/active");
+        registry.setApplicationDestinationPrefixes("/app").enableSimpleBroker("/active", "/done");
     }
 
 

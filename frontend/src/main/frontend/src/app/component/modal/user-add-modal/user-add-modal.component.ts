@@ -3,7 +3,7 @@ import {UserService} from "../../../service/user.service";
 import {ToastsManager} from "ng2-toastr";
 import {HelperService} from "../../../service/helper.service";
 import {BlockUI, NgBlockUI} from "ng-block-ui";
-import {WAIT_STRING} from "../../../app.module";
+import {waitString} from "../../../app.module";
 
 declare var $: any;
 
@@ -29,7 +29,7 @@ export class UserAddModalComponent implements OnInit {
   constructor(private toast: ToastsManager, private userService: UserService) {}
 
   ngOnInit() {
-    this.blockUI.start(WAIT_STRING);
+    this.blockUI.start(waitString);
     this.userService.getAvailableRoles().subscribe(
       (data: string[]) => {
         data.forEach(role => {
@@ -57,7 +57,7 @@ export class UserAddModalComponent implements OnInit {
     let roles = [];
     this.selectedRoles.forEach(object => roles.push(object.original));
     this.user.roles = roles;
-    this.blockUI.start(WAIT_STRING);
+    this.blockUI.start(waitString);
     this.userService.addUser(this.user).subscribe(
       data => {
         this.blockUI.stop();
@@ -89,7 +89,7 @@ export class UserAddModalComponent implements OnInit {
     this.selectedRoles.forEach(object => roles.push(object.original));
     this.user.roles = roles;
 
-    this.blockUI.start(WAIT_STRING);
+    this.blockUI.start(waitString);
     this.userService.updateUser(this.user).subscribe(
       data => {
         this.toast.success("Данные обновлены", "Успешно");
