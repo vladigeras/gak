@@ -1,4 +1,4 @@
-import {BrowserModule} from '@angular/platform-browser';
+import {BrowserModule, Title} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 
 import {AppComponent} from "./app.component";
@@ -97,6 +97,7 @@ const routes: Routes = [
     BlockUIModule
   ],
   providers: [
+    Title,
     {provide: ToastOptions, useClass: CustomToastOptions},
     UserService,
     AuthService,
