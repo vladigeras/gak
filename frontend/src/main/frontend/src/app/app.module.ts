@@ -40,6 +40,7 @@ import {CriteriaComponent} from "./component/criteria/criteria.component";
 import {CriteriaService} from "./service/criteria.service";
 import {BlockUIModule} from 'ng-block-ui';
 import {SocketService} from "./service/socket.service";
+import {DiplomService} from "./service/diplom.service";
 
 
 export class CustomToastOptions extends ToastOptions {
@@ -109,7 +110,8 @@ const routes: Routes = [
     {provide: OWL_DATE_TIME_LOCALE, useValue: 'ru'},
     GuardService,
     CriteriaService,
-    SocketService
+    SocketService,
+    DiplomService
   ],
   bootstrap: [AppComponent]
 })

@@ -62,7 +62,6 @@ public class SpeakerController {
             ZipOutputStream zos = new ZipOutputStream(new BufferedOutputStream(out));
 
             for (File file : files) {
-                System.out.println(file.getAbsolutePath());
                 if (file != null) {
                     zos.putNextEntry(new ZipEntry(file.getName()));
 
@@ -93,4 +92,5 @@ public class SpeakerController {
             e.printStackTrace();
         }
     }
+
 }

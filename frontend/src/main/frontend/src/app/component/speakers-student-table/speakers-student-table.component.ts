@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {ToastsManager} from "ng2-toastr";
 import {StudentService} from "../../service/student.service";
 import {SpeakerService} from "../../service/speaker.service";
@@ -9,7 +9,9 @@ import {BlockUI, NgBlockUI} from "ng-block-ui";
 import {waitString} from "../../app.module";
 import {SocketService, stomp} from "../../service/socket.service";
 import {Status} from "../../status";
-import {letProto} from "rxjs/operator/let";
+import {DiplomService} from "../../service/diplom.service";
+import {HelperService} from "../../service/helper.service";
+import {Router} from "@angular/router";
 
 declare var $: any;
 
@@ -20,6 +22,7 @@ declare var $: any;
 })
 export class SpeakersStudentTableComponent implements OnInit {
 
+  @ViewChild('studentSpeakerTable') table: any;
   principal = currentPrincipal;
   activeSpeaker = {id: null, fio: null};
   selectedSpeaker = null;
@@ -37,7 +40,9 @@ export class SpeakersStudentTableComponent implements OnInit {
   @BlockUI() blockUI: NgBlockUI;
 
   constructor(private toast: ToastsManager, private studentService: StudentService, private speakerService: SpeakerService,
-              private questionService: QuestionService, private socketService: SocketService) {
+              private questionService: QuestionService, private socketService: SocketService,
+              private diplomService: DiplomService,
+              private router: Router) {
 
     socketService.activeSpeakerReady.subscribe(speaker => {
       if (speaker != null) {
@@ -47,11 +52,15 @@ export class SpeakersStudentTableComponent implements OnInit {
           fio: speaker.student.lastname + " " + speaker.student.firstname + " " + speaker.student.middlename
         };
         this.getQuestionsOfSpeaker();
+        this.getDiplomInfoOfSpeaker(speaker.id);
       }
     });
 
     socketService.doneSpeakerReady.subscribe(speaker => {
-      if (speaker != null) this.setStatusToStudentInList(speaker, Status[Status.DONE]);
+      if (speaker != null) {
+        this.setStatusToStudentInList(speaker, Status[Status.DONE]);
+        this.getDiplomInfoOfSpeaker(speaker.id);
+      }
     })
   }
 
@@ -110,11 +119,12 @@ export class SpeakersStudentTableComponent implements OnInit {
                 id: speakerStudent.id,
                 fio: speakerStudent.student.lastname + " " + speakerStudent.student.firstname + " " + speakerStudent.student.middlename,
                 title: speakerStudent.student.title,
-                status: speakerStudent.student.status
+                status: speakerStudent.student.status,
+                expanded: null    //this row was closed yet
               });
             }
+            this.getDiplomInfoOfSpeaker(speakerStudent.id);
           });
-          this.reloadTable();
           this.blockUI.stop();
         },
         error => {
@@ -199,9 +209,48 @@ export class SpeakersStudentTableComponent implements OnInit {
   }
 
   setStatusToStudentInList(speaker, status: String) {
-    let object = this.speakerStudents.find(s => speaker.id === s.id);
-    this.speakerStudents[this.speakerStudents.indexOf(object)].status = status;
+    let indexOfElement = this.speakerStudents.findIndex(s => s.id === speaker.id);
+    let object = this.speakerStudents[indexOfElement];
+    object.status = status;
+    this.speakerStudents[indexOfElement] = object;
     this.reloadTable();
+  }
+
+  toggleExpandRow(event) {
+    if (event.type === "click") {
+      this.table.rowDetail.toggleExpandRow(event.row);
+    }
+  }
+
+  getDiplomInfoOfSpeaker(speakerId) {
+    this.blockUI.start(waitString);
+    this.diplomService.getDiplomBySpeakerId(speakerId).subscribe(
+      (diplom: any) => {
+        //replace existing object in list with new subdata
+        let indexOfElement = this.speakerStudents.findIndex(s => s.id === speakerId);
+        let existingObject = this.speakerStudents[indexOfElement];
+        let newObject = {
+          id: existingObject.id,
+          fio: existingObject.fio,
+          title: existingObject.title,
+          status: existingObject.status,
+          diplom: {
+            mentorFio: diplom.mentor.lastname + " " + diplom.mentor.firstname + " " + diplom.mentor.middlename,
+            reviewerFio: diplom.reviewer.lastname + " " + diplom.reviewer.firstname + " " + diplom.reviewer.middlename,
+            statusString: HelperService.convertStatusToRussian(diplom.status),
+            executionPlace: diplom.executionPlace,
+            resultMark: HelperService.convertResultMarkToString(diplom.resultMark),
+          },
+          expanded: true    //this row was expanded now
+        };
+        this.speakerStudents[indexOfElement] = newObject;
+        this.reloadTable();
+        this.blockUI.stop();
+      },
+      error => {
+        this.blockUI.stop()
+      }
+    );
   }
 }
 
