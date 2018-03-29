@@ -24,4 +24,22 @@ export class HelperService {
       case "РЕЦЕНЗЕНТ": return "REVIEWER";
     }
   }
+
+  public static convertStatusToRussian(status) {
+    if (status == null) return null;
+    switch (status.toUpperCase()) {
+      case "ACTIVE": return "Активный";
+      case "DONE": return "Завершено";
+    }
+  }
+
+  public static convertResultMarkToString(resultMark) {
+    if (resultMark == null) return null;
+    switch (resultMark.toString()) {
+      case "5": return "5 (отлично)";
+      case "4": return "4 (хорошо)";
+      case "3": return "3 (удовлетворительно)";
+      case "2": return "2 (неудовлетворительно)";
+    }
+  }
 }

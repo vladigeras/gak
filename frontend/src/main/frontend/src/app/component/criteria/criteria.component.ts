@@ -3,6 +3,8 @@ import {ToastsManager} from "ng2-toastr";
 import {CriteriaService} from "../../service/criteria.service";
 import {BlockUI, NgBlockUI} from "ng-block-ui";
 import {waitString} from "../../app.module";
+import {SocketService} from "../../service/socket.service";
+import {currentPrincipal} from "../../security/auth.service";
 
 @Component({
   selector: 'app-criteria',
@@ -11,12 +13,23 @@ import {waitString} from "../../app.module";
 })
 export class CriteriaComponent implements OnInit {
 
+  principal = currentPrincipal;
   activeSpeaker = {id: null, fio: null};
   criteriaToActiveSpeaker = [];
   resultMark;
   @BlockUI() blockUI: NgBlockUI;
 
-  constructor(private toast: ToastsManager, private criteriaService: CriteriaService) { }
+  constructor(private toast: ToastsManager, private criteriaService: CriteriaService, private socketService: SocketService) {
+
+    socketService.activeSpeakerReady.subscribe(speaker => {
+      if (speaker != null) {
+        this.activeSpeaker = {
+          id: speaker.id,
+          fio: speaker.student.lastname + " " + speaker.student.firstname + " " + speaker.student.middlename
+        };
+      }
+    });
+  }
 
   ngOnInit() {
     this.getDefaultCriteria()
@@ -39,7 +52,9 @@ export class CriteriaComponent implements OnInit {
         });
         this.blockUI.stop();
       },
-      error => {this.blockUI.stop()}
+      error => {
+        this.blockUI.stop()
+      }
     )
   }
 
@@ -66,17 +81,25 @@ export class CriteriaComponent implements OnInit {
 
   saveResult() {
     if (this.activeSpeaker != null) {
-      this.blockUI.start(waitString);
-      this.criteriaService.saveResultMarkFromUserToSpeaker(this.resultMark, this.activeSpeaker.id).subscribe(
-        data => {
-          this.blockUI.stop();
-          this.toast.success("Оценка сохранена", "Успешно")
-        },
-        error => {
-          this.blockUI.stop();
-          if (error.error.message != undefined) this.toast.error(error.error.message, "Ошибка");
-          else this.toast.error(error.error, "Ошибка");
-        })
+      if (this.principal.roles.indexOf('PRESIDENT') != -1) {
+        this.blockUI.start(waitString);
+        this.criteriaService.saveResultMarkFromUserToSpeaker(this.resultMark, this.activeSpeaker.id).subscribe(
+          data => {
+            this.blockUI.stop();
+            this.toast.success("Оценка сохранена", "Успешно")
+          },
+          error => {
+            this.blockUI.stop();
+            if (error.error.message != undefined) this.toast.error(error.error.message, "Ошибка");
+            else this.toast.error(error.error, "Ошибка");
+          })
+      }
+      if (this.principal.roles.indexOf('MEMBER') != -1) {
+        this.blockUI.start(waitString);
+        //TODO: request to PRESIDENT page to show this result
+        this.blockUI.stop();
+        this.toast.success("Оценка сохранена", "Успешно")
+      }
     }
   }
 
