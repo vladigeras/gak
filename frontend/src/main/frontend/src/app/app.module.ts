@@ -98,7 +98,6 @@ const routes: Routes = [
     BlockUIModule
   ],
   providers: [
-    Title,
     {provide: ToastOptions, useClass: CustomToastOptions},
     UserService,
     AuthService,
