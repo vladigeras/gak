@@ -27,9 +27,13 @@ export class StudentService {
   }
 
   readFile(studentId, isReport) {
-    let a = document.createElement("a");
-    a.href = "/students/readFile" + "?student=" + studentId + "&isReport=" + isReport;
-    a.click()
+  //   let a = document.createElement("a");
+  //   a.href = "/students/readFile" + "?student=" + studentId + "&isReport=" + isReport;
+  //   a.click()
+    return this.http.get("/students/readFile" + "?student=" + studentId + "&isReport=" + isReport, { responseType: 'blob'})
+      .map(res => {
+        return new Blob([res], { type: 'application/pdf', });
+      });
   }
 
   deleteStudent(studentId) {

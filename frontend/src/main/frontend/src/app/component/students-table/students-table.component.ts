@@ -131,7 +131,11 @@ export class StudentsTableComponent implements OnInit {
 
   readFile (row, isReport: boolean) {
     let studentId = row.id;
-    this.studentService.readFile(studentId, isReport);
+    let tab = window.open();
+    this.studentService.readFile(studentId, isReport).subscribe(fileData => {
+      const fileUrl = URL.createObjectURL(fileData);
+      tab.location.href = fileUrl;
+    });
   }
 
   clearSelected() {

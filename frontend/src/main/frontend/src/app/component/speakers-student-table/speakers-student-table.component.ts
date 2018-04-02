@@ -117,10 +117,14 @@ export class SpeakersStudentTableComponent implements OnInit {
             if (speakerStudent.student != null) {
               this.speakerStudents.push({
                 id: speakerStudent.id,
+                studentId: speakerStudent.student.id,
                 fio: speakerStudent.student.lastname + " " + speakerStudent.student.firstname + " " + speakerStudent.student.middlename,
                 title: speakerStudent.student.title,
                 status: speakerStudent.student.status,
-                expanded: null    //this row was closed yet
+                expanded: null,    //this row was closed yet
+                report: null,
+                presentation: null,
+                diplom: null
               });
             }
             this.getDiplomInfoOfSpeaker(speakerStudent.id);
@@ -231,6 +235,7 @@ export class SpeakersStudentTableComponent implements OnInit {
         let existingObject = this.speakerStudents[indexOfElement];
         let newObject = {
           id: existingObject.id,
+          studentId: existingObject.studentId,
           fio: existingObject.fio,
           title: existingObject.title,
           status: existingObject.status,
@@ -241,7 +246,9 @@ export class SpeakersStudentTableComponent implements OnInit {
             executionPlace: diplom.executionPlace,
             resultMark: HelperService.convertResultMarkToString(diplom.resultMark),
           },
-          expanded: true    //this row was expanded now
+          expanded: true,   //this row was expanded now
+          report: diplom.report != null,
+          presentation: diplom.presentation != null
         };
         this.speakerStudents[indexOfElement] = newObject;
         this.reloadTable();
@@ -251,6 +258,20 @@ export class SpeakersStudentTableComponent implements OnInit {
         this.blockUI.stop()
       }
     );
+  }
+
+  readFile(row, isReport: boolean) {
+    let studentId = row.studentId;
+    let tab = window.open();
+    this.studentService.readFile(studentId, isReport).subscribe(fileData => {
+      const fileUrl = URL.createObjectURL(fileData);
+      tab.location.href = fileUrl;
+    });
+  }
+
+  isPrincipalContainsRole(role: String) : boolean {
+    if (role == null) return false;
+    return this.principal.roles.indexOf(role) != -1;
   }
 }
 

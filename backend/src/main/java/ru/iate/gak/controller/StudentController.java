@@ -73,7 +73,7 @@ public class StudentController {
     }
 
     @GetMapping(value = "/readFile")
-    @GakSecured(roles = {Roles.ADMIN})
+    @GakSecured(roles = {Roles.ADMIN, Roles.MEMBER, Roles.PRESIDENT})
     public void readFile (@RequestParam(name = "student", required = true) Long id,
                           @RequestParam(name = "isReport", required = true) boolean isReport,
                           HttpServletResponse response) {

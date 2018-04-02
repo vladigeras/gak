@@ -25,9 +25,9 @@ export class AuthService {
   }
 
   getCurrentPrincipal() {
+    this.blockUI.start(waitString);
     let cookie = this.cookieService.get("X-AUTH-TOKEN");
     if (cookie && !this.isLoggedIn()) {
-      this.blockUI.start(waitString);
       this.http.get("/auth/principal").subscribe(
         (data: any) => {
           currentPrincipal.id = data.id;
