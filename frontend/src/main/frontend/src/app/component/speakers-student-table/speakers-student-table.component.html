@@ -44,15 +44,14 @@
     </ngx-datatable-row-detail>
     <ngx-datatable-column prop="fio" name="ФИО"></ngx-datatable-column>
     <ngx-datatable-column prop="title" name="Тема"></ngx-datatable-column>
-    <ngx-datatable-column prop="setActiveStudent" name="">
-      <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
-        <div
-          *ngIf="principal != null && principal.roles.indexOf('SECRETARY') != -1 && router.url.toString().includes('secretary')">
+    <div *ngIf="isPrincipalContainsRole('SECRETARY') && router.url.toString().includes('secretary')">
+      <ngx-datatable-column prop="setActiveStudent" name="">
+        <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
           <i class="glyphicon glyphicon-education set-active-student-button text-info" aria-hidden="true"
              (click)="showSetActiveStudentModal(row)"></i>
-        </div>
-      </ng-template>
-    </ngx-datatable-column>
+        </ng-template>
+      </ngx-datatable-column>
+    </div>
     <div *ngIf="(isPrincipalContainsRole('PRESIDENT') || isPrincipalContainsRole('MEMBER'))
     && (router.url.toString().includes('president') || router.url.toString().includes('member'))">
       <ngx-datatable-column prop="report" name="Отчет (.pdf)">

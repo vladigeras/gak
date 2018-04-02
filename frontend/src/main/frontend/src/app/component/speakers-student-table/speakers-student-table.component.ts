@@ -222,7 +222,7 @@ export class SpeakersStudentTableComponent implements OnInit {
 
   toggleExpandRow(event) {
     if (event.type === "click") {
-      this.table.rowDetail.toggleExpandRow(event.row);
+      if (event.cellIndex != 2 && event.cellIndex != 3) this.table.rowDetail.toggleExpandRow(event.row);    //cellIndex 2 = button for set active
     }
   }
 

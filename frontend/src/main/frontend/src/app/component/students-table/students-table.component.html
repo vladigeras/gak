@@ -18,7 +18,7 @@
   <ngx-datatable *ngIf="selectedGroup[0] != null" class="material" [rows]="students" [columnMode]="'force'"
                  [headerHeight]="40" [footerHeight]="40" [limit]="10"
                  [rowHeight]="'auto'" [selectionType]="'single'"
-                 (select)="selectStudentToUpdate($event)">
+                 (activate)="selectStudentToUpdate($event)">
     <ngx-datatable-column prop="fio" name="ФИО"></ngx-datatable-column>
     <ngx-datatable-column prop="title" name="Тема работы"></ngx-datatable-column>
     <ngx-datatable-column prop="mentor" name="Руководитель"></ngx-datatable-column>

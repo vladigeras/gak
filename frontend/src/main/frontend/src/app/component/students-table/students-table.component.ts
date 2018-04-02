@@ -105,28 +105,32 @@ export class StudentsTableComponent implements OnInit {
   }
 
   selectStudentToUpdate(event) {
-    this.clearSelected();
+    if (event.type === "click") {
+      if (event.cellIndex != 4 && event.cellIndex != 5) {   //this is a buttons for files
+        this.clearSelected();
 
-    let row = event.selected[0];
-    let fio = row.fio;
-    fio = fio.trim().split(" ");
-    this.selectedStudent.id = row.id;
-    this.selectedStudent.lastname = fio[0];
-    this.selectedStudent.firstname = fio[1];
-    this.selectedStudent.middlename = fio[2];
-    this.selectedStudent.title = row.title;
-    this.selectedMentor.push({
-      id: 1,
-      itemName: row.mentor,
-      userId: row.mentorId,
-    });
-    this.selectedReviewer.push({
-      id: 1,
-      itemName: row.reviewer,
-      userId: row.reviewerId
-    });
-    this.isAddingNewStudent = false;
-    $('#studentAddModal').modal({backdrop: 'static', keyboard: false});
+        let row = event.row;
+        let fio = row.fio;
+        fio = fio.trim().split(" ");
+        this.selectedStudent.id = row.id;
+        this.selectedStudent.lastname = fio[0];
+        this.selectedStudent.firstname = fio[1];
+        this.selectedStudent.middlename = fio[2];
+        this.selectedStudent.title = row.title;
+        this.selectedMentor.push({
+          id: 1,
+          itemName: row.mentor,
+          userId: row.mentorId,
+        });
+        this.selectedReviewer.push({
+          id: 1,
+          itemName: row.reviewer,
+          userId: row.reviewerId
+        });
+        this.isAddingNewStudent = false;
+        $('#studentAddModal').modal({backdrop: 'static', keyboard: false});
+      }
+    }
   }
 
   readFile (row, isReport: boolean) {
