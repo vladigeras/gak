@@ -34,6 +34,11 @@
                    [(ngModel)]="student.title" name="title">
           </div>
           <div class="form-group">
+            <label for="inputExecutionPlaceStudentForm">Место выполнения работы</label>
+            <input type="text" class="form-control" id="inputExecutionPlaceStudentForm" placeholder="Место выполнения работы"
+                   [(ngModel)]="student.executionPlace" name="executionPlace">
+          </div>
+          <div class="form-group">
             <label>Группа</label>
             <angular2-multiselect [data]="availableGroups" [(ngModel)]="selectedGroup" name="group"
                                   [settings]="groupSelectDropdownSettings"></angular2-multiselect>

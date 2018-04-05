@@ -33,8 +33,8 @@ public class StudentController {
     @GakSecured(roles = {Roles.ADMIN})
     public Long saveStudent(@RequestBody @RequestPart StudentDto studentDto) {
         if (StringUtil.isStringNullOrEmptyTrim(studentDto.firstname) || StringUtil.isStringNullOrEmptyTrim(studentDto.lastname)
-                || StringUtil.isStringNullOrEmptyTrim(studentDto.title)) {
-            throw new RuntimeException("Имя, фамилия, тема работы не могут быть пустыми");
+                || StringUtil.isStringNullOrEmptyTrim(studentDto.title) || StringUtil.isStringNullOrEmptyTrim(studentDto.executionPlace)) {
+            throw new RuntimeException("Имя, фамилия, тема работы, место выполнения не могут быть пустыми");
         }
 
         if (studentDto.group == null || StringUtil.isStringNullOrEmptyTrim(studentDto.group.title))
@@ -74,9 +74,9 @@ public class StudentController {
 
     @GetMapping(value = "/readFile")
     @GakSecured(roles = {Roles.ADMIN, Roles.MEMBER, Roles.PRESIDENT})
-    public void readFile (@RequestParam(name = "student", required = true) Long id,
-                          @RequestParam(name = "isReport", required = true) boolean isReport,
-                          HttpServletResponse response) {
+    public void readFile(@RequestParam(name = "student", required = true) Long id,
+                         @RequestParam(name = "isReport", required = true) boolean isReport,
+                         HttpServletResponse response) {
         if (id > 0) {
             byte[] content = studentService.readFile(id, isReport);
             String contentType = "application/pdf";
@@ -100,7 +100,8 @@ public class StudentController {
 
     /**
      * Split string by symbol and get last splitting
-     * @param input input string (reg. expression)
+     *
+     * @param input  input string (reg. expression)
      * @param symbol splitting symbol
      * @return last splitting if input != null, else return empty
      */

@@ -12,6 +12,7 @@ public class StudentDto extends LongIdentifiableDto {
     public String middlename;
     public String lastname;
     public String title;
+    public String executionPlace;
     public Long deleteTime;
     public GroupDto group;
     public UserDto mentor;
@@ -29,6 +30,7 @@ public class StudentDto extends LongIdentifiableDto {
         this.middlename = student.getMiddlename();
         this.lastname = student.getLastname();
         this.title = student.getTitle();
+        this.executionPlace = student.getExecutionPlace();
         this.deleteTime = (student.getDeleteTime() == null) ? null : student.getDeleteTime().toInstant(ZoneOffset.UTC).toEpochMilli();
         this.group = student.getGroup() == null ? null : new GroupDto(student.getGroup());
         this.mentor = student.getMentor() == null ? null : new UserDto(student.getMentor());
@@ -46,6 +48,7 @@ public class StudentDto extends LongIdentifiableDto {
         student.setMiddlename(this.middlename);
         student.setLastname(this.lastname);
         student.setTitle(this.title);
+        student.setExecutionPlace(this.executionPlace);
         student.setDeleteTime((this.deleteTime == null) ? null : LocalDateTime.ofInstant(Instant.ofEpochMilli(this.deleteTime), ZoneOffset.UTC));
         student.setGroup((this.group == null) ? null : this.group.toGroup());
         student.setMentor((this.mentor == null) ? null : this.mentor.toUser());

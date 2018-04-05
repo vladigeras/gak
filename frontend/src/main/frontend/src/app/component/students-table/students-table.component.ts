@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ToastsManager} from "ng2-toastr";
 import {StudentService} from "../../service/student.service";
 import {BlockUI, NgBlockUI} from "ng-block-ui";
@@ -22,6 +22,7 @@ export class StudentsTableComponent implements OnInit {
     middlename: null,
     lastname: null,
     title: null,
+    executionPlace: null,
     group: null,
     mentor: null,
     reviewer: null
@@ -80,6 +81,7 @@ export class StudentsTableComponent implements OnInit {
               id: student.id,
               fio: student.lastname + " " + student.firstname + " " + student.middlename,
               title: student.title,
+              executionPlace: student.executionPlace,
               mentor: student.mentor.lastname + " " + student.mentor.firstname + " " + student.mentor.middlename,
               mentorId: student.mentor.id,
               reviewer: student.reviewer.lastname + " " + student.reviewer.firstname + " " + student.reviewer.middlename,
@@ -106,7 +108,7 @@ export class StudentsTableComponent implements OnInit {
 
   selectStudentToUpdate(event) {
     if (event.type === "click") {
-      if (event.cellIndex != 4 && event.cellIndex != 5) {   //this is a buttons for files
+      if (event.cellIndex != 5 && event.cellIndex != 6) {   //this is a buttons for files
         this.clearSelected();
 
         let row = event.row;
@@ -117,6 +119,7 @@ export class StudentsTableComponent implements OnInit {
         this.selectedStudent.firstname = fio[1];
         this.selectedStudent.middlename = fio[2];
         this.selectedStudent.title = row.title;
+        this.selectedStudent.executionPlace = row.executionPlace;
         this.selectedMentor.push({
           id: 1,
           itemName: row.mentor,
@@ -143,7 +146,7 @@ export class StudentsTableComponent implements OnInit {
   }
 
   clearSelected() {
-    this.selectedStudent = {id: null, firstname: null, middlename: null, lastname: null, title: null, group: null, mentor: null, reviewer: null};
+    this.selectedStudent = {id: null, firstname: null, middlename: null, lastname: null, title: null, executionPlace: null, group: null, mentor: null, reviewer: null};
     this.selectedReviewer = [];
     this.selectedMentor = [];
   }

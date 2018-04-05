@@ -47,6 +47,7 @@ public class StudentServiceImpl implements StudentService {
         studentRepository.getAllByGroupAndDeletedTimeIsNull(groupEntity).forEach(s -> {
             Student student = new Student(s);
             student.setTitle(s.getDiplom().getTitle());
+            student.setExecutionPlace(s.getDiplom().getExecutionPlace());
             student.setMentor(new User(s.getDiplom().getMentor()));
             student.setReviewer(new User(s.getDiplom().getReviewer()));
             student.setReport(s.getDiplom().getReport() == null ? null : "".getBytes());
@@ -91,6 +92,7 @@ public class StudentServiceImpl implements StudentService {
         studentRepository.save(studentEntity);
 
         diplomEntity.setTitle(student.getTitle());
+        diplomEntity.setExecutionPlace(student.getExecutionPlace());
         diplomEntity.setMentor(mentorEntity);
         diplomEntity.setReviewer(reviewerEntity);
         diplomEntity.setReport(student.getReport());

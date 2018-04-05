@@ -20,6 +20,7 @@ export class StudentAddModalComponent implements OnInit {
     middlename: null,
     lastname: null,
     title: null,
+    executionPlace: null,
     group: null,
     mentor: null,
     reviewer: null
@@ -120,6 +121,7 @@ export class StudentAddModalComponent implements OnInit {
       middlename: null,
       lastname: null,
       title: null,
+      executionPlace: null,
       group: null,
       mentor: null,
       reviewer: null

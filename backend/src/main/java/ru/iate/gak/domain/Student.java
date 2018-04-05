@@ -9,6 +9,7 @@ public class Student extends LongIdentifiable {
     private String middlename;
     private String lastname;
     private String title;
+    private String executionPlace;
     private LocalDateTime deleteTime;
     private Group group;
     private User mentor;
@@ -116,5 +117,14 @@ public class Student extends LongIdentifiable {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+
+    public String getExecutionPlace() {
+        return executionPlace;
+    }
+
+    public void setExecutionPlace(String executionPlace) {
+        this.executionPlace = executionPlace;
     }
 }
