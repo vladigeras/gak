@@ -9,7 +9,7 @@ import ru.iate.gak.dto.SpeakerDto;
 import ru.iate.gak.service.SpeakerService;
 
 @Controller
-public class WebsocketController {
+public class WebSocketController {
 
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
