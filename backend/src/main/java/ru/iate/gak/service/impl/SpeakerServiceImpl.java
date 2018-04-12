@@ -83,6 +83,16 @@ public class SpeakerServiceImpl implements SpeakerService {
 
     @Override
     @Transactional
+    public Map<String, List<Speaker>> getAllSpeakersListAllGroupsOfDay(LocalDateTime date) {
+        Map<String, List<Speaker>> result = new HashMap<>();
+        groupRepository.getAllOrderByTitleAsc().forEach(groupEntity -> {   //get all groups and get speakers of these groups
+            result.put(groupEntity.getTitle(), speakerRepository.getSpeakersListOfCurrentGroupOfDay(groupEntity, date).stream().map(Speaker::new).collect(Collectors.toList()));
+        });
+        return result;
+    }
+
+    @Override
+    @Transactional
     public List<File> getSpeakerProtocolsOfGroup(String group) {
         GroupEntity groupEntity = groupRepository.findOne(group);
         if (groupEntity == null) throw new RuntimeException("Группа с названием " + group + "  не найдена");
@@ -180,4 +190,6 @@ public class SpeakerServiceImpl implements SpeakerService {
             } else throw new RuntimeException("Произошла ошибка");
         } else throw new RuntimeException("Произошла ошибка");
     }
+
+
 }
