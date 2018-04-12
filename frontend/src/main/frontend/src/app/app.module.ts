@@ -50,7 +50,7 @@ export class CustomToastOptions extends ToastOptions {
 }
 
 export let waitString = "Подождите";
-export let socketPath = "http://localhost:8080/socket";
+export let socketPath = "http://" + window.location.hostname + ":8080/socket";   //for example http://localhost:8080/socket
 
 const routes: Routes = [
   {path: '', component: MainPageComponent},
