@@ -20,10 +20,7 @@ import ru.iate.gak.util.StatusUtil;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Component
 public class TelegramBotComponent extends TelegramLongPollingBot {
@@ -107,20 +104,27 @@ public class TelegramBotComponent extends TelegramLongPollingBot {
                 case "all":
                     //get all speakers of current day
                     StringBuilder finalResponseText = responseText;
-                    speakerService.getAllSpeakersListAllGroupsOfDay(messageDateInUTC).forEach((group, speakerList) -> {
+                    Map<String, List<Speaker>> allSpeakersListAllGroupsOfDay = speakerService.getAllSpeakersListAllGroupsOfDay(messageDateInUTC);
+
+                    final boolean[] isOneSpeakerGroup = {false};
+                    allSpeakersListAllGroupsOfDay.forEach((group, speakerList) -> {
                         if (!speakerList.isEmpty()) {
+                            isOneSpeakerGroup[0] = true;
                             finalResponseText.append("--- ").append(group).append(" ---").append("\n");
                             finalResponseText.append(getStringFromSpeakersList(speakerList));
                             finalResponseText.append("\n\n");
                         }
                     });
+                    if (!isOneSpeakerGroup[0]) finalResponseText.append("Today no speakers :(");
                     response.setText(finalResponseText.toString());
                     break;
 
                 default:
                     //get speakers of current day of specific group
                     List<Speaker> speakers = speakerService.getSpeakerListOfCurrentGroupOfDay(data, messageDateInUTC);
-                    responseText = getStringFromSpeakersList(speakers);
+                    if (!speakers.isEmpty()) {
+                        responseText = getStringFromSpeakersList(speakers);
+                    } else responseText.append("Today no speakers :(");
                     response.setText(responseText.toString());
                     break;
             }
@@ -150,27 +154,25 @@ public class TelegramBotComponent extends TelegramLongPollingBot {
 
     private StringBuilder getStringFromSpeakersList(List<Speaker> speakerList) {
         StringBuilder responseText = new StringBuilder();
-        if (!speakerList.isEmpty()) {
-            speakerList.forEach(speaker -> {
-                Student student = speaker.getStudent();
-                if (student != null) {
-                    responseText.append((student.getMiddlename() != null)
-                            ? speaker.getOrderOfSpeaking() + ". " + student.getLastname() + " " + student.getFirstname() + " " + student.getMiddlename() + "\n"
-                            : speaker.getOrderOfSpeaking() + ". " + student.getLastname() + " " + student.getFirstname() + "\n");
+        speakerList.forEach(speaker -> {
+            Student student = speaker.getStudent();
+            if (student != null) {
+                responseText.append((student.getMiddlename() != null)
+                        ? speaker.getOrderOfSpeaking() + ". " + student.getLastname() + " " + student.getFirstname() + " " + student.getMiddlename() + "\n"
+                        : speaker.getOrderOfSpeaking() + ". " + student.getLastname() + " " + student.getFirstname() + "\n");
 
-                    Diplom diplom = diplomService.getDiplomBySpeakerId(speaker.getId());
+                Diplom diplom = diplomService.getDiplomBySpeakerId(speaker.getId());
 
-                    if (diplom != null) {
-                        String status = StatusUtil.getRussianStringFromStatusEnum(diplom.getStatus());
+                if (diplom != null) {
+                    String status = StatusUtil.getRussianStringFromStatusEnum(diplom.getStatus());
 
-                        if (!status.isEmpty()) {
-                            responseText.append("(").append(status).append(")").append("\n");
-                        }
+                    if (!status.isEmpty()) {
+                        responseText.append("(").append(status).append(")").append("\n");
                     }
-
                 }
-            });
-        } else responseText.append("Today no speakers :(");
+
+            }
+        });
 
         return responseText;
     }
