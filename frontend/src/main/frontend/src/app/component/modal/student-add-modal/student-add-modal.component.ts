@@ -4,6 +4,7 @@ import {UserService} from "../../../service/user.service";
 import {StudentService} from "../../../service/student.service";
 import {BlockUI, NgBlockUI} from "ng-block-ui";
 import {waitString} from "../../../app.module";
+import {HelperService} from "../../../service/helper.service";
 
 declare var $: any;
 
@@ -19,6 +20,7 @@ export class StudentAddModalComponent implements OnInit {
     firstname: null,
     middlename: null,
     lastname: null,
+    gender: null,
     title: null,
     executionPlace: null,
     group: null,
@@ -120,6 +122,7 @@ export class StudentAddModalComponent implements OnInit {
       firstname: null,
       middlename: null,
       lastname: null,
+      gender: null,
       title: null,
       executionPlace: null,
       group: null,
@@ -146,6 +149,7 @@ export class StudentAddModalComponent implements OnInit {
     if (this.selectedReviewer[0] != undefined) {
       reviewer = {id: this.selectedReviewer[0].userId};
     }
+    this.student.gender = HelperService.convertRussianToGender(this.student.gender);
     this.student.group = group;
     this.student.mentor = mentor;
     this.student.reviewer = reviewer;

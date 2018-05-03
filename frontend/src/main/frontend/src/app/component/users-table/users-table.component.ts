@@ -18,10 +18,20 @@ export class UsersTableComponent implements OnInit {
     {prop: "firstname", name: "Имя"},
     {prop: "lastname", name: "Фамилия"},
     {prop: "middlename", name: "Отчество"},
+    {prop: "gender", name: "Пол"},
     {prop: "login", name: "Логин"},
     {prop: "roles", name: "Роль"}
   ];
-  selectedUser = {id: null, firstname: null, middlename: null, lastname: null, login: null, password: null, roles: []};
+  selectedUser = {
+    id: null,
+    firstname: null,
+    middlename: null,
+    lastname: null,
+    gender: null,
+    login: null,
+    password: null,
+    roles: []
+  };
   roles = [];
   isAddingNewUser;
   @BlockUI() blockUI: NgBlockUI;
@@ -49,6 +59,7 @@ export class UsersTableComponent implements OnInit {
             firstname: u.firstname,
             lastname: u.lastname,
             middlename: u.middlename,
+            gender: HelperService.convertGenderToRussian(u.gender),
             login: u.login,
             roles: roles
           });
@@ -96,7 +107,16 @@ export class UsersTableComponent implements OnInit {
   }
 
   clearSelected() {
-    this.selectedUser = {id: null, firstname: null, middlename: null, lastname: null, login: null, password: null, roles: []};
+    this.selectedUser = {
+      id: null,
+      firstname: null,
+      middlename: null,
+      lastname: null,
+      gender: null,
+      login: null,
+      password: null,
+      roles: []
+    };
     this.roles = [];
   }
 }

@@ -1,5 +1,6 @@
 package ru.iate.gak.dto;
 
+import ru.iate.gak.domain.Gender;
 import ru.iate.gak.domain.User;
 import ru.iate.gak.domain.Role;
 
@@ -12,6 +13,7 @@ public class UserDto extends LongIdentifiableDto {
     public String firstname;
     public String middlename;
     public String lastname;
+    public Gender gender;
     public Set<Role> roles;
 
     public UserDto() {
@@ -25,6 +27,7 @@ public class UserDto extends LongIdentifiableDto {
         this.firstname = user.getFirstname();
         this.middlename = user.getMiddlename();
         this.lastname = user.getLastname();
+        this.gender = user.getGender();
         this.roles = user.getRoles();
     }
 
@@ -36,6 +39,7 @@ public class UserDto extends LongIdentifiableDto {
         user.setFirstname(this.firstname);
         user.setMiddlename(this.middlename);
         user.setLastname(this.lastname);
+        user.setGender(this.gender);
         user.setRoles(this.roles);
         return user;
     }

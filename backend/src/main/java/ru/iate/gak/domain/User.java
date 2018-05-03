@@ -11,6 +11,7 @@ public class User extends LongIdentifiable {
     private String firstname;
     private String middlename;
     private String lastname;
+    private Gender gender;
     private Set<Role> roles;
 
     public User() {
@@ -24,6 +25,7 @@ public class User extends LongIdentifiable {
         this.firstname = userEntity.getFirstname();
         this.middlename = userEntity.getMiddlename();
         this.lastname = userEntity.getLastname();
+        this.gender = userEntity.getGender();
         this.roles = userEntity.getRoles();
     }
 
@@ -73,5 +75,13 @@ public class User extends LongIdentifiable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Gender getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
     }
 }

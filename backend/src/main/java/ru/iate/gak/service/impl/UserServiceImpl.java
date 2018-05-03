@@ -54,6 +54,7 @@ public class UserServiceImpl implements UserService {
         userEntity.setLogin(user.getLogin());
         userEntity.setPassword(passwordEncoder.encode(user.getPassword()));
         userEntity.setFirstname(user.getFirstname());
+        userEntity.setGender(user.getGender());
         userEntity.setMiddlename(user.getMiddlename());
         userEntity.setLastname(user.getLastname());
         userEntity.setRoles(user.getRoles());
@@ -72,6 +73,7 @@ public class UserServiceImpl implements UserService {
         userEntity.setFirstname(user.getFirstname());
         userEntity.setMiddlename(user.getMiddlename());
         userEntity.setLastname(user.getLastname());
+        userEntity.setGender(user.getGender());
         userEntity.setRoles(user.getRoles());
         userRepository.save(userEntity);
     }

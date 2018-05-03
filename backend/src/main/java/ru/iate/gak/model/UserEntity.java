@@ -1,5 +1,6 @@
 package ru.iate.gak.model;
 
+import ru.iate.gak.domain.Gender;
 import ru.iate.gak.domain.Role;
 
 import javax.persistence.*;
@@ -24,6 +25,10 @@ public class UserEntity extends LongIdentifiableEntity {
 
     @Column(name = "lastname")
     private String lastname;
+
+    @Enumerated(value = EnumType.STRING)
+    @Column(name = "gender")
+    private Gender gender;
 
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(
@@ -98,4 +103,11 @@ public class UserEntity extends LongIdentifiableEntity {
         this.roles = roles;
     }
 
+    public Gender getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
+    }
 }

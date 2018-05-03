@@ -88,6 +88,7 @@ public class StudentServiceImpl implements StudentService {
         studentEntity.setFirstname(student.getFirstname());
         studentEntity.setLastname(student.getLastname());
         studentEntity.setMiddlename(student.getMiddlename());
+        studentEntity.setGender(student.getGender());
         studentEntity.setGroup(groupEntity);
         studentRepository.save(studentEntity);
 

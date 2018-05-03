@@ -9,6 +9,7 @@ public class Student extends LongIdentifiable {
     private String middlename;
     private String lastname;
     private String title;
+    private Gender gender;
     private String executionPlace;
     private LocalDateTime deleteTime;
     private Group group;
@@ -26,6 +27,8 @@ public class Student extends LongIdentifiable {
         this.middlename = studentEntity.getMiddlename();
         this.lastname = studentEntity.getLastname();
         this.title = (studentEntity.getDiplom() == null) ? null : studentEntity.getDiplom().getTitle();
+        this.gender = studentEntity.getGender();
+
         this.deleteTime = studentEntity.getDeletedTime();
         this.status = (studentEntity.getDiplom() == null) ? null : studentEntity.getDiplom().getStatus();
     }
@@ -126,5 +129,13 @@ public class Student extends LongIdentifiable {
 
     public void setExecutionPlace(String executionPlace) {
         this.executionPlace = executionPlace;
+    }
+
+    public Gender getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
     }
 }

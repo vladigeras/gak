@@ -29,6 +29,13 @@
                    [(ngModel)]="student.middlename" name="middlename">
           </div>
           <div class="form-group">
+            <label for="selectGenderStudentForm">Пол</label>
+            <select class="form-control" id="selectGenderStudentForm" [(ngModel)]="student.gender" name="gender">
+              <option>Мужской</option>
+              <option>Женский</option>
+            </select>
+          </div>
+          <div class="form-group">
             <label for="inputTitleStudentForm">Название темы</label>
             <input type="text" class="form-control" id="inputTitleStudentForm" placeholder="Название темы"
                    [(ngModel)]="student.title" name="title">

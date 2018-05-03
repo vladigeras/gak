@@ -3,6 +3,7 @@ import {ToastsManager} from "ng2-toastr";
 import {StudentService} from "../../service/student.service";
 import {BlockUI, NgBlockUI} from "ng-block-ui";
 import {waitString} from "../../app.module";
+import {HelperService} from "../../service/helper.service";
 
 declare var $: any;
 
@@ -21,6 +22,7 @@ export class StudentsTableComponent implements OnInit {
     firstname: null,
     middlename: null,
     lastname: null,
+    gender: null,
     title: null,
     executionPlace: null,
     group: null,
@@ -36,7 +38,8 @@ export class StudentsTableComponent implements OnInit {
   };
   @BlockUI() blockUI: NgBlockUI;
 
-  constructor(private toast: ToastsManager, private studentService: StudentService) {}
+  constructor(private toast: ToastsManager, private studentService: StudentService) {
+  }
 
   ngOnInit() {
     this.getAvailableGroups();
@@ -80,6 +83,7 @@ export class StudentsTableComponent implements OnInit {
             this.students.push({
               id: student.id,
               fio: student.lastname + " " + student.firstname + " " + student.middlename,
+              gender: HelperService.convertGenderToRussian(student.gender),
               title: student.title,
               executionPlace: student.executionPlace,
               mentor: student.mentor.lastname + " " + student.mentor.firstname + " " + student.mentor.middlename,
@@ -118,6 +122,7 @@ export class StudentsTableComponent implements OnInit {
         this.selectedStudent.lastname = fio[0];
         this.selectedStudent.firstname = fio[1];
         this.selectedStudent.middlename = fio[2];
+        this.selectedStudent.gender = row.gender;
         this.selectedStudent.title = row.title;
         this.selectedStudent.executionPlace = row.executionPlace;
         this.selectedMentor.push({
@@ -136,7 +141,7 @@ export class StudentsTableComponent implements OnInit {
     }
   }
 
-  readFile (row, isReport: boolean) {
+  readFile(row, isReport: boolean) {
     let studentId = row.id;
     let tab = window.open();
     this.studentService.readFile(studentId, isReport).subscribe(fileData => {
@@ -146,7 +151,18 @@ export class StudentsTableComponent implements OnInit {
   }
 
   clearSelected() {
-    this.selectedStudent = {id: null, firstname: null, middlename: null, lastname: null, title: null, executionPlace: null, group: null, mentor: null, reviewer: null};
+    this.selectedStudent = {
+      id: null,
+      firstname: null,
+      middlename: null,
+      lastname: null,
+      gender: null,
+      title: null,
+      executionPlace: null,
+      group: null,
+      mentor: null,
+      reviewer: null
+    };
     this.selectedReviewer = [];
     this.selectedMentor = [];
   }

@@ -29,6 +29,13 @@
                    [(ngModel)]="user.middlename" name="middlename">
           </div>
           <div class="form-group">
+            <label for="selectGenderUserForm">Пол</label>
+            <select class="form-control" id="selectGenderUserForm" [(ngModel)]="user.gender" name="gender">
+              <option>Мужской</option>
+              <option>Женский</option>
+            </select>
+          </div>
+          <div class="form-group">
             <i class="glyphicon glyphicon-user"></i>
             <label>Логин</label>
             <div *ngIf="!isAddingNewUser">

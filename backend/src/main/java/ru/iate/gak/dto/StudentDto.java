@@ -1,5 +1,6 @@
 package ru.iate.gak.dto;
 
+import ru.iate.gak.domain.Gender;
 import ru.iate.gak.domain.Status;
 import ru.iate.gak.domain.Student;
 
@@ -11,6 +12,7 @@ public class StudentDto extends LongIdentifiableDto {
     public String firstname;
     public String middlename;
     public String lastname;
+    public Gender gender;
     public String title;
     public String executionPlace;
     public Long deleteTime;
@@ -29,6 +31,7 @@ public class StudentDto extends LongIdentifiableDto {
         this.firstname = student.getFirstname();
         this.middlename = student.getMiddlename();
         this.lastname = student.getLastname();
+        this.gender = student.getGender();
         this.title = student.getTitle();
         this.executionPlace = student.getExecutionPlace();
         this.deleteTime = (student.getDeleteTime() == null) ? null : student.getDeleteTime().toInstant(ZoneOffset.UTC).toEpochMilli();
@@ -47,6 +50,7 @@ public class StudentDto extends LongIdentifiableDto {
         student.setFirstname(this.firstname);
         student.setMiddlename(this.middlename);
         student.setLastname(this.lastname);
+        student.setGender(this.gender);
         student.setTitle(this.title);
         student.setExecutionPlace(this.executionPlace);
         student.setDeleteTime((this.deleteTime == null) ? null : LocalDateTime.ofInstant(Instant.ofEpochMilli(this.deleteTime), ZoneOffset.UTC));

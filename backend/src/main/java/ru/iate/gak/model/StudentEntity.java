@@ -1,5 +1,7 @@
 package ru.iate.gak.model;
 
+import ru.iate.gak.domain.Gender;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -15,6 +17,10 @@ public class StudentEntity extends LongIdentifiableEntity {
 
     @Column(name = "lastname")
     private String lastname;
+
+    @Enumerated(value = EnumType.STRING)
+    @Column(name = "gender")
+    private Gender gender;
 
     @Column(name = "deleted_time")
     private LocalDateTime deletedTime;
@@ -83,5 +89,13 @@ public class StudentEntity extends LongIdentifiableEntity {
 
     public void setDeletedTime(LocalDateTime deletedTime) {
         this.deletedTime = deletedTime;
+    }
+
+    public Gender getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
     }
 }
