@@ -1,0 +1,43 @@
+<div>
+    <div *ngIf="time <=9000">
+    <h1> {{ formatTime(time) }}</h1>
+    <div class="btn-group">
+      <button (click)="toggle()">
+        <span *ngIf="!started">Start</span>
+        <span *ngIf="started">Pause</span>
+      </button>
+      <button    (click)="reset()">Reset</button>
+      <button   (click)="lap()">Split</button>
+    </div>
+    </div>
+
+  <div *ngIf="time >9000">
+  <h1 class="text-danger">{{ formatTime(time) }}</h1>
+  <div class="btn-group ">
+    <button class="btn-danger" (click)="toggle()">
+      <span *ngIf="!started">Start</span>
+      <span *ngIf="started">Pause</span>
+    </button>
+    <button class="btn-danger"   (click)="reset()">Reset</button>
+    <button class="btn-danger"  (click)="lap()">Split</button>
+  </div>
+
+  </div>
+    <div class="laps"
+         *ngIf="stopwatchService.laps.length > 1">
+      <div class="lap"
+           *ngFor="let lap of stopwatchService.laps; let i = index; let last = last;">
+
+        <div *ngIf="i==0">Время выступлениея</div>
+        <div *ngIf="i==1">Время на зачитывания отзывов</div>
+        <div *ngIf="i==2">Время на вопросы</div>
+        <div *ngIf="i==3">Время на заключительное слово</div>
+        <div *ngIf="i==4">Время всей защиты</div>
+        <div>{{ formatTime(lap.startMs) }}</div>
+        <div *ngIf="last">{{ formatTime(time) }}</div>
+        <div *ngIf="!last">{{ formatTime(lap.endMs) }}</div>
+      </div>
+    </div>
+
+
+</div>
