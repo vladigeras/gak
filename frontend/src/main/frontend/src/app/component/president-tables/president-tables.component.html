@@ -19,9 +19,16 @@
   </div>
 
   <ngx-datatable *ngIf="selectedGroup[0] != null" #studentSpeakerTable
-                 class="material expandable" [rows]="speakerStudents" [columnMode]="'force'"
-                 [headerHeight]="40" [footerHeight]="40" [limit]="20" [rowClass]="getRowClass"
-                 [rowHeight]="'auto'" (activate)="toggleExpandRow($event)">
+                 class="material expandable"
+                 [rows]="speakerStudents"
+                 [columnMode]="'force'"
+                 [headerHeight]="40"
+                 [footerHeight]="40"
+                 [limit]="20"
+                 [rowClass]="getRowClass"
+                 [rowHeight]="'auto'"
+                 (activate)="toggleExpandRow($event)"
+                  >
     <ngx-datatable-row-detail [rowHeight]="'auto'">
       <ng-template let-row="row" ngx-datatable-row-detail-template>
         <div class="container-fluid">
@@ -58,7 +65,7 @@
     </div>
     <div *ngIf="(isPrincipalContainsRole('PRESIDENT') || isPrincipalContainsRole('MEMBER'))
     && (router.url.toString().includes('president') || router.url.toString().includes('member'))">
-      <ngx-datatable-column prop="report" name="Отчет (.pdf)">
+      <ngx-datatable-column prop="report" name="Отчет (.pdf)" [width]="30">
         <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
           <button *ngIf="value == true" type="button" class="btn btn-default" (click)="readFile(row, true)">
             <i class="glyphicon glyphicon-play-circle" aria-hidden="true"></i> Посмотреть
@@ -69,7 +76,7 @@
     </div>
     <div *ngIf="(isPrincipalContainsRole('PRESIDENT') || isPrincipalContainsRole('MEMBER'))
     && (router.url.toString().includes('president') || router.url.toString().includes('member'))">
-      <ngx-datatable-column prop="presentation" name="Презентация (.pdf)">
+      <ngx-datatable-column prop="presentation" name="Презентация (.pdf)" [width]="30">
         <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
           <button *ngIf="value == true" type="button" class="btn btn-default" (click)="readFile(row, false)">
             <i class="glyphicon glyphicon-play-circle" aria-hidden="true"></i> Посмотреть
@@ -78,15 +85,16 @@
       </ngx-datatable-column>
     </div>
 
+
     <div *ngIf="(isPrincipalContainsRole('PRESIDENT') )
     && (router.url.toString().includes('president'))">
-      <ngx-datatable-column prop="stopping" name="Stop">
+      <ngx-datatable-column prop="defense" name="Процесс защиты" [width]="70">
         <ng-template let-row="row" ngx-datatable-cell-template>
-          <i *ngIf="row.diplom.statusString != DONE">
-
-            <button type="button" class="btn icon-stop" (click)="stopDefense()">
-              Остановить защиту
-            </button>
+          <button *ngIf=" compareString(row.status, 'ACTIVE') && (countLabs == 4)"  class="btn btn-default" (click)="setDoneStudent()">
+            Следующий студент
+          </button>
+          <i  *ngIf=" compareString(row.status, 'ACTIVE')">
+            <app-stopwatch (flagLabs)="getFlagLabs($event)"></app-stopwatch>
           </i>
 
         </ng-template>
@@ -95,16 +103,23 @@
 
     <div *ngIf="(isPrincipalContainsRole('PRESIDENT') )
     && (router.url.toString().includes('president'))">
-      <ngx-datatable-column prop="timing" name="Time">
+      <ngx-datatable-column prop="criteria" name="Критерии" [width]="300">
         <ng-template let-row="row" ngx-datatable-cell-template>
-          <i  *ngIf="row.diplom.statusString != DONE">
-            <app-stopwatch></app-stopwatch>
-          </i>
 
+          <i  *ngIf=" compareString(row.status, 'ACTIVE')" >
+            <app-criteria></app-criteria>
+          </i>
         </ng-template>
       </ngx-datatable-column>
     </div>
+
+
+
   </ngx-datatable>
+
+
+
+
 
 
 

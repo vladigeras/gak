@@ -41,7 +41,12 @@ import {CriteriaService} from "./service/criteria.service";
 import {BlockUIModule} from 'ng-block-ui';
 import {SocketService} from "./service/socket.service";
 import {DiplomService} from "./service/diplom.service";
+import {PresidentTablesComponent} from "./component/president-tables/president-tables.component";
+import { MomentModule } from "angular2-moment";
 
+import {StopWatchService} from "./service/stopwatch.service";
+import {StopWatchComponent} from "./component/stopwatch/stopwatch.component";
+import {TransfereService} from "./service/transfere.service";
 
 export class CustomToastOptions extends ToastOptions {
   showCloseButton = true;
@@ -80,7 +85,10 @@ const routes: Routes = [
     StudentsTableComponent,
     CommissionsTableComponent,
     SpeakersStudentTableComponent,
-    CriteriaComponent
+    CriteriaComponent,
+    PresidentTablesComponent,
+    StopWatchComponent
+
   ],
   imports: [
     BrowserModule,
@@ -95,7 +103,8 @@ const routes: Routes = [
     DndModule.forRoot(),
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
-    BlockUIModule
+    BlockUIModule,
+    MomentModule
   ],
   providers: [
     {provide: ToastOptions, useClass: CustomToastOptions},
@@ -110,7 +119,9 @@ const routes: Routes = [
     GuardService,
     CriteriaService,
     SocketService,
-    DiplomService
+    DiplomService,
+    StopWatchService,
+    TransfereService
   ],
   bootstrap: [AppComponent]
 })

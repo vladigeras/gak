@@ -14,6 +14,7 @@ import {HelperService} from "../../service/helper.service";
 import {Router} from "@angular/router";
 
 import {StopWatchService} from "../../service/stopwatch.service";
+import {TransfereService} from "../../service/transfere.service";
 
 
 declare var $: any;
@@ -43,12 +44,14 @@ export class PresidentTablesComponent implements OnInit {
   };
   socket = stomp;
   @BlockUI() blockUI: NgBlockUI;
+  countLabs = 0;
 
   constructor(private toast: ToastsManager, private studentService: StudentService, private speakerService: SpeakerService,
               private questionService: QuestionService, private socketService: SocketService,
               private diplomService: DiplomService,
               private router: Router,
-              private stopwatchService: StopWatchService
+              private stopwatchService: StopWatchService,
+              private transfereService: TransfereService
              ) {
 
     socketService.activeSpeakerReady.subscribe(speaker => {
@@ -68,6 +71,9 @@ export class PresidentTablesComponent implements OnInit {
         this.setStatusToStudentInList(speaker, Status[Status.DONE]);
         this.getDiplomInfoOfSpeaker(speaker.id);
       }
+
+    transfereService.data.subscribe(count => {this.countLabs = count;
+    console.log(count, this.countLabs)});
     })
 
 
@@ -120,6 +126,16 @@ export class PresidentTablesComponent implements OnInit {
       $('#setActiveStudentConfirmModal').modal('hide');
     }
   }
+
+  setDoneStudent() {
+      //this.setStatusToStudentInList(this.activeSpeaker, Status[Status.DONE]);
+      this.socket.send("/app/doneSpeaker", {}, this.activeSpeaker.id);
+      $('#setActiveStudentConfirmModal').modal('hide');
+  this.countLabs = 0;
+
+  }
+
+
 
   getSpeakersStudentsOfGroup() {
     if (this.selectedGroup[0] != undefined) {
@@ -289,10 +305,24 @@ export class PresidentTablesComponent implements OnInit {
     return this.principal.roles.indexOf(role) != -1;
   }
 
-  stopDefense(){
-    this.stopwatchService.stop()
+  compareString(str1: String , str2: String) {
+    if (str1 != null){
+      if( str1 === str2)
+      {
+        return true;
+      }
+      else
+      {
+        return false;
+      }
+    }
+    else return false;
+
   }
 
+  getFlagLabs(event) {
+    this.countLabs = event;
+  }
 
 }
 

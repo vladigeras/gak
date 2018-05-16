@@ -1,25 +1,29 @@
 <div>
-    <div *ngIf="time <=9000">
-    <h1> {{ formatTime(time) }}</h1>
-    <div class="btn-group">
-      <button (click)="toggle()">
-        <span *ngIf="!started">Start</span>
-        <span *ngIf="started">Pause</span>
+    <div *ngIf="time <=9000 || countLaps > 0">
+    <h1 class="text-center"> {{ formatTime(time) }}</h1>
+    <div class="btn-group-vertical" >
+      <button class="btn" *ngIf="countLaps < 4" (click)="toggle()">
+        <span *ngIf="!started && !flagStartDefense && (countLaps < 4)">Начать защиту</span>
+        <span *ngIf="!started && flagStartDefense">Старт</span>
+        <span *ngIf="started ">Пауза</span>
       </button>
-      <button    (click)="reset()">Reset</button>
-      <button   (click)="lap()">Split</button>
+      <button class="btn" *ngIf="flagStartDefense && (countLaps < 3)"  (click)="lap()">Следующий этап</button>
+      <button class="btn" *ngIf="flagStartDefense && (countLaps == 3)"  (click)="lapAndStop()">Закончить защиту</button>
+      <button *ngIf="flagStartDefense && (countLaps < 4)" class="btn" (click)="reset()">Сброс</button>
+      <button *ngIf="(countLaps == 4)" class="btn" (click)=" getDataToPresidentTables()">Следующий студент</button>
+
     </div>
     </div>
 
-  <div *ngIf="time >9000">
-  <h1 class="text-danger">{{ formatTime(time) }}</h1>
-  <div class="btn-group ">
-    <button class="btn-danger" (click)="toggle()">
-      <span *ngIf="!started">Start</span>
-      <span *ngIf="started">Pause</span>
+  <div *ngIf="time >9000 && countLaps == 0">
+  <h1 class="text-danger text-center">{{ formatTime(time) }}</h1>
+  <div class="btn-group-vertical">
+    <button class="btn btn-danger" (click)="toggle()">
+      <span *ngIf="!started">Старт</span>
+      <span *ngIf="started">Пауза</span>
     </button>
-    <button class="btn-danger"   (click)="reset()">Reset</button>
-    <button class="btn-danger"  (click)="lap()">Split</button>
+    <button class="btn btn-danger"   (click)="lap()">Следующий этап</button>
+    <button class="btn btn-danger"  (click)="reset()">Сброс</button>
   </div>
 
   </div>
@@ -28,14 +32,22 @@
       <div class="lap"
            *ngFor="let lap of stopwatchService.laps; let i = index; let last = last;">
 
-        <div *ngIf="i==0">Время выступлениея</div>
-        <div *ngIf="i==1">Время на зачитывания отзывов</div>
-        <div *ngIf="i==2">Время на вопросы</div>
-        <div *ngIf="i==3">Время на заключительное слово</div>
-        <div *ngIf="i==4">Время всей защиты</div>
-        <div>{{ formatTime(lap.startMs) }}</div>
-        <div *ngIf="last">{{ formatTime(time) }}</div>
-        <div *ngIf="!last">{{ formatTime(lap.endMs) }}</div>
+        <div *ngIf="i==0">Доклад</div>
+        <div *ngIf="i==1">Отзыв и рецензия</div>
+        <div *ngIf="i==2">Вопросы</div>
+        <div *ngIf="i==3">Заключительное слово</div>
+        <div *ngIf="i==4">Время защиты</div>
+        <div *ngIf="i<4">
+          <div>{{ formatTime(lap.startMs) }}</div>
+          <div *ngIf="last">{{ formatTime(time) }}</div>
+          <div *ngIf="!last">{{ formatTime(lap.endMs) }}</div>
+        </div>
+        <div *ngIf="i==4">
+          <div>{{ formatTime(stopwatchService.startAt) }}</div>
+          <div *ngIf="last">{{ formatTime(time) }}</div>
+          <div *ngIf="!last">{{ formatTime(lap.endMs) }}</div>
+        </div>
+
       </div>
     </div>
 

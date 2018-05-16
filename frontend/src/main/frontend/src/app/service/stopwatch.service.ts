@@ -3,7 +3,7 @@ import {Injectable} from '@angular/core';
 
 @Injectable()
 export class StopWatchService {
-  public laps: Lap[];
+  public laps: Lap[] = null;
 
   private startAt: number;
   private lapTime: number;
@@ -53,6 +53,9 @@ export class StopWatchService {
   time() {
     return this.lapTime
       + (this.startAt ? this.now() - this.startAt : 0);
+  }
+  getLaps(){
+    return this.laps;
   }
 }
 
