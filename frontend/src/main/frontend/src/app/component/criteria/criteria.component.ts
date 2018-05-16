@@ -5,6 +5,7 @@ import {BlockUI, NgBlockUI} from "ng-block-ui";
 import {waitString} from "../../app.module";
 import {SocketService} from "../../service/socket.service";
 import {currentPrincipal} from "../../security/auth.service";
+import {Constants} from "../../constants";
 
 @Component({
   selector: 'app-criteria',
@@ -60,15 +61,27 @@ export class CriteriaComponent implements OnInit {
 
   saveCriteria() {
     if (this.activeSpeaker != null) {
+      let criteria = [];
+      this.criteriaToActiveSpeaker.forEach(c => criteria.push(c));    //add criteria
+
+      if (this.resultMark != null) {      //because result mark will be one more criteria too with fixed title
+        criteria.push({
+          index: this.criteriaToActiveSpeaker.length + 1,
+          title: Constants.criteriaResult,
+          rating: this.resultMark,
+          comment: null
+        });
+      }
+
       let criteriaDtoWithResult = {
-        criteriaDtoList: this.criteriaToActiveSpeaker,
+        criteriaDtoList: criteria,
         speakerId: this.activeSpeaker.id
       };
       this.blockUI.start(waitString);
       this.criteriaService.saveCriteriaWithData(criteriaDtoWithResult).subscribe(
         data => {
           this.blockUI.stop();
-          this.toast.success("Критерии и оценки сохранены", "Успешно")
+          this.toast.success("Критерии и оценки для студента сохранены", "Успешно")
         },
         error => {
           this.blockUI.stop();
@@ -79,29 +92,24 @@ export class CriteriaComponent implements OnInit {
     }
   }
 
-  saveResult() {
-    if (this.activeSpeaker != null) {
-      if (this.principal.roles.indexOf('PRESIDENT') != -1) {
-        this.blockUI.start(waitString);
-        this.criteriaService.saveResultMarkFromUserToSpeaker(this.resultMark, this.activeSpeaker.id).subscribe(
-          data => {
-            this.blockUI.stop();
-            this.toast.success("Оценка сохранена", "Успешно")
-          },
-          error => {
-            this.blockUI.stop();
-            if (error.error.message != undefined) this.toast.error(error.error.message, "Ошибка");
-            else this.toast.error(error.error, "Ошибка");
-          })
-      }
-      if (this.principal.roles.indexOf('MEMBER') != -1) {
-        this.blockUI.start(waitString);
-        //TODO: request to PRESIDENT page to show this result
-        this.blockUI.stop();
-        this.toast.success("Оценка сохранена", "Успешно")
-      }
-    }
-  }
+  // this method for PRESIDENT final result mark function
+  // saveResult() {
+  //   if (this.activeSpeaker != null) {
+  //     if (this.principal.roles.indexOf('PRESIDENT') != -1) {
+  //       this.blockUI.start(waitString);
+  //       this.criteriaService.saveResultMarkFromUserToSpeaker(this.resultMark, ????? speaker id).subscribe(
+  //         data => {
+  //           this.blockUI.stop();
+  //           this.toast.success("Оценка сохранена", "Успешно")
+  //         },
+  //         error => {
+  //           this.blockUI.stop();
+  //           if (error.error.message != undefined) this.toast.error(error.error.message, "Ошибка");
+  //           else this.toast.error(error.error, "Ошибка");
+  //         })
+  //     }
+  //   }
+  // }
 
   removeCriteria(index) {
     let ind = this.criteriaToActiveSpeaker.findIndex(c => {
