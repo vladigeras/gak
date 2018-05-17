@@ -114,8 +114,7 @@ public class SpeakerServiceImpl implements SpeakerService {
 
             Map<String, String> params = new HashMap<>();
 
-            //TODO: Fix this date, because it writes prev day in result
-            params.put("@date", s.getDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
+            params.put("@date", s.getDate().plusDays(1).format(DateTimeFormatter.ofPattern("dd.MM.yyyy"))); //because UTC date show another day
             params.put("@number", s.getOrderOfSpeaking().toString());
 
             boolean gender = false;     //false for FEMALE
