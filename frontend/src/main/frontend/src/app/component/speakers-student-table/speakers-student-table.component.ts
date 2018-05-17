@@ -199,9 +199,9 @@ export class SpeakersStudentTableComponent implements OnInit {
     }
   }
 
-  downloadProtocols() {
+  downloadProtocolsOfTodaySpeakers() {
     if (this.selectedGroup[0] != undefined) {
-      this.speakerService.getProtocolsForGroup(this.selectedGroup[0].itemName);
+      this.speakerService.getProtocolsForTodaySpeakersOfGroup(this.selectedGroup[0].itemName);
     }
   }
 

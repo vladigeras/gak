@@ -53,7 +53,7 @@ public class SpeakerController {
                                            HttpServletResponse response) {
 
         if (StringUtil.isStringNullOrEmptyTrim(group)) throw new RuntimeException("Неверное значение для группы");
-        List<File> files = speakerService.getSpeakerProtocolsOfGroup(group);
+        List<File> files = speakerService.getSpeakerProtocolsForTodaySpeakersOfGroup(group);
 
         try {
             response.setContentType("Content-type: text/zip");

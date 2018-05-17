@@ -6,7 +6,7 @@
     <div class="pull-right"
          *ngIf="selectedGroup[0] != null && principal != null && principal.roles.indexOf('SECRETARY') != -1
          && router.url.toString().includes('secretary')">
-      <button class="btn btn-info navbar-btn" (click)="downloadProtocols()">Получить протоколы для всей группы</button>
+      <button class="btn btn-info navbar-btn" (click)="downloadProtocolsOfTodaySpeakers()">Скачать протоколы</button>
     </div>
   </div>
 

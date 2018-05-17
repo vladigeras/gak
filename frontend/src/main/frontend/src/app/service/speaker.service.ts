@@ -19,7 +19,7 @@ export class SpeakerService {
     }
   }
 
-  getProtocolsForGroup(group) {
+  getProtocolsForTodaySpeakersOfGroup(group) {
     let a = document.createElement("a");
     a.href = "/speakers/zippedProtocols" + "?group=" + group;
     a.click()
