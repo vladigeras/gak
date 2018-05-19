@@ -40,8 +40,9 @@ public class CommissionServiceImpl implements CommissionService {
     public void setPresidentRoleTemporally(Commission commission) {
         CommissionEntity commissionEntity = commissionRepository.findOne(commission.getId());
         if (commissionEntity == null) throw new RuntimeException("Произошла ошибка");
-
         if (commissionEntity.getUser() == null) throw new RuntimeException("Произошла ошибка");
+        if (commissionEntity.getUser().getRoles().contains(Role.PRESIDENT)) throw new RuntimeException("Данный член комиссии уже является ПРЕДСЕДАТЕЛЕМ");
+
         commissionEntity.getUser().getRoles().add(Role.PRESIDENT);
 
         commissionRepository.save(commissionEntity);
