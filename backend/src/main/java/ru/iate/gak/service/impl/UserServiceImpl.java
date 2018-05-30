@@ -5,17 +5,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.iate.gak.domain.Role;
 import ru.iate.gak.domain.User;
-import ru.iate.gak.model.RoleEntity;
 import ru.iate.gak.model.UserEntity;
-import ru.iate.gak.repository.RoleRepository;
 import ru.iate.gak.repository.UserRepository;
 import ru.iate.gak.service.UserService;
 import ru.iate.gak.util.StringUtil;
 
 import javax.transaction.Transactional;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,9 +19,6 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private RoleRepository roleRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -81,6 +74,6 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public List<Role> getAllRoles() {
-        return roleRepository.findAll().stream().map(RoleEntity::getRole).collect(Collectors.toList());
+        return new ArrayList<>(Arrays.asList(Role.values()));
     }
 }
