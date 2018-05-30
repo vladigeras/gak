@@ -9,8 +9,6 @@ public class DiplomDto extends LongIdentifiableDto {
     public StudentDto student;
     public UserDto mentor;
     public UserDto reviewer;
-    public UserDto consultant;
-    public UserDto ruleController;
     public Integer resultMark;
     public Status status;
     public String executionPlace;
@@ -25,8 +23,6 @@ public class DiplomDto extends LongIdentifiableDto {
         this.student = (diplom.getStudent() == null) ? null : new StudentDto(diplom.getStudent());
         this.mentor = (diplom.getMentor() == null) ? null : new UserDto(diplom.getMentor());
         this.reviewer = (diplom.getReviewer() == null) ? null : new UserDto(diplom.getReviewer());
-        this.consultant = (diplom.getConsultant() == null) ? null : new UserDto(diplom.getConsultant());
-        this.ruleController = (diplom.getRuleController() == null) ? null : new UserDto(diplom.getRuleController());
         this.resultMark = diplom.getResultMark();
         this.status = diplom.getStatus();
         this.executionPlace = diplom.getExecutionPlace();
@@ -41,8 +37,6 @@ public class DiplomDto extends LongIdentifiableDto {
         diplom.setStudent(this.student.toStudent());
         diplom.setMentor(this.mentor.toUser());
         diplom.setReviewer(this.reviewer.toUser());
-        diplom.setConsultant(this.consultant.toUser());
-        diplom.setRuleController(this.ruleController.toUser());
         diplom.setResultMark(this.resultMark);
         diplom.setStatus(this.status);
         diplom.setExecutionPlace(this.executionPlace);
