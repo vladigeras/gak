@@ -8,8 +8,6 @@ public class Diplom extends LongIdentifiable {
     private Student student;
     private User mentor;
     private User reviewer;
-    private User consultant;
-    private User ruleController;
     private Integer resultMark;
     private Status status;
     private String executionPlace;
@@ -24,8 +22,6 @@ public class Diplom extends LongIdentifiable {
         this.student = (diplomEntity.getStudent() == null) ? null : new Student(diplomEntity.getStudent());
         this.mentor = (diplomEntity.getMentor() == null) ? null : new User(diplomEntity.getMentor());
         this.reviewer = (diplomEntity.getReviewer() == null) ? null : new User(diplomEntity.getReviewer());
-        this.consultant = (diplomEntity.getConsultant()) == null ? null : new User(diplomEntity.getConsultant());
-        this.ruleController = (diplomEntity.getRuleController() == null) ? null :new User(diplomEntity.getRuleController());
         this.resultMark = diplomEntity.getResultMark();
         this.status = diplomEntity.getStatus();
         this.executionPlace = diplomEntity.getExecutionPlace();
@@ -79,22 +75,6 @@ public class Diplom extends LongIdentifiable {
 
     public void setPresentation(byte[] presentation) {
         this.presentation = presentation;
-    }
-
-    public User getConsultant() {
-        return consultant;
-    }
-
-    public void setConsultant(User consultant) {
-        this.consultant = consultant;
-    }
-
-    public User getRuleController() {
-        return ruleController;
-    }
-
-    public void setRuleController(User ruleController) {
-        this.ruleController = ruleController;
     }
 
     public Integer getResultMark() {

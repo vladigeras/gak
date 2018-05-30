@@ -46,12 +46,6 @@ public class UserEntity extends LongIdentifiableEntity {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "reviewer")
     private Set<DiplomEntity> diplomsWhereUserIsReviewer;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "consultant")
-    private Set<DiplomEntity> diplomsWhereUserIsConsultant;
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "ruleController")
-    private Set<DiplomEntity> diplomsWhereUserIsRuleController;
-
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private Set<CommissionEntity> commissionsWhereUserInclude;
 
