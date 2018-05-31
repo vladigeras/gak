@@ -245,8 +245,6 @@ public class SpeakerServiceImpl implements SpeakerService {
                         speakerEntity.getStudent().getDiplom().setStatus(status);
                         speakerRepository.save(speakerEntity);
 
-                        if (speakerEntity == null) throw new RuntimeException("Произошла ошибка");
-
                         return new Speaker(speakerEntity);
                     } else throw new RuntimeException("Произошла ошибка");
                 } else throw new RuntimeException("Произошла ошибка");

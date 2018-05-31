@@ -46,13 +46,15 @@ export class SpeakersStudentTableComponent implements OnInit {
 
     socketService.activeSpeakerReady.subscribe(speaker => {
       if (speaker != null) {
-        this.setStatusToStudentInList(speaker, Status[Status.ACTIVE]);
-        this.activeSpeaker = {
-          id: speaker.id,
-          fio: speaker.student.lastname + " " + speaker.student.firstname + " " + speaker.student.middlename
-        };
-        this.getQuestionsOfSpeaker();
-        this.getDiplomInfoOfSpeaker(speaker.id);
+        if (this.selectedGroup[0] != undefined) {
+          this.setStatusToStudentInList(speaker, Status[Status.ACTIVE]);
+          this.activeSpeaker = {
+            id: speaker.id,
+            fio: speaker.student.lastname + " " + speaker.student.firstname + " " + speaker.student.middlename
+          };
+          this.getQuestionsOfSpeaker();
+          this.getDiplomInfoOfSpeaker(speaker.id);
+        }
       }
     });
 
@@ -95,22 +97,16 @@ export class SpeakersStudentTableComponent implements OnInit {
 
   setActiveStudent() {
     if (this.selectedSpeaker != null) {
-      this.activeSpeaker = {
-        id: this.selectedSpeaker.id,
-        fio: this.selectedSpeaker.fio
-      };
-      this.setStatusToStudentInList(this.activeSpeaker, Status[Status.ACTIVE]);
-      this.socket.send("/app/activeSpeaker", {}, this.activeSpeaker.id);
-      this.getQuestionsOfSpeaker();
+      this.socket.send("/app/activeSpeaker", {}, this.selectedSpeaker.id);
       $('#setActiveStudentConfirmModal').modal('hide');
     }
   }
 
   getSpeakersStudentsOfGroup() {
     if (this.selectedGroup[0] != undefined) {
+      this.blockUI.start(waitString);
       this.activeSpeaker = null;
       this.speakerStudents = [];
-      this.blockUI.start(waitString);
       this.speakerService.getSpeakersListOfGroupOfDay(this.selectedGroup[0].itemName, this.today.unix() * 1000).subscribe(
         (data: any) => {
           data.forEach(speakerStudent => {
@@ -213,10 +209,7 @@ export class SpeakersStudentTableComponent implements OnInit {
   }
 
   setStatusToStudentInList(speaker, status: String) {
-    let indexOfElement = this.speakerStudents.findIndex(s => s.id === speaker.id);
-    let object = this.speakerStudents[indexOfElement];
-    object.status = status;
-    this.speakerStudents[indexOfElement] = object;
+    this.speakerStudents[speaker.orderOfSpeaking-1].status = status;
     this.reloadTable();
   }
 
