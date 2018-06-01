@@ -41,8 +41,8 @@ import {CriteriaService} from "./service/criteria.service";
 import {BlockUIModule} from 'ng-block-ui';
 import {SocketService} from "./service/socket.service";
 import {DiplomService} from "./service/diplom.service";
-import {PresidentTablesComponent} from "./component/president-tables/president-tables.component";
-import { MomentModule } from "angular2-moment";
+
+
 
 import {StopWatchService} from "./service/stopwatch.service";
 import {StopWatchComponent} from "./component/stopwatch/stopwatch.component";
@@ -86,7 +86,6 @@ const routes: Routes = [
     CommissionsTableComponent,
     SpeakersStudentTableComponent,
     CriteriaComponent,
-    PresidentTablesComponent,
     StopWatchComponent
 
   ],
@@ -103,8 +102,7 @@ const routes: Routes = [
     DndModule.forRoot(),
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
-    BlockUIModule,
-    MomentModule
+    BlockUIModule
   ],
   providers: [
     {provide: ToastOptions, useClass: CustomToastOptions},

@@ -1,6 +1,11 @@
 import {Component, EventEmitter, Output} from '@angular/core';
 import {StopWatchService} from "../../service/stopwatch.service";
 import {TransfereService} from "../../service/transfere.service";
+import {BlockUI, NgBlockUI} from "ng-block-ui";
+import {currentPrincipal} from "../../security/auth.service";
+import {ToastsManager} from "ng2-toastr";
+import {SocketService} from "../../service/socket.service";
+import {CriteriaService} from "../../service/criteria.service";
 
 
 
@@ -25,10 +30,21 @@ export class StopWatchComponent {
   private flagStartDefense = false;
   private countLaps = 0;
 
-
+  principal = currentPrincipal;
+  activeSpeaker = {id: null, fio: null};
+  @BlockUI() blockUI: NgBlockUI;
 
   constructor(private stopwatchService: StopWatchService,
-              private transfereService: TransfereService) {
+              private toast: ToastsManager,
+              private socketService: SocketService) {
+    socketService.activeSpeakerReady.subscribe(speaker => {
+      if (speaker != null) {
+        this.activeSpeaker = {
+          id: speaker.id,
+          fio: speaker.student.lastname + " " + speaker.student.firstname + " " + speaker.student.middlename
+        };
+      }
+    });
     this.time = 0;
     this.started = false;
     this.flagStartDefense = false;
@@ -114,7 +130,7 @@ export class StopWatchComponent {
     this.stopwatchService.stop();
   }
 
-  getDataToPresidentTables(){
+  getDataToSpeakersStudentTable(){
    this.flagLabs.emit(4);
    this.reset();
   }

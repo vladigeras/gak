@@ -1,7 +1,7 @@
-<div>
+<div *ngIf="(activeSpeaker.id != null) && (countLaps < 5) ">
     <div *ngIf="time <=9000 || countLaps > 0">
     <h1 class="text-center"> {{ formatTime(time) }}</h1>
-    <div class="btn-group-vertical" >
+    <div class="btn-group-vertical center-block" >
       <button class="btn" *ngIf="countLaps < 4" (click)="toggle()">
         <span *ngIf="!started && !flagStartDefense && (countLaps < 4)">Начать защиту</span>
         <span *ngIf="!started && flagStartDefense">Старт</span>
@@ -10,14 +10,14 @@
       <button class="btn" *ngIf="flagStartDefense && (countLaps < 3)"  (click)="lap()">Следующий этап</button>
       <button class="btn" *ngIf="flagStartDefense && (countLaps == 3)"  (click)="lapAndStop()">Закончить защиту</button>
       <button *ngIf="flagStartDefense && (countLaps < 4)" class="btn" (click)="reset()">Сброс</button>
-      <button *ngIf="(countLaps == 4)" class="btn" (click)=" getDataToPresidentTables()">Следующий студент</button>
+      <button *ngIf="(countLaps == 4)" class="btn" (click)=" getDataToSpeakersStudentTable()">Сохранить время студента</button>
 
     </div>
     </div>
 
   <div *ngIf="time >9000 && countLaps == 0">
   <h1 class="text-danger text-center">{{ formatTime(time) }}</h1>
-  <div class="btn-group-vertical">
+  <div class="btn-group-vertical center-block">
     <button class="btn btn-danger" (click)="toggle()">
       <span *ngIf="!started">Старт</span>
       <span *ngIf="started">Пауза</span>
@@ -25,24 +25,23 @@
     <button class="btn btn-danger"   (click)="lap()">Следующий этап</button>
     <button class="btn btn-danger"  (click)="reset()">Сброс</button>
   </div>
-
   </div>
-    <div class="laps"
-         *ngIf="stopwatchService.laps.length > 1">
-      <div class="lap"
+
+    <div class="row text-center" *ngIf="stopwatchService.laps.length > 1">
+      <div
            *ngFor="let lap of stopwatchService.laps; let i = index; let last = last;">
 
-        <div *ngIf="i==0">Доклад</div>
-        <div *ngIf="i==1">Отзыв и рецензия</div>
-        <div *ngIf="i==2">Вопросы</div>
-        <div *ngIf="i==3">Заключительное слово</div>
-        <div *ngIf="i==4">Время защиты</div>
-        <div *ngIf="i<4">
+        <div class="col-xs-1" *ngIf="i==0">Доклад</div>
+        <div class="col-xs-1" *ngIf="i==1">Отзыв и рецензия</div>
+        <div class="col-xs-1" *ngIf="i==2">Вопросы</div>
+        <div class="col-xs-1" *ngIf="i==3">Заключительное слово</div>
+        <div class="col-xs-1" *ngIf="i==4">Время защиты</div>
+        <div  class="col-xs-1" *ngIf="i<4">
           <div>{{ formatTime(lap.startMs) }}</div>
           <div *ngIf="last">{{ formatTime(time) }}</div>
           <div *ngIf="!last">{{ formatTime(lap.endMs) }}</div>
         </div>
-        <div *ngIf="i==4">
+        <div  class=" card col-xs-1"  *ngIf="i==4">
           <div>{{ formatTime(stopwatchService.startAt) }}</div>
           <div *ngIf="last">{{ formatTime(time) }}</div>
           <div *ngIf="!last">{{ formatTime(lap.endMs) }}</div>
