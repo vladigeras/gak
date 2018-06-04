@@ -10,7 +10,7 @@
       <button class="btn" *ngIf="flagStartDefense && (countLaps < 3)"  (click)="lap()">Следующий этап</button>
       <button class="btn" *ngIf="flagStartDefense && (countLaps == 3)"  (click)="lapAndStop()">Закончить защиту</button>
       <button *ngIf="flagStartDefense && (countLaps < 4)" class="btn" (click)="reset()">Сброс</button>
-      <button *ngIf="(countLaps == 4)" class="btn" (click)=" getDataToSpeakersStudentTable()">Сохранить время студента</button>
+      <button *ngIf="(countLaps == 4)" class="btn" (click)=" saveTimestamp()">Сохранить время студента</button>
 
     </div>
     </div>

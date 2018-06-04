@@ -46,7 +46,7 @@ import {DiplomService} from "./service/diplom.service";
 
 import {StopWatchService} from "./service/stopwatch.service";
 import {StopWatchComponent} from "./component/stopwatch/stopwatch.component";
-import {TransfereService} from "./service/transfere.service";
+import {TimestampService} from "./service/timestamp.service";
 
 export class CustomToastOptions extends ToastOptions {
   showCloseButton = true;
@@ -119,7 +119,8 @@ const routes: Routes = [
     SocketService,
     DiplomService,
     StopWatchService,
-    TransfereService
+    TimestampService
+
   ],
   bootstrap: [AppComponent]
 })

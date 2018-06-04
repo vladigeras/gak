@@ -1,11 +1,13 @@
 import {Component, EventEmitter, Output} from '@angular/core';
 import {StopWatchService} from "../../service/stopwatch.service";
-import {TransfereService} from "../../service/transfere.service";
 import {BlockUI, NgBlockUI} from "ng-block-ui";
 import {currentPrincipal} from "../../security/auth.service";
 import {ToastsManager} from "ng2-toastr";
 import {SocketService} from "../../service/socket.service";
 import {CriteriaService} from "../../service/criteria.service";
+import {waitString} from "../../app.module";
+import {Status} from "../../status";
+import {TimestampService} from "../../service/timestamp.service";
 
 
 
@@ -31,17 +33,21 @@ export class StopWatchComponent {
   private countLaps = 0;
 
   principal = currentPrincipal;
-  activeSpeaker = {id: null, fio: null};
+  activeSpeaker = {id: null, fio: null, date:null};
+  timestamps = [];
+
   @BlockUI() blockUI: NgBlockUI;
 
   constructor(private stopwatchService: StopWatchService,
               private toast: ToastsManager,
-              private socketService: SocketService) {
+              private socketService: SocketService,
+              private timestampService: TimestampService) {
     socketService.activeSpeakerReady.subscribe(speaker => {
       if (speaker != null) {
         this.activeSpeaker = {
           id: speaker.id,
-          fio: speaker.student.lastname + " " + speaker.student.firstname + " " + speaker.student.middlename
+          fio: speaker.student.lastname + " " + speaker.student.firstname + " " + speaker.student.middlename,
+          date: speaker.data
         };
       }
     });
@@ -80,6 +86,7 @@ export class StopWatchComponent {
       this.stopwatchService.lap();
     }
     this.countLaps++;
+
   }
 
   reset() {
@@ -128,11 +135,42 @@ export class StopWatchComponent {
 
     clearInterval(this.timer);
     this.stopwatchService.stop();
-  }
+    let laps = this.stopwatchService.getLaps();
+    laps.forEach((l, index)  =>{
+        if (index == 1)  {
+          this.timestamps.push({status: Status.SPEAKING_TIME, timestamp: l.startMs})
+          this.timestamps.push({status: Status.SPEAKING_TIME_END, timestamp: l.endMs})
+        }
+
+        if (index == 2)  this.timestamps.push({status: Status.REWIEW_TIME_END, timestamp: l.endMs})
+        if (index == 3)  this.timestamps.push({status: Status.QUESTION_TIME_END, timestamp: l.endMs})
+        if (index == 4)  this.timestamps.push({status: Status.ALL_TIME, timestamp: l.endMs})
+
+    }
+
+    );
+  }students
 
   getDataToSpeakersStudentTable(){
    this.flagLabs.emit(4);
    this.reset();
+  }
+
+  saveTimestamp() {
+    this.getDataToSpeakersStudentTable();
+      this.blockUI.start(waitString);
+      console.log(this.timestamps);
+      this.timestampService.saveTimestamp(this.activeSpeaker.id, this.timestamps).subscribe(
+        data => {
+          this.blockUI.stop();
+          this.toast.success("Сохранено", "Успешно")
+        },
+        error => {
+          this.blockUI.stop()
+        }
+      );
+      this.timestamps = [];
+
   }
 
 }
