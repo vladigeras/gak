@@ -145,6 +145,10 @@ public class DiplomEntity extends LongIdentifiableEntity {
         return questions;
     }
 
+    public Set<TimestampEntity> getTimestamps() {
+        return timestamps;
+    }
+
     public void setQuestions(Set<QuestionEntity> questions) {
         this.questions = questions;
     }
