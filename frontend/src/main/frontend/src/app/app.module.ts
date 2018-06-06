@@ -41,7 +41,9 @@ import {CriteriaService} from "./service/criteria.service";
 import {BlockUIModule} from 'ng-block-ui';
 import {SocketService} from "./service/socket.service";
 import {DiplomService} from "./service/diplom.service";
-
+import {StopWatchService} from "./service/stopwatch.service";
+import {StopWatchComponent} from "./component/stopwatch/stopwatch.component";
+import {TimestampService} from "./service/timestamp.service";
 
 export class CustomToastOptions extends ToastOptions {
   showCloseButton = true;
@@ -80,7 +82,9 @@ const routes: Routes = [
     StudentsTableComponent,
     CommissionsTableComponent,
     SpeakersStudentTableComponent,
-    CriteriaComponent
+    CriteriaComponent,
+    StopWatchComponent
+
   ],
   imports: [
     BrowserModule,
@@ -110,7 +114,10 @@ const routes: Routes = [
     GuardService,
     CriteriaService,
     SocketService,
-    DiplomService
+    DiplomService,
+    StopWatchService,
+    TimestampService
+
   ],
   bootstrap: [AppComponent]
 })

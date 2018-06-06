@@ -72,6 +72,10 @@
         </ng-template>
       </ngx-datatable-column>
     </div>
+
+
+
+
   </ngx-datatable>
 
   <div class="question-block"
@@ -121,4 +125,12 @@
   </div>
 </div>
 
+<div *ngIf="(isPrincipalContainsRole('PRESIDENT') )
+    && (router.url.toString().includes('president'))">
 
+<app-stopwatch (flagLabs)="getFlagLabs($event)"></app-stopwatch>
+  <button *ngIf="countLabs == 4"  class="btn btn-danger center-block" (click)="setDoneStudent()">
+    Следующий студент
+  </button>
+<app-criteria></app-criteria>
+</div>

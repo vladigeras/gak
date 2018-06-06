@@ -24,8 +24,8 @@ public class TimestampDto extends LongIdentifiableDto {
 
     public Timestamp toTimestamp() {
         Timestamp timestamp = new Timestamp();
-        timestamp.setDiplom(this.diplom.toDiplom());
-        timestamp.setStatus(this.status);
+        timestamp.setDiplom((this.diplom == null) ? null : this.diplom.toDiplom());
+        timestamp.setStatus((this.status == null)? null : this.status );
         timestamp.setTimestamp((this.timestamp == null) ? null : LocalDateTime.ofInstant(Instant.ofEpochMilli(this.timestamp), ZoneOffset.UTC));
         return timestamp;
     }

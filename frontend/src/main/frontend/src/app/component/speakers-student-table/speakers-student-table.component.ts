@@ -38,6 +38,7 @@ export class SpeakersStudentTableComponent implements OnInit {
   };
   socket = stomp;
   @BlockUI() blockUI: NgBlockUI;
+  countLabs = 0;
 
   constructor(private toast: ToastsManager, private studentService: StudentService, private speakerService: SpeakerService,
               private questionService: QuestionService, private socketService: SocketService,
@@ -265,6 +266,33 @@ export class SpeakersStudentTableComponent implements OnInit {
   isPrincipalContainsRole(role: String) : boolean {
     if (role == null) return false;
     return this.principal.roles.indexOf(role) != -1;
+  }
+
+  compareString(str1: String , str2: String) {
+    if (str1 != null){
+      if( str1 === str2)
+      {
+        return true;
+      }
+      else
+      {
+        return false;
+      }
+    }
+    else return false;
+
+  }
+
+  getFlagLabs(event) {
+    this.countLabs = event;
+  }
+
+  setDoneStudent() {
+    if (this.activeSpeaker != null) {
+      this.socket.send("/app/doneSpeaker", {}, this.activeSpeaker.id);
+      $('#setActiveStudentConfirmModal').modal('hide');
+      this.countLabs = 0;
+    }
   }
 }
 
