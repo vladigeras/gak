@@ -10,6 +10,13 @@ export class CriteriaService {
     return this.http.get("/criteria/getDefault");
   }
 
+  getAllCriteriaByDiplomId() {
+    return this.http.get("/criteria/getCriteria");
+  }
+
+
+
+
   saveResultMarkFromUserToSpeaker(rating, speakerId) {
     let data = {rating: rating, speakerId: speakerId};
     return this.http.post("/criteria/saveResult", data);

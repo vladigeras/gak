@@ -1,0 +1,69 @@
+<div class="content">
+  <div class="row">
+    <div class="pull-left">
+      <h4>Выберите группу для выставления окончательных оценок за ВКР</h4>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <angular2-multiselect [data]="availableGroups" [(ngModel)]="selectedGroup"
+                          [settings]="groupSelectDropdownSettings"
+                          (onSelect)="getSpeakersStudentsOfGroup()">
+    </angular2-multiselect>
+  </div>
+
+  <ngx-datatable *ngIf="selectedGroup[0] != null" #studentSpeakerTable
+                 class="material expandable" [rows]="speakerStudents" [columnMode]="'force'"
+                 [headerHeight]="40" [footerHeight]="40" [limit]="20"
+                 [rowHeight]="'auto'" (activate)="toggleExpandRow($event)">
+
+    <ngx-datatable-row-detail [rowHeight]="'auto'">
+      <ng-template let-row="row"   ngx-datatable-row-detail-template >
+        <div class="result-mark row"   >
+          <div class="pull-left">
+            <label class="result-mark-inline" for="result-mark">Выставить результирующую оценку студенту (в баллах):</label>
+            <select class="form-control result-mark-inline result-mark-inline-select" id="result-mark" [(ngModel)]="resultMark">
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+              <option>5</option>
+            </select>
+            <button class="btn btn-default navbar-btn result-mark-inline button-save-result" (click)="saveResult(row.id)">
+              Сохранить
+            </button>
+          </div>
+        </div>
+
+        <ngx-datatable class="material expandable "
+                       [rows]="commissionsList"
+                       [columnMode]="'force'"
+                       [headerHeight]="40"
+                       [footerHeight]="40"
+                       [limit]="20"
+                       [rowHeight]="'auto'"
+        >
+
+          <ngx-datatable-column prop="id" name="id"></ngx-datatable-column>
+          <ngx-datatable-column prop="listId" name="listId"></ngx-datatable-column>
+          <ngx-datatable-column prop="userId" name="userId"></ngx-datatable-column>
+
+        </ngx-datatable>
+      </ng-template>
+
+
+    </ngx-datatable-row-detail>
+
+
+    <ngx-datatable-column prop="fio" name="ФИО"></ngx-datatable-column>
+    <ngx-datatable-column prop="title" name="Тема"></ngx-datatable-column>
+
+
+
+  </ngx-datatable>
+
+
+</div>
+
+
+
+
