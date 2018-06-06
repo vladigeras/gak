@@ -38,7 +38,7 @@ public class UserEntity extends LongIdentifiableEntity {
     )
     @Enumerated(value = EnumType.STRING)
     @Column(name = "role")
-    private Set<Role> roles = new HashSet<>();
+    private Set<Role> roles;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "mentor")
     private Set<DiplomEntity> diplomsWhereUserIsMentor;
