@@ -2,6 +2,7 @@ package ru.iate.gak.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import ru.iate.gak.dto.CriteriaDto;
 import ru.iate.gak.dto.CriteriaDtoListWithResult;
 import ru.iate.gak.dto.GeneralCriteriaDto;
 import ru.iate.gak.dto.RatingDto;
@@ -28,6 +29,16 @@ public class CriteriaController {
     public List<GeneralCriteriaDto> getDefaultCriteriaList(@RequestParam(name = "listId", defaultValue = "1") String listId) {
         try {
             return criteriaService.getDefaultCriteria(Integer.valueOf(listId)).stream().map(GeneralCriteriaDto::new).collect(Collectors.toList());
+        } catch (NumberFormatException ex) {
+            throw new RuntimeException("Неверное значение параметра. Введите число");
+        }
+    }
+
+    @GetMapping(value = "/getCriteria")
+    @GakSecured(roles = Roles.PRESIDENT)
+    public List<CriteriaDto> getAllCriteriaByDiplomIdList(@RequestParam(name = "diplomId") String diplomId) {
+        try {
+            return criteriaService.getCriteriaByDiplomId(Integer.valueOf(diplomId)).stream().map(CriteriaDto::new).collect(Collectors.toList());
         } catch (NumberFormatException ex) {
             throw new RuntimeException("Неверное значение параметра. Введите число");
         }

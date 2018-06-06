@@ -41,6 +41,12 @@ public class CriteriaServiceImpl implements CriteriaService {
 
     @Override
     @Transactional
+    public List<Criteria> getCriteriaByDiplomId(Integer diplomId){
+        return criteriaRepository.getAllCriteriaByDiplomId(diplomId).stream().map(Criteria::new).collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
     public void saveResultToSpeaker(Integer rating, Long speakerId) {
         if (rating > 0 && speakerId > 0) {
             SpeakerEntity speaker = speakerRepository.getOne(speakerId);
