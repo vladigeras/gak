@@ -112,7 +112,7 @@ export class StudentsTableComponent implements OnInit {
 
   selectStudentToUpdate(event) {
     if (event.type === "click") {
-      if (event.cellIndex != 5 && event.cellIndex != 6) {   //this is a buttons for files
+      if (event.cellIndex != 6 && event.cellIndex != 7) {   //this is a buttons for files
         this.clearSelected();
 
         let row = event.row;
