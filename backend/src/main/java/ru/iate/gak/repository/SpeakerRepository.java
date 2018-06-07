@@ -21,4 +21,7 @@ public interface SpeakerRepository extends JpaRepository<SpeakerEntity, Long> {
 
     @Query(value = "SELECT s FROM SpeakerEntity s WHERE (s.student.deletedTime IS NULL) AND (s.student.group = :group) AND (s.date = :date) ORDER BY s.orderOfSpeaking ASC")
     List<SpeakerEntity> getSpeakersListOfCurrentGroupOfDay(@Param("group") GroupEntity group, @Param("date") LocalDateTime date);
+
+    @Query(value = "SELECT s FROM SpeakerEntity s WHERE (s.student.deletedTime IS NULL) AND (s.student.group = :group) AND (s.date BETWEEN :prevDate AND :nextDate) ORDER BY s.orderOfSpeaking ASC")
+    List<SpeakerEntity> getSpeakersListOfCurrentGroupBetweenDate(@Param("group") GroupEntity group, @Param("prevDate") LocalDateTime prevDate, @Param("nextDate") LocalDateTime nextDate);
 }

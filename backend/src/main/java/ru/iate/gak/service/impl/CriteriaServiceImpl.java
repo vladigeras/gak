@@ -40,10 +40,11 @@ public class CriteriaServiceImpl implements CriteriaService {
     }
 
     @Override
-    @Transactional
-    public List<Criteria> getCriteriaByDiplomId(Integer diplomId){
-        return criteriaRepository.getAllCriteriaByDiplomId(diplomId).stream().map(Criteria::new).collect(Collectors.toList());
+    public List<Criteria> getCriteriaByDiplomId(Long diplomId){
+        return criteriaRepository.getCriteriaEntitiesByDiplomId(diplomId).stream().map(Criteria::new).collect(Collectors.toList());
     }
+
+
 
     @Override
     @Transactional

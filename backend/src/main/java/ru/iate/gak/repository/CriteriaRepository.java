@@ -10,7 +10,9 @@ import java.util.List;
 @Repository
 public interface CriteriaRepository extends JpaRepository<CriteriaEntity, Long> {
 
-    List<CriteriaEntity> getAllCriteriaByDiplomId(Integer diplomId);
+    List<CriteriaEntity> getCriteriaEntitiesByDiplomId(Long diplomId);
+
+
 
     void deleteByCommission(CommissionEntity commissionEntity);
 }

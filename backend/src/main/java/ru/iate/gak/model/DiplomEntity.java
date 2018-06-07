@@ -22,12 +22,6 @@ public class DiplomEntity extends LongIdentifiableEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private UserEntity reviewer;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private UserEntity consultant;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    private UserEntity ruleController;
-
     @Column(name = "result_mark")
     private Integer resultMark;
 
@@ -101,14 +95,6 @@ public class DiplomEntity extends LongIdentifiableEntity {
         this.presentation = presentation;
     }
 
-    public UserEntity getRuleController() {
-        return ruleController;
-    }
-
-    public void setRuleController(UserEntity ruleController) {
-        this.ruleController = ruleController;
-    }
-
     public Integer getResultMark() {
         return resultMark;
     }
@@ -123,14 +109,6 @@ public class DiplomEntity extends LongIdentifiableEntity {
 
     public void setStatus(Status status) {
         this.status = status;
-    }
-
-    public UserEntity getConsultant() {
-        return consultant;
-    }
-
-    public void setConsultant(UserEntity consultant) {
-        this.consultant = consultant;
     }
 
     public String getExecutionPlace() {

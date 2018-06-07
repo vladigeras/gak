@@ -5,7 +5,7 @@
 \usepackage[utf8]{inputenc} % кодировка исходного текста
 \usepackage[russian]{babel}	%локализация и переносы
 \usepackage{ragged2e}		%для выравнивания по ширине \justifying
-\usepackage[left=25mm, top=5mm, right=10mm, bottom=20mm, nohead, nofoot]{geometry}
+\usepackage[left=18mm, top=5mm, right=10mm, bottom=15mm, nohead, nofoot]{geometry}
 \usepackage{setspace}
 
 \begin{document}
@@ -55,23 +55,24 @@
 		Члены комиссии:\hspace{2cm} 	& \underline{@member1}  \\
 					   \hspace{2cm}  	& \underline{@member2}  \\
 					   \hspace{2cm}		& \underline{@member3}  \\
-					   \hspace{2cm}		& \underline{@member4}  \\
-		\ \\ %Чтоб перед секретарём был пробел
-		\vspace{0.4cm}			
+					   \hspace{2cm}		& \underline{@member4}  \\ 
+	   \vspace{-0.25cm}
+		 	\\			
 		Секретарь:     \hspace{2cm}		& \underline{@secretary}  \\	    
 	\end{tabular}
 \end{center}
-	\vspace{-0.3cm}
+	\vspace{0.2cm}
 	
-	\hspace{1cm}РАССМАТРИВАЛИ выпускную квалификационную работу 
-	\underline{@student,}\\
+	\hspace{1cm}РАССМАТРИВАЛИ выпускную квалификационную работу \\
+	
+	\vspace{-0.5cm}
+	\hspace{1cm}\underline{@studentRodit,}\\
 	
 	\vspace{-0.4cm}
-	\hspace{1cm}студента (ки) отделения \underline{Интеллектуальных кибернетических систем}
+	\hspace{1cm}@genderStudentRodit отделения \underline{Интеллектуальных кибернетических систем}
 
     \vspace{0.2cm}
 	\hspace{1cm}На тему: 
-	
 
 	\hspace{1cm}\underline{@title}
 	
@@ -79,7 +80,7 @@
 	\hspace{1cm}Выпускная квалификационная работа выполнена под руководством
 	
 	
-    \hspace{1cm}\underline{@mentor}\\
+    \hspace{1cm}\underline{@mentorRodit}\\
 
 \hspace{-0.25cm}В комиссию представлены следующие материалы:
 \vspace{-0.25cm}
@@ -98,27 +99,27 @@
 \end{enumerate}
 
 \hspace{-0.15cm}Сообщение о выпускной квалификационной работе длилось \underline{@time} мин., после чего\\
- студенту (ке) были заданы следующие вопросы:\\
+ @genderStudentDatel были заданы следующие вопросы:\\
 \vspace{-0.5cm} 
 \begin{flushleft}
 	  	1. @question1
 	  	\smallskip\hrule
-	  	\vspace{0.3cm} 
+	  	\vspace{0.2cm} 
 	  	2. @question2
 	  	\smallskip\hrule
-	  	\vspace{0.3cm}
-	  	3. @question3 
+	  	\vspace{0.2cm}
+	  	3. @question3
 	  	\smallskip\hrule
-	  	\vspace{0.3cm} 
+	  	\vspace{0.2cm} 
 	  	4. @question4
 	  	\smallskip\hrule
-	  	\vspace{0.3cm} 
+	  	\vspace{0.2cm} 
 	  	5. @question5
 	  	\smallskip\hrule
-	  	\vspace{0.3cm} 
+	  	\vspace{0.2cm} 
 	  	6. @question6
 	  	\smallskip\hrule
-	  	\vspace{0.3cm} 	 	
+	  	\vspace{0.2cm} 	 	
 	  	
 \end{flushleft}
 
@@ -129,7 +130,7 @@
 %Вторая страница
 \thispagestyle{empty}
  
-	Общая характеристика ответов студента (ки) на заданные ему вопросы и замечания\\ рецензента  
+	Общая характеристика ответов @genderStudentRodit на заданные ему вопросы и замечания\\ рецензента  
 	\vspace{0.4cm}
 	\smallskip\hrule
 	\vspace{0.4cm} 
@@ -145,9 +146,9 @@
 	\vspace{0.4cm} 
 
 \par\medskip
-Итоги освоения студентом (кой) образовательной программы (средний балл)
+Итоги освоения @genderStudentTvorit образовательной программы (средний балл)
 
-Подготовка студента (ки):
+Подготовка @genderStudentRodit:
 \vspace{-0.2cm}
 \begin{enumerate}
 	\item оценки 5: \underline{@mark5} \%
@@ -161,16 +162,16 @@
 \end{enumerate}
 \par\bigskip
 Руководитель выпускной квалификационной работы 
-\underline{@mentor}\\
-считает, что выпускная квалификационная работа студента (ки) заслуживает \\
+\underline{@mentorIO}\\
+считает, что выпускная квалификационная работа @genderStudentRodit заслуживает \\
 оценки  \makebox[10mm]{\hrulefill}\makebox[10mm]{\hrulefill}\makebox[10mm]{\hrulefill}
 \par\medskip
-Рецензент \underline{@reviewer} считает, что выпускная квалификационная\\ работа заслуживает оценки \makebox[10mm]{\hrulefill}\makebox[10mm]{\hrulefill}\makebox[10mm]{\hrulefill}
+Рецензент \underline{@reviewerIO} считает, что выпускная квалификационная\\ работа заслуживает оценки \makebox[10mm]{\hrulefill}\makebox[10mm]{\hrulefill}\makebox[10mm]{\hrulefill}
 \par\medskip
 
 Государственная экзаменационная комиссия РАССМОТРЕЛА:
 
-- результаты выполнения студентом (кой) НИЯУ МИФИ \underline{@student}\\
+- результаты выполнения @genderStudentTvorit НИЯУ МИФИ \underline{@studentIOTvor}\\
  по направлению подготовки:\underline{09.03.02 Информационные системы и технологии}  (форма обучения\\
   очная) учебного плана и освоения образовательной программы, отраженные в учебной карточке;
 
@@ -178,21 +179,22 @@
 
 - иные документы, представленные отделением Интеллектуальных кибернетических систем
 
-\par\smallskip
+\par\medskip
 
 ПРИНЯЛА РЕШЕНИЕ:
 
 \begin{enumerate}
-	\item 	Признать, что студент (ка) \underline{@student} защитил (а) \\
+	\item 	Признать, что @genderStudentImen \underline{@studentIOIm} @genderDefImen \\
 	выпускную квалификационную работу с оценкой \makebox[10mm]{\hrulefill}\makebox[10mm]{\hrulefill}, ECTS \makebox[10mm]{\hrulefill}. 
 	\vspace{-0.25cm}
-	\item 	Присвоить выпускнику (це) \underline{@student} квалификацию (степень)\\ «бакалавр» по направлению подготовки \underline{09.03.02 Информационные системы и технологии} 
-	\vspace{-0.75cm}
-	\item 	Выдать диплом государственного образца с отличием / без отличия выпускнику (це) \\
-	НИЯУ МИФИ \underline{@student} по направлению подготовки\\
+	\item 	Присвоить @genderOutDatel \underline{@studentIODatel} квалификацию (степень)\\ 
+	«бакалавр» по направлению подготовки \underline{09.03.02 Информационные системы и технологии} 
+	\vspace{-0.25cm}
+	\item 	Выдать диплом государственного образца с отличием / без отличия @genderOutDatel \\
+	НИЯУ МИФИ \underline{@studentIODatel} по направлению подготовки\\
 	\underline{09.03.02 Информационные системы и технологии} 
 	\vspace{-0.20cm}
-	\item 	Рекомендовать выпускника (цу) \underline{@student}  для поступления\\
+	\item 	Рекомендовать @genderOutRodit \underline{@studentIOVinit}  для поступления\\
 	 в магистратуру
 	\vspace{-0.25cm}
 \end{enumerate}
@@ -200,15 +202,15 @@
 \begin{center} 	
 	\begin{tabular}{lll}
 		\vspace{0.3cm}
-		Председатель ГЭК:\hspace{1cm} &\makebox[40mm]{\hrulefill} & @president  \\
-		Члены комиссии:  \hspace{1cm} &\makebox[40mm]{\hrulefill}\par\medskip & @member1 \\
+		\hspace{-3cm} Председатель ГЭК:\hspace{1cm} &\makebox[40mm]{\hrulefill} & @president  \\
+	    \hspace{-3cm} Члены комиссии:  \hspace{1cm} &\makebox[40mm]{\hrulefill}\par\medskip & @member1 \\
 		
 						 \hspace{1cm} &\makebox[40mm]{\hrulefill}\par\medskip & @member2  \\
 					   	 \hspace{1cm} &\makebox[40mm]{\hrulefill}\par\medskip & @member3  \\
-						 \hspace{1cm} &\makebox[40mm]{\hrulefill}\par\medskip & @member4  \\
-		\ \\ %Чтоб перед секретарём был пробел
-		\vspace{0.3cm}			
-		Секретарь ГЭК:   \hspace{1cm} & \makebox[40mm]{\hrulefill}  &@secretary  \\		
+						 \hspace{1cm} &\makebox[40mm]{\hrulefill}\par\medskip & @member4  \\ 
+		 \vspace{-0.4cm}
+		 \\			
+	    \hspace{-3cm} Секретарь ГЭК:   \hspace{1cm} & \makebox[40mm]{\hrulefill}  & @secretary  \\		
 	\end{tabular}
 \end{center}
 

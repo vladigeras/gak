@@ -33,24 +33,32 @@
             </button>
           </div>
         </div>
-
-        <ngx-datatable class="material expandable "
+        <button (click)="getAllCriteriaBySpeakerId(row.diplom.id)"> Получить оценки и критерии членов ГАК</button>
+        <ngx-datatable #commissionTable
+                       class="material expandable "
                        [rows]="commissionsList"
                        [columnMode]="'force'"
                        [headerHeight]="40"
                        [footerHeight]="40"
                        [limit]="20"
                        [rowHeight]="'auto'"
+                       (activate)="toggleExpandRow2($event)"
+
         >
+          <ngx-datatable-row-detail [rowHeight]="'auto'"  >
+            <ng-template let-row="row"    ngx-datatable-row-detail-template >
+              <div *ngFor = "let cr of allCriteria">
+                     <span *ngIf="row.commission === cr.commission">
+                       {{cr.title}}: {{cr.rating}} Комментарий: {{cr.comment}}
+                     </span>
+              </div>
 
-          <ngx-datatable-column prop="id" name="id"></ngx-datatable-column>
-          <ngx-datatable-column prop="listId" name="listId"></ngx-datatable-column>
-          <ngx-datatable-column prop="userId" name="userId"></ngx-datatable-column>
-
+            </ng-template>
+          </ngx-datatable-row-detail>
+          <ngx-datatable-column prop="commission" name="Член ГАК"></ngx-datatable-column>
         </ngx-datatable>
+
       </ng-template>
-
-
     </ngx-datatable-row-detail>
 
 
@@ -60,6 +68,7 @@
 
 
   </ngx-datatable>
+
 
 
 </div>

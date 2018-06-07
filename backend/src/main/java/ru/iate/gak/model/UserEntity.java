@@ -38,19 +38,13 @@ public class UserEntity extends LongIdentifiableEntity {
     )
     @Enumerated(value = EnumType.STRING)
     @Column(name = "role")
-    private Set<Role> roles = new HashSet<>();
+    private Set<Role> roles;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "mentor")
     private Set<DiplomEntity> diplomsWhereUserIsMentor;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "reviewer")
     private Set<DiplomEntity> diplomsWhereUserIsReviewer;
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "consultant")
-    private Set<DiplomEntity> diplomsWhereUserIsConsultant;
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "ruleController")
-    private Set<DiplomEntity> diplomsWhereUserIsRuleController;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private Set<CommissionEntity> commissionsWhereUserInclude;

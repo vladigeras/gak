@@ -9,7 +9,9 @@ import java.util.List;
 public interface CriteriaService {
     List<GeneralCriteria> getDefaultCriteria(Integer listId);
 
-    List<Criteria> getCriteriaByDiplomId(Integer diplomId);
+    List<Criteria> getCriteriaByDiplomId(Long diplomId);
+
+
 
     void saveResultToSpeaker(Integer rating, Long speakerId);
 

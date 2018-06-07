@@ -2,6 +2,8 @@ package ru.iate.gak.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import padeg.lib.Padeg;
+import ru.iate.gak.domain.Gender;
 import ru.iate.gak.domain.Role;
 import ru.iate.gak.domain.Speaker;
 import ru.iate.gak.domain.Status;
@@ -16,6 +18,7 @@ import ru.iate.gak.service.TexService;
 import javax.transaction.Transactional;
 import java.io.File;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -93,12 +96,16 @@ public class SpeakerServiceImpl implements SpeakerService {
 
     @Override
     @Transactional
-    public List<File> getSpeakerProtocolsOfGroup(String group) {
+    public List<File> getSpeakerProtocolsForTodaySpeakersOfGroup(String group) {
         GroupEntity groupEntity = groupRepository.findOne(group);
         if (groupEntity == null) throw new RuntimeException("Группа с названием " + group + "  не найдена");
 
         List<File> result = new ArrayList<>();
-        List<SpeakerEntity> speakers = speakerRepository.getSpeakersListOfCurrentGroup(groupEntity);
+
+        LocalDateTime currentDayInUTC = LocalDateTime.now(ZoneOffset.UTC);  // this is a next day, because we need to get
+                                                                            // objects of time included today, e.g. [-1day; now]
+
+        List<SpeakerEntity> speakers = speakerRepository.getSpeakersListOfCurrentGroupBetweenDate(groupEntity, currentDayInUTC.minusDays(1), currentDayInUTC);
         speakers.forEach(s -> {
             if (s.getStudent() == null) return;
             if (s.getStudent().getDiplom() == null) return;
@@ -106,26 +113,82 @@ public class SpeakerServiceImpl implements SpeakerService {
                 return;
 
             Map<String, String> params = new HashMap<>();
-            params.put("@date", s.getDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
+
+            params.put("@date", s.getDate().plusDays(1).format(DateTimeFormatter.ofPattern("dd.MM.yyyy"))); //because UTC date show another day
             params.put("@number", s.getOrderOfSpeaking().toString());
 
+            boolean gender = false;     //false for FEMALE
+            if (s.getStudent().getGender() != null && s.getStudent().getGender().equals(Gender.MALE)) gender = true;
+
             String studentName = (s.getStudent().getMiddlename() == null) || (s.getStudent().getMiddlename().isEmpty()) ?
-                    s.getStudent().getLastname() + " " + s.getStudent().getFirstname() :
-                    s.getStudent().getLastname() + " " + s.getStudent().getFirstname() + " " + s.getStudent().getMiddlename();
-            params.put("@student", studentName);
+                    Padeg.getFIOPadeg(s.getStudent().getLastname(), s.getStudent().getFirstname(), "", gender, 2) :
+                    Padeg.getFIOPadeg(s.getStudent().getLastname(), s.getStudent().getFirstname(), s.getStudent().getMiddlename(), gender, 2);
+            params.put("@studentRodit", studentName);
             params.put("@studentLastname", s.getStudent().getLastname());
 
+            String studentIO = (s.getStudent().getMiddlename() == null) || (s.getStudent().getMiddlename().isEmpty()) ?
+                    s.getStudent().getLastname() + " " + s.getStudent().getFirstname().charAt(0) + "." :
+                    s.getStudent().getLastname() + " " + s.getStudent().getFirstname().charAt(0) + ". " + s.getStudent().getMiddlename().charAt(0) + ".";
+            params.put("@studentIOIm", studentIO);
+
+            String studentIORodit = (s.getStudent().getMiddlename() == null) || (s.getStudent().getMiddlename().isEmpty()) ?
+                    Padeg.getFIOPadeg(s.getStudent().getLastname(), s.getStudent().getFirstname().charAt(0) + ".", "", gender, 2) :
+                    Padeg.getFIOPadeg(s.getStudent().getLastname(), s.getStudent().getFirstname().charAt(0) + ".", s.getStudent().getMiddlename().charAt(0) + ".", gender, 2);
+            params.put("@studentIORodit", studentIORodit);
+
+            String studentIODatel = (s.getStudent().getMiddlename() == null) || (s.getStudent().getMiddlename().isEmpty()) ?
+                    Padeg.getFIOPadeg(s.getStudent().getLastname(), s.getStudent().getFirstname().charAt(0) + ".", "", gender, 3) :
+                    Padeg.getFIOPadeg(s.getStudent().getLastname(), s.getStudent().getFirstname().charAt(0) + ".", s.getStudent().getMiddlename().charAt(0) + ".", gender, 3);
+            params.put("@studentIODatel", studentIODatel);
+
+            String studentIOVinit = (s.getStudent().getMiddlename() == null) || (s.getStudent().getMiddlename().isEmpty()) ?
+                    Padeg.getFIOPadeg(s.getStudent().getLastname(), s.getStudent().getFirstname().charAt(0) + ".", "", gender, 4) :
+                    Padeg.getFIOPadeg(s.getStudent().getLastname(), s.getStudent().getFirstname().charAt(0) + ".", s.getStudent().getMiddlename().charAt(0) + ".", gender, 4);
+            params.put("@studentIOVinit", studentIOVinit);
+
+            String studentIOTvor = (s.getStudent().getMiddlename() == null) || (s.getStudent().getMiddlename().isEmpty()) ?
+                    Padeg.getFIOPadeg(s.getStudent().getLastname(), s.getStudent().getFirstname().charAt(0) + ".", "", gender, 5) :
+                    Padeg.getFIOPadeg(s.getStudent().getLastname(), s.getStudent().getFirstname().charAt(0) + ".", s.getStudent().getMiddlename().charAt(0) + ".", gender, 5);
+            params.put("@studentIOTvor", studentIOTvor);
+
+            if (gender) {
+                params.put("@genderStudentImen", "студент");
+                params.put("@genderStudentRodit", "студента");
+                params.put("@genderStudentDatel", "студенту");
+                params.put("@genderStudentTvorit", "студентом");
+                params.put("@genderDefImen", "защитил");
+                params.put("@genderOutRodit", "выпускника");
+                params.put("@genderOutDatel", "выпускнику");
+            } else {
+                params.put("@genderStudentImen", "студентка");
+                params.put("@genderStudentRodit", "студентки");
+                params.put("@genderStudentDatel", "студентке");
+                params.put("@genderStudentTvorit", "студенткой");
+                params.put("@genderDefImen", "защитила");
+                params.put("@genderOutRodit", "выпускницу");
+                params.put("@genderOutDatel", "выпускнице");
+            }
+
             params.put("@title", s.getStudent().getDiplom().getTitle());
+
+            boolean mentorGender = false; //false for FEMALE
+            if (s.getStudent().getDiplom().getMentor().getGender() != null && s.getStudent().getDiplom().getMentor().getGender().equals(Gender.MALE))
+                mentorGender = true;
 
             String mentorName = (s.getStudent().getDiplom().getMentor().getMiddlename() == null) || (s.getStudent().getDiplom().getMentor().getMiddlename().isEmpty()) ?
                     s.getStudent().getDiplom().getMentor().getLastname() + " " + s.getStudent().getDiplom().getMentor().getFirstname().charAt(0) + "." :
                     s.getStudent().getDiplom().getMentor().getLastname() + " " + s.getStudent().getDiplom().getMentor().getFirstname().charAt(0) + ". " + s.getStudent().getDiplom().getMentor().getMiddlename().charAt(0) + ".";
-            params.put("@mentor", mentorName);
+            params.put("@mentorIO", mentorName);
+
+            String mentorRoditName = (s.getStudent().getDiplom().getMentor().getMiddlename() == null) || (s.getStudent().getDiplom().getMentor().getMiddlename().isEmpty()) ?
+                    Padeg.getFIOPadeg(s.getStudent().getDiplom().getMentor().getLastname(), s.getStudent().getDiplom().getMentor().getFirstname(), "", mentorGender, 2) :
+                    Padeg.getFIOPadeg(s.getStudent().getDiplom().getMentor().getLastname(), s.getStudent().getDiplom().getMentor().getFirstname(), s.getStudent().getDiplom().getMentor().getMiddlename(), mentorGender, 2);
+            params.put("@mentorRodit", mentorRoditName);
 
             String reviewerName = (s.getStudent().getDiplom().getReviewer().getMiddlename() == null) || (s.getStudent().getDiplom().getReviewer().getMiddlename().isEmpty()) ?
                     s.getStudent().getDiplom().getReviewer().getLastname() + " " + s.getStudent().getDiplom().getReviewer().getFirstname().charAt(0) + "." :
                     s.getStudent().getDiplom().getReviewer().getLastname() + " " + s.getStudent().getDiplom().getReviewer().getFirstname().charAt(0) + ". " + s.getStudent().getDiplom().getReviewer().getMiddlename().charAt(0) + ".";
-            params.put("@reviewer", reviewerName);
+            params.put("@reviewerIO", reviewerName);
 
             Set<QuestionEntity> questions = s.getStudent().getDiplom().getQuestions();
             final int[] i = {1};      //only 6 first question write in protocol
@@ -181,8 +244,6 @@ public class SpeakerServiceImpl implements SpeakerService {
                     if (speakerEntity.getStudent().getDiplom() != null) {
                         speakerEntity.getStudent().getDiplom().setStatus(status);
                         speakerRepository.save(speakerEntity);
-
-                        if (speakerEntity == null) throw new RuntimeException("Произошла ошибка");
 
                         return new Speaker(speakerEntity);
                     } else throw new RuntimeException("Произошла ошибка");

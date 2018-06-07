@@ -7,9 +7,6 @@
           class="glyphicon glyphicon-plus"></i></button>
       </h5>
     </div>
-    <div class="pull-right" *ngIf="criteriaToActiveSpeaker.length != 0">
-      <button class="btn btn-default navbar-btn" (click)="saveCriteria()">Сохранить</button>
-    </div>
   </div>
   <div *ngFor="let criteria of criteriaToActiveSpeaker">
     <div class="input-group">
@@ -31,14 +28,15 @@
 
   <div class="result-mark row">
     <div class="pull-left">
-      <label class="result-mark-inline" for="result-mark">Выставить результирующую оценку студенту (в баллах):</label>
-      <select class="form-control result-mark-inline result-mark-inline-select" id="result-mark" [(ngModel)]="resultMark">
+      <label class="result-mark-inline" for="result-mark">Выставить оценку студенту (в баллах):</label>
+      <select class="form-control result-mark-inline result-mark-inline-select" id="result-mark"
+              [(ngModel)]="resultMark">
         <option>2</option>
         <option>3</option>
         <option>4</option>
         <option>5</option>
       </select>
-      <button class="btn btn-default navbar-btn result-mark-inline button-save-result" (click)="saveResult()">
+      <button class="btn btn-default navbar-btn result-mark-inline button-save-result" (click)="saveCriteria()">
         Сохранить
       </button>
     </div>

@@ -12,6 +12,6 @@ public interface SpeakerService {
     void fillList(List<Speaker> speakers);
     List<Speaker> getSpeakerListOfCurrentGroupOfDay(String group, LocalDateTime date);
     Map<String, List<Speaker>> getAllSpeakersListAllGroupsOfDay(LocalDateTime date);
-    List<File> getSpeakerProtocolsOfGroup(String group);
+    List<File> getSpeakerProtocolsForTodaySpeakersOfGroup(String group);
     Speaker updateDiplomStatus(Long speakerId, Status status);
 }

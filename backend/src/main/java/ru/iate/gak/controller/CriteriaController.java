@@ -34,15 +34,15 @@ public class CriteriaController {
         }
     }
 
-    @GetMapping(value = "/getCriteria")
+
+
+    @GetMapping(value = "/ByDiplomId")
     @GakSecured(roles = Roles.PRESIDENT)
-    public List<CriteriaDto> getAllCriteriaByDiplomIdList(@RequestParam(name = "diplomId") String diplomId) {
-        try {
-            return criteriaService.getCriteriaByDiplomId(Integer.valueOf(diplomId)).stream().map(CriteriaDto::new).collect(Collectors.toList());
-        } catch (NumberFormatException ex) {
-            throw new RuntimeException("Неверное значение параметра. Введите число");
-        }
+    public List<CriteriaDto> getCriteriaByDiplomId(@RequestParam(name = "diplomId") Long diplomId) {
+        if(diplomId == null) throw new RuntimeException("Укажите номер диплома");
+        return criteriaService.getCriteriaByDiplomId(diplomId).stream().map(CriteriaDto::new).collect(Collectors.toList());
     }
+
 
     @PostMapping(value = "saveResult", consumes = "application/json")
     @GakSecured(roles = {Roles.PRESIDENT})

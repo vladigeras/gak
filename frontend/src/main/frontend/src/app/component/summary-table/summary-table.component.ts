@@ -25,6 +25,9 @@ declare var $: any;
 export class SummaryTableComponent implements OnInit {
 
   @ViewChild('studentSpeakerTable') table: any;
+
+  @ViewChild('commissionTable') comTable: any;
+
   principal = currentPrincipal;
   activeSpeaker = {id: null, fio: null};
   selectedSpeaker = null;
@@ -34,6 +37,7 @@ export class SummaryTableComponent implements OnInit {
   selectedGroup = [];
   speakerStudents = [];
   commissionsList = [];
+  allCriteria = [];
 
   groupSelectDropdownSettings = {
     singleSelection: true,
@@ -44,6 +48,7 @@ export class SummaryTableComponent implements OnInit {
   resultMark = null;
   listId  = null;
   speakerId = null;
+  diplomId = null;
   @BlockUI() blockUI: NgBlockUI;
 
 
@@ -112,8 +117,8 @@ export class SummaryTableComponent implements OnInit {
             this.getDiplomInfoOfSpeaker(speakerStudent.id, speakerStudent.listId  );
           });
           this.blockUI.stop();
-          this.listId = this.speakerStudents[0].listId;
-          this.getComissionsByListId();
+         // this.listId = this.speakerStudents[0].listId;
+        //  this.getComissionsByListId();
 
         },
         error => {
@@ -135,6 +140,10 @@ export class SummaryTableComponent implements OnInit {
     this.speakerStudents = [...this.speakerStudents];
   }
 
+  reloadCriteriaTable() {
+    this.allCriteria = [...this.allCriteria];
+  }
+
   reloadCommissionTable() {
     this.commissionsList = [...this.commissionsList];
   }
@@ -150,7 +159,7 @@ export class SummaryTableComponent implements OnInit {
             listId: com.listId,
             userId: com.user.firstname,
           });
-          this.reloadCommissionTable();
+          this.reloadCriteriaTable();
         })
 
       }
@@ -161,11 +170,7 @@ export class SummaryTableComponent implements OnInit {
 
   }
 
-  setCommision(listId){
-    //this.listId = listId;
-    //this.getComissionsByListId();
-    this.reloadCommissionTable();
-  }
+
 
   saveResult(speakerId) {
     this.speakerId = speakerId;
@@ -183,33 +188,73 @@ export class SummaryTableComponent implements OnInit {
             else this.toast.error(error.error, "Ошибка");
           })
       }
-    this.speakerId = null;
+
+      this.deleteSpeakersFromSpeakerStudents(this.speakerId);
+      this.speakerId = null;
+      this.allCriteria = [];
+
 
   }
 
+  getAllCriteriaBySpeakerId(diplomId){
+    this.allCriteria = [];
+    this.diplomId = diplomId;
+    if(this.diplomId != null){
+      if (this.principal.roles.indexOf('PRESIDENT') != -1) {
+        this.criteriaService.getAllCriteriaByDiplomId(this.diplomId).subscribe (
+          (criteria: any) =>{
 
-  getQuestionsOfSpeaker() {
-    if (this.selectedGroup[0] != undefined && this.principal.roles.indexOf('SECRETARY') != -1) {
-      this.criteria = [];
-      this.blockUI.start(waitString);
-      this.questionService.getQuestionsOfSpeaker(this.activeSpeaker.id).subscribe(
-        (data: any) => {
-          data.forEach(q => {
-            this.criteria.push({
-              id: q.id,
-              index: this.criteria.length + 1,
-              text: q.questionText
+            criteria.forEach(cr =>{
+              this.allCriteria.push({
+                id: cr.id,
+                comment: cr.comment,
+                rating: cr.rating,
+                title: cr.title,
+                commission: cr.commissionDto.user.lastname,
+                diplom: cr.diplom,
+
+              });
+
+              console.log(this.allCriteria);
+              this.reloadCriteriaTable();
             })
-          });
-          this.blockUI.stop();
-        },
-        error => {
-          this.blockUI.stop()
-        }
-      )
+
+            this.commissionsList = criteria.map (cr => cr.commissionDto.user.lastname)
+              .filter((c, index, array) => array.indexOf(c) == index).sort();
+            let commissionTemp = []
+            this.commissionsList.forEach(com=>{
+              commissionTemp.push({
+                commission: com
+              })
+            })
+            this.commissionsList = commissionTemp;
+            this.reloadCommissionTable();
+
+          }
+        )
+      }
+
+
+
     }
+    this.diplomId = null;
   }
 
+  parsingDataOfAllCriteria(){
+
+  }
+
+
+
+  deleteSpeakersFromSpeakerStudents(speakerId){
+    console.log(speakerId);
+
+    let indexOfElement = this.speakerStudents.findIndex(s => s.id === speakerId);
+    console.log(indexOfElement)
+    console.log(this.speakerStudents);
+    this.speakerStudents.splice(indexOfElement, 1);
+    this.reloadTable();
+  }
 
 
 
@@ -230,6 +275,7 @@ export class SummaryTableComponent implements OnInit {
           title: existingObject.title,
           status: existingObject.status,
           diplom: {
+            id: diplom.id,
             mentorFio: diplom.mentor.lastname + " " + diplom.mentor.firstname + " " + diplom.mentor.middlename,
             reviewerFio: diplom.reviewer.lastname + " " + diplom.reviewer.firstname + " " + diplom.reviewer.middlename,
             statusString: HelperService.convertStatusToRussian(diplom.status),
@@ -252,19 +298,21 @@ export class SummaryTableComponent implements OnInit {
   }
 
 
-  setStatusToStudentInList(speaker, status: String) {
-    let indexOfElement = this.speakerStudents.findIndex(s => s.id === speaker.id);
-    let object = this.speakerStudents[indexOfElement];
-    object.status = status;
-    this.speakerStudents[indexOfElement] = object;
-    this.reloadTable();
-  }
+
 
   toggleExpandRow(event) {
     if (event.type === "click") {
       if (event.cellIndex != 2 && event.cellIndex != 3) this.table.rowDetail.toggleExpandRow(event.row);    //cellIndex 2 = button for set active
     }
   }
+
+  toggleExpandRow2(event) {
+    if (event.type === "click") {
+      if (event.cellIndex != 2 && event.cellIndex != 3) this.comTable.rowDetail.toggleExpandRow(event.row);    //cellIndex 2 = button for set active
+    }
+  }
+
+
 
   isPrincipalContainsRole(role: String) : boolean {
     if (role == null) return false;

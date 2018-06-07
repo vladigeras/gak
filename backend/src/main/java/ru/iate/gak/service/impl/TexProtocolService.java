@@ -88,7 +88,6 @@ public class TexProtocolService implements TexService {
     private File selectFile(File directory, String filename) {
         if (directory.isDirectory()) {
             for (File file : directory.listFiles()) {
-                System.out.println(file.getAbsolutePath());
                 if (file.getName().equals(filename.replace(".tex", ".pdf"))) return file;
             }
         }

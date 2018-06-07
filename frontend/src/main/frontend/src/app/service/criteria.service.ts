@@ -10,9 +10,14 @@ export class CriteriaService {
     return this.http.get("/criteria/getDefault");
   }
 
-  getAllCriteriaByDiplomId() {
-    return this.http.get("/criteria/getCriteria");
+  getAllCriteriaByDiplomId(diplomId) {
+    return this.http.get("/criteria/ByDiplomId" + "?diplomId=" + diplomId);
   }
+
+
+
+
+
 
 
 
