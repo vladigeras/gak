@@ -44,6 +44,7 @@ import {DiplomService} from "./service/diplom.service";
 import {StopWatchService} from "./service/stopwatch.service";
 import {StopWatchComponent} from "./component/stopwatch/stopwatch.component";
 import {TimestampService} from "./service/timestamp.service";
+import { SummaryTableComponent } from "./component/summary-table/summary-table.component";
 
 export class CustomToastOptions extends ToastOptions {
   showCloseButton = true;
@@ -83,7 +84,8 @@ const routes: Routes = [
     CommissionsTableComponent,
     SpeakersStudentTableComponent,
     CriteriaComponent,
-    StopWatchComponent
+    StopWatchComponent,
+    SummaryTableComponent
 
   ],
   imports: [

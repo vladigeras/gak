@@ -18,14 +18,14 @@ public class CommissionController {
     private CommissionService commissionService;
 
     @GetMapping(value = "/byListId")
-    @GakSecured(roles = {Roles.SECRETARY})
+    @GakSecured(roles = {Roles.SECRETARY, Roles.PRESIDENT})
     public List<CommissionDto> getCommissionsByListId(@RequestParam(name = "listId") Integer listId) {
         if (listId == null) throw new RuntimeException("Укажите номер списка");
         return commissionService.getCommissionsByListId(listId).stream().map(CommissionDto::new).collect(Collectors.toList());
     }
 
     @PostMapping(value = "/transferPresidentRole", consumes = "application/json")
-    @GakSecured(roles = {Roles.SECRETARY})
+    @GakSecured(roles = {Roles.SECRETARY, Roles.PRESIDENT})
     public void transferPresidentRole(@RequestBody CommissionDto commissionDto) {
         if (commissionDto.id == null) throw new RuntimeException("Не выбран член комиссии");
         commissionService.setPresidentRoleTemporally(commissionDto.toCommission());
