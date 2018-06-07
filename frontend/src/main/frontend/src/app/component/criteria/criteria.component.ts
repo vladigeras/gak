@@ -92,25 +92,6 @@ export class CriteriaComponent implements OnInit {
     }
   }
 
-  // this method for PRESIDENT final result mark function
-  // saveResult() {
-  //   if (this.activeSpeaker != null) {
-  //     if (this.principal.roles.indexOf('PRESIDENT') != -1) {
-  //       this.blockUI.start(waitString);
-  //       this.criteriaService.saveResultMarkFromUserToSpeaker(this.resultMark, ????? speaker id).subscribe(
-  //         data => {
-  //           this.blockUI.stop();
-  //           this.toast.success("Оценка сохранена", "Успешно")
-  //         },
-  //         error => {
-  //           this.blockUI.stop();
-  //           if (error.error.message != undefined) this.toast.error(error.error.message, "Ошибка");
-  //           else this.toast.error(error.error, "Ошибка");
-  //         })
-  //     }
-  //   }
-  // }
-
   removeCriteria(index) {
     let ind = this.criteriaToActiveSpeaker.findIndex(c => {
       return c.index == index

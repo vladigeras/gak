@@ -268,21 +268,6 @@ export class SpeakersStudentTableComponent implements OnInit {
     return this.principal.roles.indexOf(role) != -1;
   }
 
-  compareString(str1: String , str2: String) {
-    if (str1 != null){
-      if( str1 === str2)
-      {
-        return true;
-      }
-      else
-      {
-        return false;
-      }
-    }
-    else return false;
-
-  }
-
   getFlagLabs(event) {
     this.countLabs = event;
   }
