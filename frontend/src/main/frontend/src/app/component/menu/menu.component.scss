@@ -4,14 +4,28 @@
   width: 34px;
 }
 
-.principal {
-  display: inline-block;
-  margin-right: 11px;
-  text-align: right;
-}
-
-.navbar-right {
+.principal-menu-block {
   margin-right: 0;
+  float: right;
+
+  .principal {
+    display: inline-block;
+    margin-right: 12px;
+    text-align: right;
+
+    .principal-name {
+      margin-left: 2px;
+      text-decoration: underline;
+    }
+  }
 }
 
+.navbar-default .navbar-brand {
+  color: #3a3a3a;
+}
+
+.active-link {
+  color: #c3420d !important;
+  border-bottom: 2px solid;
+}
 
