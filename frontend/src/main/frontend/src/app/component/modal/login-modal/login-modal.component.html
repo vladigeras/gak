@@ -6,7 +6,7 @@
           aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="loginModalLabel">Вход в систему</h4>
       </div>
-      <div class="modal-body">
+      <div class="modal-body" (keyup.enter)="enter()">      <!-- send by press enter key -->
         <form>
           <div class="form-group">
             <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>

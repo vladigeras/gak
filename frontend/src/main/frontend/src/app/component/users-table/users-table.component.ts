@@ -15,8 +15,8 @@ declare var $: any;
 export class UsersTableComponent implements OnInit {
   users = [];
   headers = [
-    {prop: "firstname", name: "Имя"},
     {prop: "lastname", name: "Фамилия"},
+    {prop: "firstname", name: "Имя"},
     {prop: "middlename", name: "Отчество"},
     {prop: "gender", name: "Пол"},
     {prop: "login", name: "Логин"},
