@@ -16,7 +16,7 @@
           <a routerLink="/" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">Главная</a>
         </li>
 
-        <li class="nav navbar-nav" *ngFor="let role of rolesAndLinks">
+        <li *ngFor="let role of rolesAndLinks">
           <a routerLink={{role.link}} routerLinkActive="active-link">{{role.role}}</a>
         </li>
       </ul>
@@ -33,7 +33,7 @@
             </h5>
           </div>
           <button type="button" class="btn btn-warning btn-sm btn-circle navbar-btn" (click)="showLogoutModal()">
-            <span class="glyphicon glyphicon-log-out"></span>
+            Выход <span class="glyphicon glyphicon-log-out"></span>
           </button>
         </div>
       </div>
