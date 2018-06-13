@@ -253,7 +253,10 @@ export class SummaryTableComponent implements OnInit {
     console.log(indexOfElement)
     console.log(this.speakerStudents);
     this.speakerStudents.splice(indexOfElement, 1);
+    this.commissionsList = [];
     this.reloadTable();
+    this.reloadCommissionTable();
+    this.reloadCriteriaTable();
   }
 
 

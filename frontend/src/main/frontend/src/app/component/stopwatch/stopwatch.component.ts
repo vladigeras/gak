@@ -3,11 +3,15 @@ import {StopWatchService} from "../../service/stopwatch.service";
 import {BlockUI, NgBlockUI} from "ng-block-ui";
 import {currentPrincipal} from "../../security/auth.service";
 import {ToastsManager} from "ng2-toastr";
-import {SocketService} from "../../service/socket.service";
+import {SocketService, stomp} from "../../service/socket.service";
 import {CriteriaService} from "../../service/criteria.service";
 import {waitString} from "../../app.module";
 import {Status} from "../../status";
 import {TimestampService} from "../../service/timestamp.service";
+import {SpeakerService} from "../../service/speaker.service";
+
+declare var $: any;
+
 
 
 
@@ -35,13 +39,15 @@ export class StopWatchComponent {
   principal = currentPrincipal;
   activeSpeaker = {id: null, fio: null, date:null};
   timestamps = [];
+  socket = stomp;
 
   @BlockUI() blockUI: NgBlockUI;
 
   constructor(private stopwatchService: StopWatchService,
               private toast: ToastsManager,
               private socketService: SocketService,
-              private timestampService: TimestampService) {
+              private timestampService: TimestampService,
+              private speakerService: SpeakerService) {
     socketService.activeSpeakerReady.subscribe(speaker => {
       if (speaker != null) {
         this.activeSpeaker = {
@@ -101,6 +107,17 @@ export class StopWatchComponent {
     this.flagStartDefense = true;
     this.timer = setInterval(this.getUpdate(), 1);
     this.stopwatchService.start();
+    // Изменение статуса
+    // this.blockUI.start(waitString);
+    // this.speakerService.updateDiplomStatus(this.activeSpeaker.id).subscribe(
+    //   data => {
+    //     this.blockUI.stop();
+    //     this.toast.success("Следующий этап", "Пошёл")
+    //   },
+    //   error => {
+    //     this.blockUI.stop()
+    //   }
+    // );
   }
 
   stop() {
@@ -149,7 +166,8 @@ export class StopWatchComponent {
     }
 
     );
-  }students
+    this.saveTimestamp();
+  }
 
   getDataToSpeakersStudentTable(){
    this.flagLabs.emit(4);
@@ -159,7 +177,6 @@ export class StopWatchComponent {
   saveTimestamp() {
     this.getDataToSpeakersStudentTable();
       this.blockUI.start(waitString);
-      console.log(this.timestamps);
       this.timestampService.saveTimestamp(this.activeSpeaker.id, this.timestamps).subscribe(
         data => {
           this.blockUI.stop();
@@ -170,6 +187,20 @@ export class StopWatchComponent {
         }
       );
       this.timestamps = [];
+
+  }
+
+  setDoneStudent() {
+    if (this.activeSpeaker != null) {
+      this.socket.send("/app/doneSpeaker", {}, this.activeSpeaker.id);
+      $('#setDoneStudentConfirmModal').modal('hide');
+      this.lapAndStop();
+
+    }
+  }
+
+  showSetActiveStudentModal() {
+    $('#setDoneStudentConfirmModal').modal('show');
 
   }
 

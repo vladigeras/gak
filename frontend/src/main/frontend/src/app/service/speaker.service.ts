@@ -19,11 +19,23 @@ export class SpeakerService {
     }
   }
 
+  updateDiplomStatus(speakerId){
+    // return this.http.post("/speakers/update" + "?speakerId=" + speakerId);
+    console.log(speakerId);
+    return this.http.post("/speakers/update", speakerId);
+  }
+
   getProtocolsForTodaySpeakersOfGroup(group) {
     let a = document.createElement("a");
     a.href = "/speakers/zippedProtocols" + "?group=" + group;
     a.click()
   }
+
+
+
+
+
+
 }
 
 
