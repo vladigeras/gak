@@ -8,14 +8,15 @@
         <span *ngIf="started ">Пауза</span>
       </button>
       <button class="btn" *ngIf="flagStartDefense && (countLaps < 3)" (click)="lap()">Следующий этап</button>
-      <button class="btn" *ngIf="flagStartDefense && (countLaps == 3)" (click)="showSetActiveStudentModal()">Закончить защиту</button>
+      <button class="btn" *ngIf="flagStartDefense && (countLaps == 3)" (click)="showSetActiveStudentModal()">Закончить
+        защиту
+      </button>
       <button *ngIf="flagStartDefense && (countLaps < 4)" class="btn" (click)="reset()">Сброс</button>
       <!--<button *ngIf="(countLaps == 4)" class="btn" (click)=" saveTimestamp()">Сохранить время студента</button>-->
-
     </div>
   </div>
 
-  <div *ngIf="time>540000 && time< 60000&& countLaps == 0">
+  <div *ngIf="time > 540000 && time < 60000 && countLaps == 0">
     <h1 class="text-warning text-center">{{ formatTime(time) }}</h1>
     <div class="btn-group-vertical center-block">
       <button class="btn btn-warning" (click)="toggle()">
@@ -27,8 +28,7 @@
     </div>
   </div>
 
-
-  <div *ngIf="time >600000 && countLaps == 0">
+  <div *ngIf="time > 600000 && countLaps == 0">
     <h1 class="text-danger text-center">{{ formatTime(time) }}</h1>
     <div class="btn-group-vertical center-block">
       <button class="btn btn-danger" (click)="toggle()">
@@ -40,57 +40,34 @@
     </div>
   </div>
 
-  <div class="col-xs-6" *ngIf="stopwatchService.laps.length > 0">
-    <!--<div-->
-      <!--*ngFor="let lap of stopwatchService.laps; let i = index; let last = last;">-->
-
-      <!--<div class="col-xs-1" *ngIf="i==0">Доклад</div>-->
-      <!--<div class="col-xs-1" *ngIf="i==1">Отзыв и рецензия</div>-->
-      <!--<div class="col-xs-1" *ngIf="i==2">Вопросы</div>-->
-      <!--<div class="col-xs-1" *ngIf="i==3">Заключительное слово</div>-->
-      <!--<div class="col-xs-1" *ngIf="i==4">Время защиты</div>-->
-      <!--<div class="col-xs-1" *ngIf="i<4">-->
-        <!--<div>{{ formatTime(lap.startMs) }}</div>-->
-        <!--<div *ngIf="last">{{ formatTime(time) }}</div>-->
-        <!--<div *ngIf="!last">{{ formatTime(lap.endMs) }}</div>-->
-      <!--</div>-->
-      <!--<div class=" card col-xs-1" *ngIf="i==4">-->
-        <!--<div>{{ formatTime(stopwatchService.startAt) }}</div>-->
-        <!--<div *ngIf="last">{{ formatTime(time) }}</div>-->
-        <!--<div *ngIf="!last">{{ formatTime(lap.endMs) }}</div>-->
-      <!--</div>-->
-    <!--</div>-->
+  <div *ngIf="stopwatchService.laps.length > 0">
     <i class="glyphicon glyphicon-education set-active-student-button text-info" aria-hidden="true"
-        (click)="showSetActiveStudentModal()">
+       (click)="showSetActiveStudentModal()">
     </i>
 
     <table class="table table-hover ">
-        <thead>
-        <tr>
+      <thead>
+      <tr>
         <th>Этап защиты</th>
         <th>Начало</th>
         <th>Конец</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr *ngFor="let lap of stopwatchService.laps; let i = index; let last = last;">
-          <td  *ngIf="i==0" >Выступление</td>
-          <td  *ngIf="i==1" >Вопросы</td>
-          <td  *ngIf="i==2" >Отзыв и рецензия</td>
-          <td  *ngIf="i==3" >Заключительное слово</td>
-          <td  *ngIf="i==4" >Время защиты</td>
-          <td >{{ formatTime(lap.startMs) }}</td>
-          <td  *ngIf="last " >{{ formatTime(time) }}</td>
-          <td  *ngIf="!last " >{{ formatTime(lap.endMs) }}</td>
-        </tr>
-        </tbody>
-
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let lap of stopwatchService.laps; let i = index; let last = last;">
+        <td *ngIf="i==0">Выступление</td>
+        <td *ngIf="i==1">Вопросы</td>
+        <td *ngIf="i==2">Отзыв и рецензия</td>
+        <td *ngIf="i==3">Заключительное слово</td>
+        <td *ngIf="i==4">Время защиты</td>
+        <td>{{ formatTime(lap.startMs) }}</td>
+        <td *ngIf="last ">{{ formatTime(time) }}</td>
+        <td *ngIf="!last ">{{ formatTime(lap.endMs) }}</td>
+      </tr>
+      </tbody>
     </table>
-
   </div>
 
-  <div class="col-xs-8">
-  </div>
   <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="setDoneStudentConfirmModal" aria-hidden="true"
        id="setDoneStudentConfirmModal">
     <div class="modal-dialog modal-sm">
@@ -109,5 +86,4 @@
       </div>
     </div>
   </div>
-
 </div>

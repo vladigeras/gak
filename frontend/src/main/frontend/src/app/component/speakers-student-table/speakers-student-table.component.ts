@@ -28,7 +28,7 @@ export class SpeakersStudentTableComponent implements OnInit {
   selectedSpeaker = null;
   availableGroups = [];
   today = moment().startOf('day');
-  criteria = [];
+  questions = [];
   selectedGroup = [];
   speakerStudents = [];
   groupSelectDropdownSettings = {
@@ -39,6 +39,7 @@ export class SpeakersStudentTableComponent implements OnInit {
   socket = stomp;
   @BlockUI() blockUI: NgBlockUI;
   countLabs = 0;
+  rating = 5;
 
   constructor(private toast: ToastsManager, private studentService: StudentService, private speakerService: SpeakerService,
               private questionService: QuestionService, private socketService: SocketService,
@@ -142,23 +143,23 @@ export class SpeakersStudentTableComponent implements OnInit {
   }
 
   createQuestion() {
-    this.criteria.push({
-      index: this.criteria.length + 1,
+    this.questions.push({
+      index: this.questions.length + 1,
       text: ""
     })
   }
 
   removeQuestion(index) {
-    let ind = this.criteria.findIndex(q => {
+    let ind = this.questions.findIndex(q => {
       return q.index == index
     });
-    this.criteria.splice(ind, 1);
+    this.questions.splice(ind, 1);
   }
 
   saveQuestions() {
     if (this.selectedGroup[0] != undefined) {
       let questions = [];
-      this.criteria.forEach(q => {
+      this.questions.forEach(q => {
         questions.push({id: q.id, questionText: q.text})
       });
       this.blockUI.start(waitString);
@@ -176,14 +177,14 @@ export class SpeakersStudentTableComponent implements OnInit {
 
   getQuestionsOfSpeaker() {
     if (this.selectedGroup[0] != undefined && this.principal.roles.indexOf('SECRETARY') != -1) {
-      this.criteria = [];
+      this.questions = [];
       this.blockUI.start(waitString);
       this.questionService.getQuestionsOfSpeaker(this.activeSpeaker.id).subscribe(
         (data: any) => {
           data.forEach(q => {
-            this.criteria.push({
+            this.questions.push({
               id: q.id,
-              index: this.criteria.length + 1,
+              index: this.questions.length + 1,
               text: q.questionText
             })
           });

@@ -12,19 +12,15 @@ import {SpeakerService} from "../../service/speaker.service";
 
 declare var $: any;
 
-
-
-
 @Component({
   selector: 'app-stopwatch',
-  templateUrl:'./stopwatch.component.html',
+  templateUrl: './stopwatch.component.html',
   styleUrls: ['./stopwatch.component.scss']
 })
 
 export class StopWatchComponent {
 
-  @Output()
-  flagLabs: EventEmitter<number> = new EventEmitter<number>();
+  @Output() flagLabs: EventEmitter<number> = new EventEmitter<number>();
 
   public started: boolean = true;
   //public stopwatchService: StopWatchService;
@@ -37,7 +33,7 @@ export class StopWatchComponent {
   private countLaps = 0;
 
   principal = currentPrincipal;
-  activeSpeaker = {id: null, fio: null, date:null};
+  activeSpeaker = {id: null, fio: null, date: null};
   timestamps = [];
   socket = stomp;
 
@@ -65,7 +61,6 @@ export class StopWatchComponent {
       this.start();
     }
   }
-
 
 
   formatTime(timeMs: number) {
@@ -142,7 +137,8 @@ export class StopWatchComponent {
   onClick() {
     console.log(this.stopwatchService);
   }
-  lapAndStop(){
+
+  lapAndStop() {
     this.update();
 
     if (this.time) {
@@ -153,40 +149,39 @@ export class StopWatchComponent {
     clearInterval(this.timer);
     this.stopwatchService.stop();
     let laps = this.stopwatchService.getLaps();
-    laps.forEach((l, index)  =>{
-        if (index == 1)  {
+    laps.forEach((l, index) => {
+        if (index == 1) {
           this.timestamps.push({status: Status.SPEAKING_TIME, timestamp: l.startMs})
           this.timestamps.push({status: Status.SPEAKING_TIME_END, timestamp: l.endMs})
         }
 
-        if (index == 2)  this.timestamps.push({status: Status.REWIEW_TIME_END, timestamp: l.endMs})
-        if (index == 3)  this.timestamps.push({status: Status.QUESTION_TIME_END, timestamp: l.endMs})
-        if (index == 4)  this.timestamps.push({status: Status.ALL_TIME, timestamp: l.endMs})
+        if (index == 2) this.timestamps.push({status: Status.REWIEW_TIME_END, timestamp: l.endMs})
+        if (index == 3) this.timestamps.push({status: Status.QUESTION_TIME_END, timestamp: l.endMs})
+        if (index == 4) this.timestamps.push({status: Status.ALL_TIME, timestamp: l.endMs})
 
-    }
-
+      }
     );
     this.saveTimestamp();
   }
 
-  getDataToSpeakersStudentTable(){
-   this.flagLabs.emit(4);
-   this.reset();
+  getDataToSpeakersStudentTable() {
+    this.flagLabs.emit(4);
+    this.reset();
   }
 
   saveTimestamp() {
     this.getDataToSpeakersStudentTable();
-      this.blockUI.start(waitString);
-      this.timestampService.saveTimestamp(this.activeSpeaker.id, this.timestamps).subscribe(
-        data => {
-          this.blockUI.stop();
-          this.toast.success("Сохранено", "Успешно")
-        },
-        error => {
-          this.blockUI.stop()
-        }
-      );
-      this.timestamps = [];
+    this.blockUI.start(waitString);
+    this.timestampService.saveTimestamp(this.activeSpeaker.id, this.timestamps).subscribe(
+      data => {
+        this.blockUI.stop();
+        this.toast.success("Временные метки сохранены", "Успешно")
+      },
+      error => {
+        this.blockUI.stop()
+      }
+    );
+    this.timestamps = [];
 
   }
 
@@ -201,7 +196,6 @@ export class StopWatchComponent {
 
   showSetActiveStudentModal() {
     $('#setDoneStudentConfirmModal').modal('show');
-
   }
 
 }

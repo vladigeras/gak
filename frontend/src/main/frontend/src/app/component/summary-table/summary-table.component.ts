@@ -45,7 +45,7 @@ export class SummaryTableComponent implements OnInit {
     text: "Выберите группу"
   };
 
-  resultMark = null;
+  resultMark = 0; //default
   listId  = null;
   speakerId = null;
   diplomId = null;

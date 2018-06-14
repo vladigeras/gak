@@ -47,7 +47,8 @@
     <div *ngIf="isPrincipalContainsRole('SECRETARY') && router.url.toString().includes('secretary')">
       <ngx-datatable-column prop="setActiveStudent" name="">
         <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
-          <i *ngIf="row.status == null" class="glyphicon glyphicon-education set-active-student-button text-info" aria-hidden="true"
+          <i *ngIf="row.status != 'DONE'" class="glyphicon glyphicon-education set-active-student-button text-info"
+             aria-hidden="true"
              (click)="showSetActiveStudentModal(row)"></i>
         </ng-template>
       </ngx-datatable-column>
@@ -72,10 +73,6 @@
         </ng-template>
       </ngx-datatable-column>
     </div>
-
-
-
-
   </ngx-datatable>
 
   <div class="question-block"
@@ -84,25 +81,29 @@
     <div class="row">
       <div class="pull-left">
         <h4>Вопросы к студенту <strong class="text-danger">{{activeSpeaker.fio}}</strong></h4>
-        <h5 *ngIf="criteria.length == 0">Вопросов еще нет. Хотите <a (click)="createQuestion()"
-                                                                     class="link">создать</a>
+        <h5 *ngIf="questions.length == 0">Вопросов еще нет. Хотите <a (click)="createQuestion()"
+                                                                      class="link">создать</a>
           новый? </h5>
-        <h5 *ngIf="criteria.length != 0">Вопросов задано: <span class="question-count">{{criteria.length}}</span>
+        <h5 *ngIf="questions.length != 0">Вопросов задано: <span class="question-count">{{questions.length}}</span>
           Хотите <a
             (click)="createQuestion()" class="link">создать</a> новый? </h5>
       </div>
-      <div class="pull-right" *ngIf="criteria.length != 0">
+      <div class="pull-right" *ngIf="questions.length != 0">
         <button class="btn btn-default navbar-btn" (click)="saveQuestions()">Сохранить</button>
       </div>
     </div>
-    <div *ngFor="let cr of criteria">
+    <div *ngFor="let q of questions">
       <div class="input-group">
-        <input type="text" class="form-control" [(ngModel)]="cr.text">
-        <span class="input-group-addon remove-question-button" (click)="removeQuestion(cr.index)">
+        <input type="text" class="form-control" [(ngModel)]="q.text">
+        <span class="input-group-addon remove-question-button" (click)="removeQuestion(q.index)">
             <i class="glyphicon glyphicon-remove-circle"></i>
         </span>
       </div>
     </div>
+  </div>
+
+  <div *ngIf="(isPrincipalContainsRole('PRESIDENT')) && (router.url.toString().includes('president'))">
+    <app-stopwatch (flagLabs)="getFlagLabs($event)"></app-stopwatch>
   </div>
 </div>
 
@@ -123,14 +124,4 @@
       </div>
     </div>
   </div>
-</div>
-
-<div *ngIf="(isPrincipalContainsRole('PRESIDENT') )
-    && (router.url.toString().includes('president'))">
-
-<app-stopwatch (flagLabs)="getFlagLabs($event)"></app-stopwatch>
-  <!--<button *ngIf="countLabs == 4"  class="btn btn-danger center-block" (click)="setDoneStudent()">-->
-    <!--Следующий студент-->
-  <!--</button>-->
-<app-criteria></app-criteria>
 </div>

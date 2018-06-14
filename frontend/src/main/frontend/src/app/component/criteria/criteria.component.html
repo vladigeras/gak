@@ -8,34 +8,23 @@
       </h5>
     </div>
   </div>
-  <div *ngFor="let criteria of criteriaToActiveSpeaker">
+  <div *ngFor="let cr of criteriaToActiveSpeaker" class="criteria">
     <div class="input-group">
-      <input placeholder="Критерий" type="text" class="form-control input-text-black" [(ngModel)]="criteria.title">
-      <select class="form-control input-text-blue" [(ngModel)]="criteria.rating">
-        <option>0</option>
-        <option>1</option>
-        <option>2</option>
-        <option>3</option>
-        <option>4</option>
-        <option>5</option>
-      </select>
-      <input placeholder="Комментарий" type="text" class="form-control input-text-black" [(ngModel)]="criteria.comment">
-      <span class="input-group-addon remove-criteria-button" (click)="removeCriteria(criteria.index)">
+      <input placeholder="Критерий" type="text" class="form-control input-text-black" [(ngModel)]="cr.title">
+      <nouislider [connect]="true" [min]="0" [max]="100" [tooltips]="[true]" [step]="1"
+                  [(ngModel)]="cr.rating"></nouislider>
+      <input placeholder="Комментарий" type="text" class="form-control input-text-black" [(ngModel)]="cr.comment">
+      <span class="input-group-addon remove-criteria-button" (click)="removeCriteria(cr.index)">
             <i class="glyphicon glyphicon-remove-circle"></i>
         </span>
     </div>
   </div>
 
   <div class="result-mark row">
-    <div class="pull-left">
-      <label class="result-mark-inline" for="result-mark">Выставить оценку студенту (в баллах):</label>
-      <select class="form-control result-mark-inline result-mark-inline-select" id="result-mark"
-              [(ngModel)]="resultMark">
-        <option>2</option>
-        <option>3</option>
-        <option>4</option>
-        <option>5</option>
-      </select>
+    <div>
+      <label class="result-mark-label result-mark-inline col-sm-3 col-md-3 col-lg-3">Выставить оценку студенту (в баллах):</label>
+      <nouislider class="col-sm-3 col-md-3 col-lg-3" [connect]="true" [min]="0" [max]="100" [tooltips]="[true]" [step]="1"
+                  [(ngModel)]="resultMark"></nouislider>
       <button class="btn btn-default navbar-btn result-mark-inline button-save-result" (click)="saveCriteria()">
         Сохранить
       </button>

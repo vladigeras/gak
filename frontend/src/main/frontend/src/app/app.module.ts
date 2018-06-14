@@ -45,6 +45,7 @@ import {StopWatchService} from "./service/stopwatch.service";
 import {StopWatchComponent} from "./component/stopwatch/stopwatch.component";
 import {TimestampService} from "./service/timestamp.service";
 import { SummaryTableComponent } from "./component/summary-table/summary-table.component";
+import { NouisliderModule } from 'ng2-nouislider';
 
 export class CustomToastOptions extends ToastOptions {
   showCloseButton = true;
@@ -101,7 +102,8 @@ const routes: Routes = [
     DndModule.forRoot(),
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
-    BlockUIModule
+    BlockUIModule,
+    NouisliderModule
   ],
   providers: [
     {provide: ToastOptions, useClass: CustomToastOptions},

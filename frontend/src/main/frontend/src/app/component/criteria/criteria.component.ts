@@ -17,7 +17,7 @@ export class CriteriaComponent implements OnInit {
   principal = currentPrincipal;
   activeSpeaker = {id: null, fio: null};
   criteriaToActiveSpeaker = [];
-  resultMark;
+  resultMark = 0; //default
   @BlockUI() blockUI: NgBlockUI;
 
   constructor(private toast: ToastsManager, private criteriaService: CriteriaService, private socketService: SocketService) {
@@ -44,10 +44,10 @@ export class CriteriaComponent implements OnInit {
           this.toast.warning("Оптимальные (общие) критерии не заполнены на сервере", "Внимание")
         }
         data.forEach(c => {
-          this.criteriaToActiveSpeaker.push({    //fill list an empty criteria
+          this.criteriaToActiveSpeaker.push({    //fill list an empty questions
             index: this.criteriaToActiveSpeaker.length + 1,
             title: c.title,
-            rating: null,
+            rating: 0,
             comment: null
           })
         });
@@ -62,9 +62,9 @@ export class CriteriaComponent implements OnInit {
   saveCriteria() {
     if (this.activeSpeaker != null) {
       let criteria = [];
-      this.criteriaToActiveSpeaker.forEach(c => criteria.push(c));    //add criteria
+      this.criteriaToActiveSpeaker.forEach(c => criteria.push(c));    //add questions
 
-      if (this.resultMark != null) {      //because result mark will be one more criteria too with fixed title
+      if (this.resultMark != null) {      //because result mark will be one more questions too with fixed title
         criteria.push({
           index: this.criteriaToActiveSpeaker.length + 1,
           title: Constants.criteriaResult,
@@ -103,7 +103,7 @@ export class CriteriaComponent implements OnInit {
     this.criteriaToActiveSpeaker.push({
       index: this.criteriaToActiveSpeaker.length + 1,
       title: null,
-      rating: null,
+      rating: 0,
       comment: null
     })
   }

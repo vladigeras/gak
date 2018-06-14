@@ -21,13 +21,9 @@
       <ng-template let-row="row"   ngx-datatable-row-detail-template >
         <div class="result-mark row"   >
           <div class="pull-left">
-            <label class="result-mark-inline" for="result-mark">Выставить результирующую оценку студенту (в баллах):</label>
-            <select class="form-control result-mark-inline result-mark-inline-select" id="result-mark" [(ngModel)]="resultMark">
-              <option>2</option>
-              <option>3</option>
-              <option>4</option>
-              <option>5</option>
-            </select>
+            <label class="result-mark-inline">Выставить результирующую оценку студенту (в баллах):</label>
+            <nouislider class="form-control" [connect]="true" [min]="0" [max]="100" [tooltips]="[true]" [step]="1"
+                        [(ngModel)]="resultMark"></nouislider>
             <button class="btn btn-default navbar-btn result-mark-inline button-save-result" (click)="saveResult(row.id)">
               Сохранить
             </button>

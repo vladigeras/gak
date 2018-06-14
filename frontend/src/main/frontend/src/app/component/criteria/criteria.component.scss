@@ -1,5 +1,8 @@
 .criteria-block{
-  margin-top: 35px;
+  margin-top: 55px;
+  border: 1px solid #777;
+  padding: 12px;
+  border-radius: 11px;
 }
 
 .row {
@@ -19,10 +22,6 @@
   cursor: pointer;
 }
 
-.input-group {
-  margin-top: 8px;
-}
-
 .add-criteria-button {
   margin-left: 15px;
 }
@@ -37,7 +36,11 @@
 }
 
 .result-mark {
-  margin-top: 10px;
+  margin-top: 24px;
+
+  .result-mark-label {
+    margin-top: 8px;
+  }
 
   .result-mark-inline {
     display: inline-block;
@@ -50,5 +53,18 @@
 
   .button-save-result {
     margin-left: 8px;
+  }
+}
+
+.criteria {
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px solid #777;
+  border-radius: 7px;
+}
+
+.criteria {
+  nouislider {
+    margin-top: 81px;
   }
 }

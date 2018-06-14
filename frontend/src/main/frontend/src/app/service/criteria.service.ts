@@ -4,7 +4,8 @@ import {HttpClient} from "@angular/common/http";
 @Injectable()
 export class CriteriaService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+  }
 
   getDefaultCriteria() {
     return this.http.get("/criteria/getDefault");
@@ -13,13 +14,6 @@ export class CriteriaService {
   getAllCriteriaByDiplomId(diplomId) {
     return this.http.get("/criteria/ByDiplomId" + "?diplomId=" + diplomId);
   }
-
-
-
-
-
-
-
 
 
   saveResultMarkFromUserToSpeaker(rating, speakerId) {
