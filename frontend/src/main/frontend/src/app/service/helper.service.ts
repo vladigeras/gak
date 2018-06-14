@@ -42,6 +42,14 @@ export class HelperService {
     switch (status.toUpperCase()) {
       case "ACTIVE":
         return "Активный";
+      case "SPEAKING_TIME":
+        return "Выступление";
+      case "QUESTION_TIME":
+        return "Вопросы";
+      case "REWIEW_TIME":
+        return "Рецензия и отзывы";
+      case "LASTWORD_TIME":
+        return "Заключительное слово";
       case "DONE":
         return "Завершено";
     }
