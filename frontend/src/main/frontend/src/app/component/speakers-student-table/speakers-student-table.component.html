@@ -76,7 +76,7 @@
   </ngx-datatable>
 
   <div class="question-block"
-       *ngIf="selectedGroup[0] != null && activeSpeaker != null && principal != null && principal.roles.indexOf('SECRETARY') != -1
+       *ngIf="selectedGroup[0] != null && activeSpeaker != null && activeSpeaker.id != null && principal != null && principal.roles.indexOf('SECRETARY') != -1
 && router.url.toString().includes('secretary')">
     <div class="row">
       <div class="pull-left">

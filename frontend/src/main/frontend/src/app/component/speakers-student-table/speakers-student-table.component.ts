@@ -49,21 +49,23 @@ export class SpeakersStudentTableComponent implements OnInit {
     socketService.activeSpeakerReady.subscribe(speaker => {
       if (speaker != null) {
         if (this.selectedGroup[0] != undefined) {
-          this.setStatusToStudentInList(speaker, Status[Status.ACTIVE]);
+          // this.setStatusToStudentInList(speaker, Status[Status.ACTIVE]);
           this.activeSpeaker = {
             id: speaker.id,
             fio: speaker.student.lastname + " " + speaker.student.firstname + " " + speaker.student.middlename
           };
+          this.getSpeakersStudentsOfGroup();
           this.getQuestionsOfSpeaker();
-          this.getDiplomInfoOfSpeaker(speaker.id);
+          // this.getDiplomInfoOfSpeaker(speaker.id);
         }
       }
     });
 
     socketService.doneSpeakerReady.subscribe(speaker => {
       if (speaker != null) {
-        this.setStatusToStudentInList(speaker, Status[Status.DONE]);
-        this.getDiplomInfoOfSpeaker(speaker.id);
+        // this.setStatusToStudentInList(speaker, Status[Status.DONE]);
+        // this.getDiplomInfoOfSpeaker(speaker.id);
+        this.getSpeakersStudentsOfGroup();
       }
     })
   }
@@ -107,7 +109,7 @@ export class SpeakersStudentTableComponent implements OnInit {
   getSpeakersStudentsOfGroup() {
     if (this.selectedGroup[0] != undefined) {
       this.blockUI.start(waitString);
-      this.activeSpeaker = null;
+      // this.activeSpeaker = null;
       this.speakerStudents = [];
       this.speakerService.getSpeakersListOfGroupOfDay(this.selectedGroup[0].itemName, this.today.unix() * 1000).subscribe(
         (data: any) => {
