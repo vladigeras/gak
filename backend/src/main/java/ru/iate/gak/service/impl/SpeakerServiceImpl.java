@@ -8,10 +8,7 @@ import ru.iate.gak.domain.Role;
 import ru.iate.gak.domain.Speaker;
 import ru.iate.gak.domain.Status;
 import ru.iate.gak.model.*;
-import ru.iate.gak.repository.CommissionRepository;
-import ru.iate.gak.repository.GroupRepository;
-import ru.iate.gak.repository.SpeakerRepository;
-import ru.iate.gak.repository.StudentRepository;
+import ru.iate.gak.repository.*;
 import ru.iate.gak.service.SpeakerService;
 import ru.iate.gak.service.TexService;
 
@@ -20,6 +17,7 @@ import java.io.File;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -40,6 +38,9 @@ public class SpeakerServiceImpl implements SpeakerService {
 
     @Autowired
     private CommissionRepository commissionRepository;
+
+    @Autowired
+    private TimestampRepository timestampRepository;
 
     /**
      * Clean existing speakers and fill new:
@@ -108,8 +109,11 @@ public class SpeakerServiceImpl implements SpeakerService {
         List<SpeakerEntity> speakers = speakerRepository.getSpeakersListOfCurrentGroupBetweenDate(groupEntity, currentDayInUTC.minusDays(1), currentDayInUTC);
         speakers.forEach(s -> {
             if (s.getStudent() == null) return;
-            if (s.getStudent().getDiplom() == null) return;
-            if (s.getStudent().getDiplom().getMentor() == null || s.getStudent().getDiplom().getReviewer() == null)
+
+            DiplomEntity diplom = s.getStudent().getDiplom();
+
+            if (diplom == null) return;
+            if (diplom.getMentor() == null || diplom.getReviewer() == null)
                 return;
 
             Map<String, String> params = new HashMap<>();
@@ -169,34 +173,38 @@ public class SpeakerServiceImpl implements SpeakerService {
                 params.put("@genderOutDatel", "выпускнице");
             }
 
-            params.put("@title", s.getStudent().getDiplom().getTitle());
+            params.put("@title", diplom.getTitle());
 
             boolean mentorGender = false; //false for FEMALE
-            if (s.getStudent().getDiplom().getMentor().getGender() != null && s.getStudent().getDiplom().getMentor().getGender().equals(Gender.MALE))
+            if (diplom.getMentor().getGender() != null && diplom.getMentor().getGender().equals(Gender.MALE))
                 mentorGender = true;
 
-            String mentorName = (s.getStudent().getDiplom().getMentor().getMiddlename() == null) || (s.getStudent().getDiplom().getMentor().getMiddlename().isEmpty()) ?
-                    s.getStudent().getDiplom().getMentor().getLastname() + " " + s.getStudent().getDiplom().getMentor().getFirstname().charAt(0) + "." :
-                    s.getStudent().getDiplom().getMentor().getLastname() + " " + s.getStudent().getDiplom().getMentor().getFirstname().charAt(0) + ". " + s.getStudent().getDiplom().getMentor().getMiddlename().charAt(0) + ".";
+            String mentorName = (diplom.getMentor().getMiddlename() == null) || (diplom.getMentor().getMiddlename().isEmpty()) ?
+                    diplom.getMentor().getLastname() + " " + diplom.getMentor().getFirstname().charAt(0) + "." :
+                    diplom.getMentor().getLastname() + " " + diplom.getMentor().getFirstname().charAt(0) + ". " + diplom.getMentor().getMiddlename().charAt(0) + ".";
             params.put("@mentorIO", mentorName);
 
-            String mentorRoditName = (s.getStudent().getDiplom().getMentor().getMiddlename() == null) || (s.getStudent().getDiplom().getMentor().getMiddlename().isEmpty()) ?
-                    Padeg.getFIOPadeg(s.getStudent().getDiplom().getMentor().getLastname(), s.getStudent().getDiplom().getMentor().getFirstname(), "", mentorGender, 2) :
-                    Padeg.getFIOPadeg(s.getStudent().getDiplom().getMentor().getLastname(), s.getStudent().getDiplom().getMentor().getFirstname(), s.getStudent().getDiplom().getMentor().getMiddlename(), mentorGender, 2);
+            String mentorRoditName = (diplom.getMentor().getMiddlename() == null) || (diplom.getMentor().getMiddlename().isEmpty()) ?
+                    Padeg.getFIOPadeg(diplom.getMentor().getLastname(), diplom.getMentor().getFirstname(), "", mentorGender, 2) :
+                    Padeg.getFIOPadeg(diplom.getMentor().getLastname(), diplom.getMentor().getFirstname(), diplom.getMentor().getMiddlename(), mentorGender, 2);
             params.put("@mentorRodit", mentorRoditName);
 
-            String reviewerName = (s.getStudent().getDiplom().getReviewer().getMiddlename() == null) || (s.getStudent().getDiplom().getReviewer().getMiddlename().isEmpty()) ?
-                    s.getStudent().getDiplom().getReviewer().getLastname() + " " + s.getStudent().getDiplom().getReviewer().getFirstname().charAt(0) + "." :
-                    s.getStudent().getDiplom().getReviewer().getLastname() + " " + s.getStudent().getDiplom().getReviewer().getFirstname().charAt(0) + ". " + s.getStudent().getDiplom().getReviewer().getMiddlename().charAt(0) + ".";
+            String reviewerName = (diplom.getReviewer().getMiddlename() == null) || (diplom.getReviewer().getMiddlename().isEmpty()) ?
+                    diplom.getReviewer().getLastname() + " " + diplom.getReviewer().getFirstname().charAt(0) + "." :
+                    diplom.getReviewer().getLastname() + " " + diplom.getReviewer().getFirstname().charAt(0) + ". " + diplom.getReviewer().getMiddlename().charAt(0) + ".";
             params.put("@reviewerIO", reviewerName);
 
-            Set<QuestionEntity> questions = s.getStudent().getDiplom().getQuestions();
+            Set<QuestionEntity> questions = diplom.getQuestions();
             final int[] i = {1};      //only 6 first question write in protocol
             questions.forEach(q -> {
                 if (i[0] > 6) return;
                 params.put("@question" + i[0], q.getQuestionText());
                 i[0]++;
             });
+
+            if (questions.size() < 6) {     //if true, then last question keys must be empty
+                for (int k = 6; k > questions.size(); k--) params.put("@question" + k, null);
+            }
 
             List<CommissionEntity> commissions = commissionRepository.getCommissionEntitiesByListId(1);
             final int[] k = {1}; //only 4 gak member + president + secretary must be
@@ -226,7 +234,39 @@ public class SpeakerServiceImpl implements SpeakerService {
             params.put("@mark4", null);
             params.put("@mark3", null);
             params.put("@markAverage", null);
-            params.put("@time", null);
+
+            List<TimestampEntity> timestamps = timestampRepository.getAllByDiplom(diplom);
+            final LocalDateTime[] speakingTimeStart = {null};
+            final LocalDateTime[] speakingTimeEnd = {null};
+
+            timestamps.forEach(t -> {
+                if (t.getStatus().equals(Status.SPEAKING_TIME)) speakingTimeStart[0] = t.getTimestamp();
+                if (t.getStatus().equals(Status.SPEAKING_TIME_END)) speakingTimeEnd[0] = t.getTimestamp();
+            });
+
+            if (speakingTimeStart[0] != null && speakingTimeEnd[0] != null) {
+                Long speakingTime = speakingTimeStart[0].until(speakingTimeEnd[0], ChronoUnit.MINUTES);
+                params.put("@time", speakingTime.toString());
+            }
+            else params.put("@time", null);
+
+            Integer resultMark = diplom.getResultMark();    //main result of diplom
+            if (resultMark != null) {
+                String ects = null;
+
+                if (resultMark >= 90) ects = "A";
+                if (resultMark >= 85 && resultMark <= 89) ects = "B";
+                if (resultMark >= 75 && resultMark <= 84) ects = "C";
+                if (resultMark >= 65 && resultMark <= 74) ects = "D";
+                if (resultMark >= 60 && resultMark <= 64) ects = "E";
+                if (resultMark < 60) ects = "F";
+
+                params.put("@result", resultMark.toString());
+                params.put("@ects", ects);
+            } else {
+                params.put("@result", null);
+                params.put("@ects", null);
+            }
 
             result.add(texService.exportDocuments(params));
         });

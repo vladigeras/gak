@@ -8,6 +8,9 @@
 \usepackage[left=18mm, top=5mm, right=10mm, bottom=15mm, nohead, nofoot]{geometry}
 \usepackage{setspace}
 
+\usepackage[normalem]{ulem} % для подчёркиваний uline
+\ULdepth = 0.2em % расстояние от линии до текста выше/ниже
+
 \begin{document}
 	
 \thispagestyle{empty}
@@ -73,8 +76,14 @@
 
     \vspace{0.2cm}
 	\hspace{1cm}На тему: 
+	\vspace{0.15cm}
 
-	\hspace{1cm}\underline{@title}
+	\hspace{0.9cm}
+	\begin{minipage}{6,3in}
+	\uline{@title }
+	\end{minipage} 
+		
+		
 	
     \vspace{0.2cm}
 	\hspace{1cm}Выпускная квалификационная работа выполнена под руководством
@@ -98,7 +107,7 @@
 	\item  	скриншот результатов проверки на заимствование (плагиат).
 \end{enumerate}
 
-\hspace{-0.15cm}Сообщение о выпускной квалификационной работе длилось \underline{@time} мин., после чего\\
+\hspace{-0.15cm}Сообщение о выпускной квалификационной работе длилось \underline{\makebox[10mm]{@time}} мин., после чего\\
  @genderStudentDatel были заданы следующие вопросы:\\
 \vspace{-0.5cm} 
 \begin{flushleft}
@@ -185,7 +194,7 @@
 
 \begin{enumerate}
 	\item 	Признать, что @genderStudentImen \underline{@studentIOIm} @genderDefImen \\
-	выпускную квалификационную работу с оценкой \makebox[10mm]{\hrulefill}\makebox[10mm]{\hrulefill}, ECTS \makebox[10mm]{\hrulefill}. 
+	выпускную квалификационную работу с оценкой \underline{\makebox[15mm]{@result}}, ECTS \underline{\makebox[10mm]{@ects}}. 
 	\vspace{-0.25cm}
 	\item 	Присвоить @genderOutDatel \underline{@studentIODatel} квалификацию (степень)\\ 
 	«бакалавр» по направлению подготовки \underline{09.03.02 Информационные системы и технологии} 
