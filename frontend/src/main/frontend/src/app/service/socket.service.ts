@@ -11,6 +11,7 @@ export class SocketService {
 
   socketReady = new EventEmitter();
   activeSpeakerReady = new EventEmitter();
+  otherStatusSpeakerReady = new EventEmitter();
   doneSpeakerReady = new EventEmitter();
 
   connect() {
@@ -33,6 +34,15 @@ export class SocketService {
           let doneSpeaker = JSON.parse(doneSpeakerString.body);
           this.doneSpeakerReady.emit(doneSpeaker);
           this.toast.success("Председатель окончил защиту для выбранного студента");
+        }
+      });
+
+      stomp.subscribe("/otherStatus", (otherStatusString: any) => {
+        if (otherStatusString.body) {
+          let speaker = JSON.parse(otherStatusString.body);
+          this.otherStatusSpeakerReady.emit(speaker);
+          console.log("Hi from otherStatus");
+          this.toast.success("Следующий этап защиты");
         }
       });
     });

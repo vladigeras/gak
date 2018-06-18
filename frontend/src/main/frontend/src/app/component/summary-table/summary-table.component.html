@@ -18,13 +18,14 @@
                  [rowHeight]="'auto'" (activate)="toggleExpandRow($event)">
 
     <ngx-datatable-row-detail [rowHeight]="'auto'">
-      <ng-template let-row="row"   ngx-datatable-row-detail-template >
-        <div class="result-mark row"   >
+      <ng-template let-row="row" ngx-datatable-row-detail-template>
+        <div class="result-mark row">
           <div class="pull-left">
             <label class="result-mark-inline">Выставить результирующую оценку студенту (в баллах):</label>
             <nouislider class="form-control" [connect]="true" [min]="0" [max]="100" [tooltips]="[true]" [step]="1"
                         [(ngModel)]="resultMark"></nouislider>
-            <button class="btn btn-default navbar-btn result-mark-inline button-save-result" (click)="saveResult(row.id)">
+            <button class="btn btn-default navbar-btn result-mark-inline button-save-result"
+                    (click)="saveResult(row.id)">
               Сохранить
             </button>
           </div>
@@ -41,18 +42,30 @@
                        (activate)="toggleExpandRow2($event)"
 
         >
-          <ngx-datatable-row-detail [rowHeight]="'auto'"  >
-            <ng-template let-row="row"    ngx-datatable-row-detail-template >
-              <div *ngFor = "let cr of allCriteria">
-                     <span *ngIf="row.commission === cr.commission">
-                       <ul>
-                         <li>
-                           {{cr.title}}: {{cr.rating}}
-                       <strong *ngIf="cr.comment!='' ">Комментарий: {{cr.comment}} </strong>
-                         </li>
-                       </ul>
+          <ngx-datatable-row-detail [rowHeight]="'auto'">
+            <ng-template let-row="row" ngx-datatable-row-detail-template>
+              <div >
+                       <table class="table col-xs-6" >
+                         <thead>
+                           <tr>
+                             <td>Критерий</td>
+                             <td>Оценка</td>
+                             <td>Комментарий к критерию</td>
+                           </tr>
+                         </thead>
+                         <tbody *ngFor="let cr of allCriteria">
+                         <tr  *ngIf="row.commission === cr.commission">
+                           <td >{{cr.title}}</td>
+                           <td>{{cr.rating}}</td>
+                           <td>{{cr.comment}}</td>
+                         </tr>
 
-                     </span>
+                         </tbody>
+                       </table>
+
+
+
+
               </div>
 
             </ng-template>
@@ -68,9 +81,7 @@
     <ngx-datatable-column prop="title" name="Тема"></ngx-datatable-column>
 
 
-
   </ngx-datatable>
-
 
 
 </div>

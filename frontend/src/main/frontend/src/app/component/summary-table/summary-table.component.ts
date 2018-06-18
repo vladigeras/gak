@@ -215,7 +215,9 @@ export class SummaryTableComponent implements OnInit {
 
               });
 
-              console.log(this.allCriteria);
+              this.allCriteria.forEach(cr=>{
+                if (cr.title == 'RESULT') cr.title = 'Итоговый бал';
+              });
               this.reloadCriteriaTable();
             })
 
@@ -240,9 +242,7 @@ export class SummaryTableComponent implements OnInit {
     this.diplomId = null;
   }
 
-  parsingDataOfAllCriteria(){
 
-  }
 
 
 

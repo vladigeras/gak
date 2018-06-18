@@ -67,7 +67,15 @@ export class SpeakersStudentTableComponent implements OnInit {
         // this.getDiplomInfoOfSpeaker(speaker.id);
         this.getSpeakersStudentsOfGroup();
       }
-    })
+    });
+
+    socketService.otherStatusSpeakerReady.subscribe(speaker => {
+      if (speaker != null) {
+        // this.setStatusToStudentInList(speaker, Status[Status.DONE]);
+        // this.getDiplomInfoOfSpeaker(speaker.id);
+        this.getSpeakersStudentsOfGroup();
+      }
+    });
   }
 
   ngOnInit() {
@@ -208,6 +216,10 @@ export class SpeakersStudentTableComponent implements OnInit {
   getRowClass(row) {  //see classes in styles.scss file
     return {
       'active-student-row': row.status === Status[Status.ACTIVE],
+      'speaking-student-row': row.status === Status[Status.SPEAKING_TIME],
+      'question-student-row': row.status === Status[Status.QUESTION_TIME],
+      'review-student-row': row.status === Status[Status.REWIEW_TIME],
+      'lastword-student-row': row.status === Status[Status.LASTWORD_TIME],
       'done-student-row': row.status === Status[Status.DONE]
     };
   }

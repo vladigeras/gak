@@ -53,6 +53,8 @@ export class StopWatchComponent {
         };
       }
     });
+
+
     this.time = 0;
     this.started = false;
     this.flagStartDefense = false;
@@ -86,6 +88,9 @@ export class StopWatchComponent {
     if (this.time) {
       this.stopwatchService.lap();
     }
+    if(this.countLaps == 0) this.setQuestionStatus();
+    if(this.countLaps == 1) this.setReviewStatus();
+    if(this.countLaps == 2) this.setLastWordStatus();
     this.countLaps++;
 
   }
@@ -99,6 +104,9 @@ export class StopWatchComponent {
   }
 
   start() {
+    if(!this.flagStartDefense){
+      this.setSpeakingStatus();
+    }
     this.flagStartDefense = true;
     this.timer = setInterval(this.getUpdate(), 1);
     this.stopwatchService.start();
@@ -182,6 +190,29 @@ export class StopWatchComponent {
       }
     );
     this.timestamps = [];
+
+  }
+  setSpeakingStatus(){
+    if (this.activeSpeaker != null) {
+      this.socket.send("/app/speakingStatus", {}, this.activeSpeaker.id);
+    }
+  }
+  setQuestionStatus(){
+    if (this.activeSpeaker != null) {
+      this.socket.send("/app/questionStatus", {}, this.activeSpeaker.id);
+    }
+
+  }
+  setReviewStatus(){
+    if (this.activeSpeaker != null) {
+      this.socket.send("/app/reviewStatus", {}, this.activeSpeaker.id);
+    }
+
+  }
+  setLastWordStatus(){
+    if (this.activeSpeaker != null) {
+      this.socket.send("/app/lastWordStatus", {}, this.activeSpeaker.id);
+    }
 
   }
 

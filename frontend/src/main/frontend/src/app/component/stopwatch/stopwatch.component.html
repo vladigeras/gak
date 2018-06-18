@@ -45,16 +45,16 @@
        (click)="showSetActiveStudentModal()">
     </i>
 
-    <table class="table table-hover ">
-      <thead>
-      <tr>
-        <th>Этап защиты</th>
+    <table class="table table-hover col-lg-pull-4 ">
+      <thead >
+      <tr  >
+        <th >Этап защиты</th>
         <th>Начало</th>
         <th>Конец</th>
       </tr>
       </thead>
-      <tbody>
-      <tr *ngFor="let lap of stopwatchService.laps; let i = index; let last = last;">
+      <tbody >
+      <tr  *ngFor="let lap of stopwatchService.laps; let i = index; let last = last;">
         <td *ngIf="i==0">Выступление</td>
         <td *ngIf="i==1">Вопросы</td>
         <td *ngIf="i==2">Отзыв и рецензия</td>
