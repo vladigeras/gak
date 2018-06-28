@@ -91,6 +91,13 @@
             <scope>system</scope>
             <systemPath>${basedir}/src/main/resources/padeg-3.3.0.24.jar</systemPath>
         </dependency>
+
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>test</scope>
+            <version>1.4.194</version>
+        </dependency>
     </dependencies>
 
     <build>

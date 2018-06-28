@@ -48,6 +48,13 @@ public class UserEntity extends LongIdentifiableEntity {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private Set<CommissionEntity> commissionsWhereUserInclude;
 
+    public UserEntity() {
+    }
+
+    public UserEntity(String login) {
+        this.login = login;
+    }
+
     public String getLogin() {
         return login;
     }

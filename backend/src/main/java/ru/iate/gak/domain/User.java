@@ -18,6 +18,10 @@ public class User extends LongIdentifiable {
 
     }
 
+    public User(String login) {
+        this.login = login;
+    }
+
     public User(UserEntity userEntity) {
         super(userEntity.getId());
         this.login = userEntity.getLogin();
