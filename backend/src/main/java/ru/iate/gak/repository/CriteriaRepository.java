@@ -12,7 +12,5 @@ public interface CriteriaRepository extends JpaRepository<CriteriaEntity, Long> 
 
     List<CriteriaEntity> getCriteriaEntitiesByDiplomId(Long diplomId);
 
-
-
     void deleteByCommission(CommissionEntity commissionEntity);
 }
