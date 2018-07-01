@@ -3,15 +3,14 @@ package ru.iate.gak.service;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
+import ru.iate.gak.TestsConfig;
 import ru.iate.gak.domain.Role;
 import ru.iate.gak.domain.User;
-import ru.iate.gak.model.UserEntity;
-import ru.iate.gak.repository.UserRepository;
 import ru.iate.gak.service.impl.UserServiceImpl;
 
 import java.util.HashSet;
@@ -21,24 +20,18 @@ import java.util.Set;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringRunner.class)
+@SpringBootTest(classes = {
+        TestsConfig.class,
+        UserServiceImpl.class
+})
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class UserServiceImplTests {
-
-    @TestConfiguration
-    static class UserServiceImplTestsContextConfiguration {
-        @Bean
-        public UserService userService() {
-            return new UserServiceImpl();
-        }
-    }
-
-    @Autowired
-    private UserService userService;
 
     @MockBean
     private PasswordEncoder passwordEncoder;
 
-    @MockBean
-    private UserRepository userRepository;
+    @Autowired
+    private UserService userService;
 
     @Test
     public void whenGetRoles_thenReturnArrayOfRoles() {
@@ -55,18 +48,15 @@ public class UserServiceImplTests {
     @Test
     public void whenGetUsers_thenReturnArrayOfUsers() {
         //given
-        String loginOne = "one";
-        String loginTwo = "two";
-        this.userService.saveUser(new User(loginOne));
-        this.userService.saveUser(new User(loginTwo));
+        String login = "login";
+        this.userService.saveUser(new User(login));
 
         //when
         List<User> found = this.userService.getAllUsers();
 
         //then
-        assertEquals(found.size(), 2);
-        assertEquals(found.get(0).getLogin(), loginOne);
-        assertEquals(found.get(1).getLogin(), loginTwo);
+        assertEquals(found.size(), 1);
+        assertEquals(found.get(0).getLogin(), login);
     }
 
     @Test
@@ -120,9 +110,10 @@ public class UserServiceImplTests {
         user.setFirstname(newFirstname);
 
         this.userService.updateUser(user);
-        UserEntity foundAfterUpdate = userRepository.findByLogin(login);
+        List<User> found = userService.getAllUsers();
 
         //then
-        assertEquals(foundAfterUpdate.getFirstname(), newFirstname);
+        assertEquals(found.size(), 1);
+        assertEquals(found.get(0).getFirstname(), newFirstname);
     }
 }
