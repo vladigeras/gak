@@ -1,4 +1,4 @@
-package ru.iate.gak.Timestamp;
+package ru.iate.gak.repository;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -8,8 +8,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.iate.gak.model.DiplomEntity;
-import ru.iate.gak.model.TimestampEntity;
-import ru.iate.gak.repository.TimestampRepository;
+import ru.iate.gak.model.QuestionEntity;
 
 import java.util.List;
 
@@ -18,13 +17,13 @@ import static org.junit.Assert.assertEquals;
 @RunWith(SpringRunner.class)
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-public class TimestampRepositoryTests {
+public class QuestionRepositoryTests {
 
     @Autowired
     private TestEntityManager entityManager;
 
     @Autowired
-    private TimestampRepository timestampRepository;
+    private QuestionRepository questionRepository;
 
     @Test
     public void whenGetAllByDiplom_thenReturnListWithCurrentDiplomContains() {
@@ -34,16 +33,16 @@ public class TimestampRepositoryTests {
         entityManager.persist(diplom1);
         entityManager.persist(diplom2);
 
-        TimestampEntity timestamp1 = new TimestampEntity();
-        timestamp1.setDiplom(diplom1);
-        TimestampEntity timestamp2 = new TimestampEntity();
-        timestamp2.setDiplom(diplom2);
-        entityManager.persist(timestamp1);
-        entityManager.persist(timestamp2);
+        QuestionEntity question1 = new QuestionEntity();
+        question1.setDiplom(diplom1);
+        QuestionEntity question2 = new QuestionEntity();
+        question2.setDiplom(diplom2);
+        entityManager.persist(question1);
+        entityManager.persist(question1);
         entityManager.flush();
 
         //when
-        List<TimestampEntity> found = timestampRepository.getAllByDiplom(diplom1);
+        List<QuestionEntity> found = questionRepository.getAllByDiplom(diplom1);
 
         //then
         assertEquals(found.size(), 1);

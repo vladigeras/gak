@@ -1,4 +1,4 @@
-package ru.iate.gak.Student;
+package ru.iate.gak.repository;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -9,7 +9,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.iate.gak.model.GroupEntity;
 import ru.iate.gak.model.StudentEntity;
-import ru.iate.gak.repository.StudentRepository;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;

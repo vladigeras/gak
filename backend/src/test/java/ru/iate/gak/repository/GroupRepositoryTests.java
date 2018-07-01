@@ -1,4 +1,4 @@
-package ru.iate.gak.Group;
+package ru.iate.gak.repository;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -8,7 +8,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.iate.gak.model.GroupEntity;
-import ru.iate.gak.repository.GroupRepository;
 
 import java.util.List;
 

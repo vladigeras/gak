@@ -1,4 +1,4 @@
-package ru.iate.gak.User;
+package ru.iate.gak.repository;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -9,16 +9,12 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.iate.gak.domain.Role;
 import ru.iate.gak.model.UserEntity;
-import ru.iate.gak.repository.UserRepository;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest

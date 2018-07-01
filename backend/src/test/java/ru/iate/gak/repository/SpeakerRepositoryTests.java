@@ -1,4 +1,4 @@
-package ru.iate.gak.Speaker;
+package ru.iate.gak.repository;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,7 +10,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import ru.iate.gak.model.GroupEntity;
 import ru.iate.gak.model.SpeakerEntity;
 import ru.iate.gak.model.StudentEntity;
-import ru.iate.gak.repository.SpeakerRepository;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;

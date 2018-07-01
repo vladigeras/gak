@@ -1,4 +1,4 @@
-package ru.iate.gak.Diplom;
+package ru.iate.gak.repository;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -8,41 +8,44 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.iate.gak.model.DiplomEntity;
-import ru.iate.gak.model.StudentEntity;
-import ru.iate.gak.repository.DiplomRepository;
+import ru.iate.gak.model.TimestampEntity;
+
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-public class DiplomRepositoryTests {
+public class TimestampRepositoryTests {
 
     @Autowired
     private TestEntityManager entityManager;
 
     @Autowired
-    private DiplomRepository diplomRepository;
+    private TimestampRepository timestampRepository;
 
     @Test
-    public void whenGetByStudent_thenReturnListWhereStudentContains() {
+    public void whenGetAllByDiplom_thenReturnListWithCurrentDiplomContains() {
         //given
-        StudentEntity student1 = new StudentEntity();
-        StudentEntity student2 = new StudentEntity();
-        entityManager.persist(student1);
-        entityManager.persist(student2);
-
         DiplomEntity diplom1 = new DiplomEntity();
-        diplom1.setStudent(student1);
         DiplomEntity diplom2 = new DiplomEntity();
-        diplom2.setStudent(student2);
         entityManager.persist(diplom1);
         entityManager.persist(diplom2);
 
+        TimestampEntity timestamp1 = new TimestampEntity();
+        timestamp1.setDiplom(diplom1);
+        TimestampEntity timestamp2 = new TimestampEntity();
+        timestamp2.setDiplom(diplom2);
+        entityManager.persist(timestamp1);
+        entityManager.persist(timestamp2);
+        entityManager.flush();
+
         //when
-        DiplomEntity found = diplomRepository.getByStudent(student1);
+        List<TimestampEntity> found = timestampRepository.getAllByDiplom(diplom1);
 
         //then
-        assertEquals(found.getStudent(), student1);
+        assertEquals(found.size(), 1);
+        assertEquals(found.get(0).getDiplom(), diplom1);
     }
 }

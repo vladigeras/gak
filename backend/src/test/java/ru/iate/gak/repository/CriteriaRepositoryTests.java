@@ -1,4 +1,4 @@
-package ru.iate.gak.Criteria;
+package ru.iate.gak.repository;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,7 +10,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import ru.iate.gak.model.CommissionEntity;
 import ru.iate.gak.model.CriteriaEntity;
 import ru.iate.gak.model.DiplomEntity;
-import ru.iate.gak.repository.CriteriaRepository;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package ru.iate.gak.User;
+package ru.iate.gak.service;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,7 +12,6 @@ import ru.iate.gak.domain.Role;
 import ru.iate.gak.domain.User;
 import ru.iate.gak.model.UserEntity;
 import ru.iate.gak.repository.UserRepository;
-import ru.iate.gak.service.UserService;
 import ru.iate.gak.service.impl.UserServiceImpl;
 
 import java.util.HashSet;
