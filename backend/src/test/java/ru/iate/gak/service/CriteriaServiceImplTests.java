@@ -1,19 +1,14 @@
 package ru.iate.gak.service;
 
+import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringRunner;
-import ru.iate.gak.service.impl.CriteriaServiceImpl;
 
 @RunWith(SpringRunner.class)
 public class CriteriaServiceImplTests {
 
-    @TestConfiguration
-    static class CriteriaServiceImplTestsContextConfiguration {
-        @Bean
-        public CriteriaService criteriaService() {
-            return new CriteriaServiceImpl();
-        }
+    @Test
+    public void empty() {
+
     }
 }
