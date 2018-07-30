@@ -29,4 +29,21 @@
 		<module>frontend</module>
 		<module>backend</module>
 	</modules>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <version>2.2</version>
+                <configuration>
+                    <url>http://217.15.201.151:8080/manager/text</url>
+                    <server>TomcatGak</server>
+                    <username>tomcat</username>
+                    <password>tomcatG@K</password>
+                    <path>/</path>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
