@@ -8,7 +8,7 @@ export class DiplomService {
   }
 
   getDiplomBySpeakerId(speakerId) {
-    return this.http.get("/diploms/bySpeaker" + "?id=" + speakerId);
+    return this.http.get("/diploms/speaker" + "?id=" + speakerId);
   }
 
 }

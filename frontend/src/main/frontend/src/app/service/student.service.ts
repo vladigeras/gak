@@ -7,15 +7,15 @@ export class StudentService {
   constructor(private http: HttpClient) { }
 
   getAvailableGroups() {
-    return this.http.get("/groups/get");
+    return this.http.get("/groups/");
   }
 
   getStudentsOfGroup(group) {
-    return this.http.get("/students/ofGroup" + "?group=" + group);
+    return this.http.get("/students/groups" + "?group=" + group);
   }
 
   saveStudent(studentDto) {
-    return this.http.post("/students/save", studentDto);
+    return this.http.post("/students/", studentDto);
   }
 
   saveFiles(studentId, reportFile, presentationFile) {
@@ -27,9 +27,6 @@ export class StudentService {
   }
 
   readFile(studentId, isReport) {
-  //   let a = document.createElement("a");
-  //   a.href = "/students/readFile" + "?student=" + studentId + "&isReport=" + isReport;
-  //   a.click()
     return this.http.get("/students/readFile" + "?student=" + studentId + "&isReport=" + isReport, { responseType: 'blob'})
       .map(res => {
         return new Blob([res], { type: 'application/pdf', });
@@ -37,6 +34,6 @@ export class StudentService {
   }
 
   deleteStudent(studentId) {
-    return this.http.post("/students/delete", studentId)
+    return this.http.delete("/students/" + studentId)
   }
 }

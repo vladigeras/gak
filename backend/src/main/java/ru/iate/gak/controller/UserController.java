@@ -19,13 +19,13 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping(value = "/get")
+    @GetMapping(value = "/")
     @GakSecured(role = Roles.ADMIN)
     public List<UserDto> getUsers() {
         return userService.getAllUsers().stream().map(UserDto::new).collect(Collectors.toList());
     }
 
-    @PostMapping(value = "/add", consumes = "application/json")
+    @PostMapping(value = "/", consumes = "application/json")
     @GakSecured(role = Roles.ADMIN)
     public void saveUser(@RequestBody UserDto userDto) {
         if (StringUtil.isStringNullOrEmptyTrim(userDto.firstname) || StringUtil.isStringNullOrEmptyTrim(userDto.lastname)
@@ -38,7 +38,7 @@ public class UserController {
         userService.saveUser(userDto.toUser());
     }
 
-    @PostMapping(value = "/update", consumes = "application/json")
+    @PutMapping(value = "/", consumes = "application/json")
     @GakSecured(role = Roles.ADMIN)
     public void updateUser(@RequestBody UserDto userDto) {
         if (StringUtil.isStringNullOrEmptyTrim(userDto.firstname) || StringUtil.isStringNullOrEmptyTrim(userDto.lastname)) {
@@ -50,13 +50,13 @@ public class UserController {
         userService.updateUser(userDto.toUser());
     }
 
-    @GetMapping(value = "/roles")
+    @GetMapping(value = "/roles/all")
     @GakSecured(role = Roles.ADMIN)
     public List<String> getRoles() {
         return userService.getAllRoles().stream().map(Enum::name).collect(Collectors.toList());
     }
 
-    @GetMapping(value = "/byRole")
+    @GetMapping(value = "/roles")
     @GakSecured(role = Roles.ADMIN)
     public List<UserDto> getUsersByRole(@RequestParam(name = "role") String role) {
         return userService.getAllUsersByRole(Role.valueOf(role)).stream().map(UserDto::new).collect(Collectors.toList());

@@ -15,7 +15,7 @@ public class DiplomController {
     @Autowired
     private DiplomService diplomService;
 
-    @GetMapping(value = "/bySpeaker")
+    @GetMapping(value = "/speaker")
     public DiplomDto getDiplomById(@RequestParam(name = "id") Long speakerId) {
         if (speakerId > 0) {
             return new DiplomDto(diplomService.getDiplomBySpeakerId(speakerId));

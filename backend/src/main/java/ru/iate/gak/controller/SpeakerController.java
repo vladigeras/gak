@@ -3,7 +3,6 @@ package ru.iate.gak.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
-import ru.iate.gak.domain.Status;
 import ru.iate.gak.dto.SpeakerDto;
 import ru.iate.gak.security.GakSecured;
 import ru.iate.gak.security.Roles;
@@ -33,13 +32,13 @@ public class SpeakerController {
     @Value("${template.protocol.temp.directory}")
     String protocolsTempDirectory;
 
-    @PostMapping(value = "/save", consumes = "application/json")
+    @PostMapping(value = "/", consumes = "application/json")
     @GakSecured(roles = {Roles.ADMIN})
     public void saveList(@RequestBody List<SpeakerDto> speakers) {
         speakerService.fillList(speakers.stream().map(SpeakerDto::toSpeaker).collect(Collectors.toList()));
     }
 
-    @GetMapping(value = "/ofGroupOfDay")
+    @GetMapping(value = "/")
     public List<SpeakerDto> getSpeakerListOfGroupToday(@RequestParam(value = "group") String group,
                                                        @RequestParam(value = "date", required = false) Long date) {
         if (StringUtil.isStringNullOrEmptyTrim(group)) throw new RuntimeException("Неверное значение для группы");
@@ -94,22 +93,5 @@ public class SpeakerController {
             e.printStackTrace();
         }
     }
-
-    @PostMapping(value = "/update")
-    @GakSecured(roles = {Roles.PRESIDENT})
-    public void updateDiplomStatus(@RequestBody Long speakerId) {
-
-        if (speakerId > 0) {
-            speakerService.updateDiplomStatus(speakerId, Status.SPEAKING_TIME);
-
-        }
-    }
-
-
-
-
-
-
-
 
 }

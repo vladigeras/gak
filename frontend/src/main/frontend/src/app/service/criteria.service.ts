@@ -8,20 +8,20 @@ export class CriteriaService {
   }
 
   getDefaultCriteria() {
-    return this.http.get("/criteria/getDefault");
+    return this.http.get("/criteria/defaults");
   }
 
   getAllCriteriaByDiplomId(diplomId) {
-    return this.http.get("/criteria/ByDiplomId" + "?diplomId=" + diplomId);
+    return this.http.get("/criteria/diplom" + "?diplomId=" + diplomId);
   }
 
 
   saveResultMarkFromUserToSpeaker(rating, speakerId) {
     let data = {rating: rating, speakerId: speakerId};
-    return this.http.post("/criteria/saveResult", data);
+    return this.http.post("/criteria/result", data);
   }
 
   saveCriteriaWithData(criteriaDtoWithResult) {
-    return this.http.post("/criteria/save", criteriaDtoWithResult);
+    return this.http.post("/criteria/", criteriaDtoWithResult);
   }
 }

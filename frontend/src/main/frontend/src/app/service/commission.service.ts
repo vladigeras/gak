@@ -8,7 +8,7 @@ export class CommissionService {
   }
 
   getCommissionsByListId(listId) {
-    return this.http.get("/commissions/byListId" + "?listId=" + listId);
+    return this.http.get("/commissions/" + "?listId=" + listId);
   }
 
   transferPresidentRole(commissionDto) {

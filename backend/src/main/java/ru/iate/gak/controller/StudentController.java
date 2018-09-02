@@ -22,16 +22,16 @@ public class StudentController {
     @Autowired
     private StudentService studentService;
 
-    @GetMapping(value = "/ofGroup")
+    @GetMapping(value = "/groups")
     @GakSecured(roles = {Roles.ADMIN})
     public List<StudentDto> getStudentsOfGroup(@RequestParam(value = "group") String group) {
         if (StringUtil.isStringNullOrEmptyTrim(group)) throw new RuntimeException("Неверное значение для группы");
         return studentService.getStudentOfCurrentGroup(group).stream().map(StudentDto::new).collect(Collectors.toList());
     }
 
-    @PostMapping(value = "/save", consumes = "application/json")
+    @PostMapping(value = "/", consumes = "application/json")
     @GakSecured(roles = {Roles.ADMIN})
-    public Long saveStudent(@RequestBody @RequestPart StudentDto studentDto) {
+    public Long saveStudent(@RequestBody StudentDto studentDto) {
         if (StringUtil.isStringNullOrEmptyTrim(studentDto.firstname) || StringUtil.isStringNullOrEmptyTrim(studentDto.lastname)
                 || StringUtil.isStringNullOrEmptyTrim(studentDto.title) || StringUtil.isStringNullOrEmptyTrim(studentDto.executionPlace)) {
             throw new RuntimeException("Имя, фамилия, тема работы, место выполнения не могут быть пустыми");
@@ -90,9 +90,9 @@ public class StudentController {
         } else throw new RuntimeException("Некорректный id");
     }
 
-    @PostMapping(value = "/delete")
+    @DeleteMapping(value = "/{studentId}")
     @GakSecured(roles = {Roles.ADMIN})
-    public void deleteStudent(@RequestBody Long id) {
+    public void deleteStudent(@PathVariable(value = "studentId") Long id) {
         if (id > 0) {
             studentService.deleteStudent(id);
         } else throw new RuntimeException("Некорректный id");

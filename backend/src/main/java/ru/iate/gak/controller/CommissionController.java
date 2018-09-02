@@ -17,7 +17,7 @@ public class CommissionController {
     @Autowired
     private CommissionService commissionService;
 
-    @GetMapping(value = "/byListId")
+    @GetMapping(value = "/")
     @GakSecured(roles = {Roles.SECRETARY, Roles.PRESIDENT})
     public List<CommissionDto> getCommissionsByListId(@RequestParam(name = "listId") Integer listId) {
         if (listId == null) throw new RuntimeException("Укажите номер списка");

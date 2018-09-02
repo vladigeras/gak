@@ -8,11 +8,11 @@ export class QuestionService {
   }
 
   saveQuestions(speakerId, questions) {
-    return this.http.post("/questions/save" + "?speakerId=" + speakerId, questions);
+    return this.http.post("/questions/" + "?speakerId=" + speakerId, questions);
   }
 
   getQuestionsOfSpeaker(speakerId) {
-    return this.http.get("/questions/ofSpeaker" + "?speakerId=" + speakerId);
+    return this.http.get("/questions/speaker" + "?speakerId=" + speakerId);
   }
 }
 

@@ -17,7 +17,7 @@ public class QuestionController {
     @Autowired
     private QuestionService questionService;
 
-    @PostMapping(value = "/save", consumes = "application/json")
+    @PostMapping(value = "/", consumes = "application/json")
     @GakSecured(roles = {Roles.SECRETARY})
     public void saveQuestionsList(@RequestParam(name = "speakerId", required = true) Long id,
                                   @RequestBody List<QuestionDto> questions) {
@@ -25,7 +25,7 @@ public class QuestionController {
         questionService.saveQuestions(id, questions.stream().map(QuestionDto::toQuestion).collect(Collectors.toList()));
     }
 
-    @GetMapping(value = "/ofSpeaker")
+    @GetMapping(value = "/speaker")
     @GakSecured(roles = {Roles.SECRETARY})
     public List<QuestionDto> getQuestionsOfSpeaker(@RequestParam(name = "speakerId", required = true) Long id) {
         if (id <= 0) throw new RuntimeException("Неверное значение для спикера");

@@ -24,7 +24,7 @@ public class CriteriaController {
     @Autowired
     private GakSecurityContext securityContext;
 
-    @GetMapping(value = "/getDefault")
+    @GetMapping(value = "/defaults")
     @GakSecured(roles = {Roles.PRESIDENT, Roles.MEMBER})
     public List<GeneralCriteriaDto> getDefaultCriteriaList(@RequestParam(name = "listId", defaultValue = "1") String listId) {
         try {
@@ -34,9 +34,7 @@ public class CriteriaController {
         }
     }
 
-
-
-    @GetMapping(value = "/ByDiplomId")
+    @GetMapping(value = "/diplom")
     @GakSecured(roles = Roles.PRESIDENT)
     public List<CriteriaDto> getCriteriaByDiplomId(@RequestParam(name = "diplomId") Long diplomId) {
         if(diplomId == null) throw new RuntimeException("Укажите номер диплома");
@@ -44,13 +42,13 @@ public class CriteriaController {
     }
 
 
-    @PostMapping(value = "saveResult", consumes = "application/json")
+    @PostMapping(value = "/result", consumes = "application/json")
     @GakSecured(roles = {Roles.PRESIDENT})
     public void saveResultToSpeaker(@RequestBody RatingDto ratingDto) {
         this.criteriaService.saveResultToSpeaker(ratingDto.rating, ratingDto.speakerId);
     }
 
-    @PostMapping(value = "save", consumes = "application/json")
+    @PostMapping(value = "/", consumes = "application/json")
     @GakSecured(roles = {Roles.PRESIDENT, Roles.MEMBER})
     public void saveCriteriaListWithData(@RequestBody CriteriaDtoListWithResult criteriaDtoListWithResult) {
         this.criteriaService.saveCriteriaListWithData(securityContext.getCurrentPrincipal().getId(), criteriaDtoListWithResult);

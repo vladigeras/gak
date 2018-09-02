@@ -8,21 +8,15 @@ export class SpeakerService {
   }
 
   saveSpeakersList(speakersList) {
-    return this.http.post("/speakers/save", speakersList);
+    return this.http.post("/speakers/", speakersList);
   }
 
   getSpeakersListOfGroupOfDay(group, date) {
     if (date == null) {
-      return this.http.get("/speakers/ofGroupOfDay" + "?group=" + group);
+      return this.http.get("/speakers/" + "?group=" + group);
     } else {
-      return this.http.get("/speakers/ofGroupOfDay" + "?group=" + group + "&date=" + date);
+      return this.http.get("/speakers/" + "?group=" + group + "&date=" + date);
     }
-  }
-
-  updateDiplomStatus(speakerId){
-    // return this.http.post("/speakers/update" + "?speakerId=" + speakerId);
-    console.log(speakerId);
-    return this.http.post("/speakers/update", speakerId);
   }
 
   getProtocolsForTodaySpeakersOfGroup(group) {
@@ -30,12 +24,6 @@ export class SpeakerService {
     a.href = "/speakers/zippedProtocols" + "?group=" + group;
     a.click()
   }
-
-
-
-
-
-
 }
 
 

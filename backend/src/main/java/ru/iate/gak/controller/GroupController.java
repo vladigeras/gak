@@ -17,7 +17,7 @@ public class GroupController {
     @Autowired
     private GroupService groupService;
 
-    @GetMapping(value = "/get")
+    @GetMapping(value = "/")
     public List<GroupDto> getGroups() {
         return groupService.getGroups().stream().map(GroupDto::new).collect(Collectors.toList());
 

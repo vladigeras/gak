@@ -8,11 +8,11 @@ export class TimestampService {
   }
 
   saveTimestamp(speakerId, timestamps) {
-    return this.http.post("/timestamps/save" + "?speakerId=" + speakerId, timestamps);
+    return this.http.post("/timestamps/" + "?speakerId=" + speakerId, timestamps);
   }
 
   getTimestampOfSpeaker(speakerId) {
-    return this.http.get("/timestamps/ofSpeaker" + "?speakerId=" + speakerId);
+    return this.http.get("/timestamps/speaker" + "?speakerId=" + speakerId);
   }
 }
 
