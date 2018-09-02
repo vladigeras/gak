@@ -9,8 +9,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.iate.gak.TestsConfig;
-import ru.iate.gak.domain.Role;
-import ru.iate.gak.domain.User;
+import ru.iate.gak.dto.UserDto;
+import ru.iate.gak.model.Role;
+import ru.iate.gak.model.UserEntity;
 import ru.iate.gak.service.impl.UserServiceImpl;
 
 import java.util.HashSet;
@@ -49,10 +50,12 @@ public class UserServiceImplTests {
     public void whenGetUsers_thenReturnArrayOfUsers() {
         //given
         String login = "login";
-        this.userService.saveUser(new User(login));
+        UserDto userDto = new UserDto();
+        userDto.login = login;
+        this.userService.saveUser(userDto);
 
         //when
-        List<User> found = this.userService.getAllUsers();
+        List<UserEntity> found = this.userService.getAllUsers();
 
         //then
         assertEquals(found.size(), 1);
@@ -62,22 +65,25 @@ public class UserServiceImplTests {
     @Test
     public void whenGetUsersByRoles_thenReturnArrayOfUsersWhichContainsRole() {
         //given
-        User user1 = new User("user1");
-        user1.setRoles(new HashSet<>(Set.of(Role.PRESIDENT)));
+        UserDto user1 = new UserDto();
+        user1.login = "user1";
+        user1.roles = new HashSet<>(Set.of(Role.PRESIDENT));
 
-        User user2 = new User("user2");
-        user2.setRoles(new HashSet<>(Set.of(Role.PRESIDENT, Role.ADMIN)));
+        UserDto user2 = new UserDto();
+        user2.login = "user2";
+        user2.roles = new HashSet<>(Set.of(Role.PRESIDENT, Role.ADMIN));
 
         String userLogin = "user3";
-        User user3 = new User(userLogin);
-        user3.setRoles(new HashSet<>(Set.of(Role.PRESIDENT, Role.MENTOR)));
+        UserDto user3 = new UserDto();
+        user3.login = userLogin;
+        user3.roles = new HashSet<>(Set.of(Role.PRESIDENT, Role.MENTOR));
 
         this.userService.saveUser(user1);
         this.userService.saveUser(user2);
         this.userService.saveUser(user3);
 
         //when
-        List<User> found = this.userService.getAllUsersByRole(Role.MENTOR);
+        List<UserEntity> found = this.userService.getAllUsersByRole(Role.MENTOR);
 
         //then
         assertEquals(found.size(), 1);
@@ -87,7 +93,7 @@ public class UserServiceImplTests {
     @Test
     public void whenSaveUser_thenReturnPlusOneUsers() {
         //given
-        User user = new User();
+        UserDto user = new UserDto();
         int countBeforeSave = this.userService.getAllUsers().size();
 
         //when
@@ -102,15 +108,16 @@ public class UserServiceImplTests {
     public void whenUpdateUser_thenReturnChangedUser() {
         //given
         String login = "login";
-        User user = new User(login);
+        UserDto user = new UserDto();
+        user.login = login;
         this.userService.saveUser(user);
 
         //when
         String newFirstname = "newFirstname";
-        user.setFirstname(newFirstname);
+        user.firstname = newFirstname;
 
         this.userService.updateUser(user);
-        List<User> found = userService.getAllUsers();
+        List<UserEntity> found = userService.getAllUsers();
 
         //then
         assertEquals(found.size(), 1);

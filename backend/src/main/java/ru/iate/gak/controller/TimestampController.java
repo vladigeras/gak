@@ -22,7 +22,7 @@ public class TimestampController {
     public void saveTimestampList(@RequestParam(name = "speakerId", required = true) Long id,
                                   @RequestBody List<TimestampDto> timestamps) {
         if (id <= 0) throw new RuntimeException("Неверное значение для спикера");
-        timestampService.saveTimestamp(id, timestamps.stream().map(TimestampDto::toTimestamp).collect(Collectors.toList()));
+        timestampService.saveTimestamp(id, timestamps);
     }
 
 

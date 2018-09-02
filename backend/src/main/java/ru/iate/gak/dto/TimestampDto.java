@@ -1,10 +1,8 @@
 package ru.iate.gak.dto;
 
-import ru.iate.gak.domain.Status;
-import ru.iate.gak.domain.Timestamp;
+import ru.iate.gak.model.Status;
+import ru.iate.gak.model.TimestampEntity;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
 public class TimestampDto extends LongIdentifiableDto {
@@ -15,18 +13,10 @@ public class TimestampDto extends LongIdentifiableDto {
 
     public TimestampDto() {}
 
-    public TimestampDto(Timestamp timestamp) {
+    public TimestampDto(TimestampEntity timestamp) {
         super(timestamp.getId());
         this.status = timestamp.getStatus();
-        this.diplom = new DiplomDto(timestamp.getDiplom());
+        this.diplom = timestamp.getDiplom() == null ? null : new DiplomDto(timestamp.getDiplom());
         this.timestamp = timestamp.getTimestamp().toInstant(ZoneOffset.UTC).toEpochMilli();
-    }
-
-    public Timestamp toTimestamp() {
-        Timestamp timestamp = new Timestamp();
-        timestamp.setDiplom((this.diplom == null) ? null : this.diplom.toDiplom());
-        timestamp.setStatus((this.status == null)? null : this.status );
-        timestamp.setTimestamp((this.timestamp == null) ? null : LocalDateTime.ofInstant(Instant.ofEpochMilli(this.timestamp), ZoneOffset.UTC));
-        return timestamp;
     }
 }

@@ -7,7 +7,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.iate.gak.TestsConfig;
-import ru.iate.gak.domain.Group;
 import ru.iate.gak.model.GroupEntity;
 import ru.iate.gak.repository.GroupRepository;
 import ru.iate.gak.service.impl.GroupServiceImpl;
@@ -36,7 +35,7 @@ public class GroupServiceImplTests {
         groupRepository.save(new GroupEntity("ИС-Б14"));
 
         //when
-        List<Group> found = groupService.getGroups();
+        List<GroupEntity> found = groupService.getGroups();
 
         //then
         assertEquals(found.size(), 1);

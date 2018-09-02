@@ -1,4 +1,4 @@
-package ru.iate.gak.domain;
+package ru.iate.gak.model;
 
 public enum Gender {
     MALE, FEMALE

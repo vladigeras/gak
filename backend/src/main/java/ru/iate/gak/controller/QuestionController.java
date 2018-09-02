@@ -22,7 +22,7 @@ public class QuestionController {
     public void saveQuestionsList(@RequestParam(name = "speakerId", required = true) Long id,
                                   @RequestBody List<QuestionDto> questions) {
         if (id <= 0) throw new RuntimeException("Неверное значение для спикера");
-        questionService.saveQuestions(id, questions.stream().map(QuestionDto::toQuestion).collect(Collectors.toList()));
+        questionService.saveQuestions(id, questions);
     }
 
     @GetMapping(value = "/speaker")

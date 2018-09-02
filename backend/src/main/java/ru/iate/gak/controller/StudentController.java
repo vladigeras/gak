@@ -42,7 +42,7 @@ public class StudentController {
         if (studentDto.mentor == null || studentDto.reviewer == null || studentDto.mentor.id == null || studentDto.reviewer.id == null)
             throw new RuntimeException("Выберите руководителя и рецензента");
 
-        return studentService.saveStudent(studentDto.toStudent());
+        return studentService.saveStudent(studentDto);
     }
 
     @PostMapping(value = "/files", consumes = "multipart/form-data")

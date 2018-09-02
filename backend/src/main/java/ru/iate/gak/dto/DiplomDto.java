@@ -1,7 +1,7 @@
 package ru.iate.gak.dto;
 
-import ru.iate.gak.domain.Diplom;
-import ru.iate.gak.domain.Status;
+import ru.iate.gak.model.DiplomEntity;
+import ru.iate.gak.model.Status;
 
 public class DiplomDto extends LongIdentifiableDto {
 
@@ -17,7 +17,7 @@ public class DiplomDto extends LongIdentifiableDto {
 
     public DiplomDto() {}
 
-    public DiplomDto(Diplom diplom) {
+    public DiplomDto(DiplomEntity diplom) {
         super(diplom.getId());
         this.title = diplom.getTitle();
         this.student = (diplom.getStudent() == null) ? null : new StudentDto(diplom.getStudent());
@@ -28,20 +28,5 @@ public class DiplomDto extends LongIdentifiableDto {
         this.executionPlace = diplom.getExecutionPlace();
         this.report = diplom.getReport() == null ? null : "".getBytes();
         this.presentation = diplom.getPresentation() == null ? null : "".getBytes();
-    }
-
-    public Diplom toDiplom() {
-        Diplom diplom = new Diplom();
-        diplom.setId(this.id);
-        diplom.setTitle(this.title);
-        diplom.setStudent(this.student.toStudent());
-        diplom.setMentor(this.mentor.toUser());
-        diplom.setReviewer(this.reviewer.toUser());
-        diplom.setResultMark(this.resultMark);
-        diplom.setStatus(this.status);
-        diplom.setExecutionPlace(this.executionPlace);
-        diplom.setReport(this.report);
-        diplom.setPresentation(this.presentation);
-        return diplom;
     }
 }

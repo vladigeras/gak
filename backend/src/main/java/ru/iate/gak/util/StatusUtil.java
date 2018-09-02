@@ -1,6 +1,6 @@
 package ru.iate.gak.util;
 
-import ru.iate.gak.domain.Status;
+import ru.iate.gak.model.Status;
 
 public class StatusUtil {
     public static String getRussianStringFromStatusEnum(Status status) {

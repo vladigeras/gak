@@ -3,8 +3,8 @@ package ru.iate.gak.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ru.iate.gak.domain.Role;
-import ru.iate.gak.domain.User;
+import ru.iate.gak.dto.UserDto;
+import ru.iate.gak.model.Role;
 import ru.iate.gak.model.UserEntity;
 import ru.iate.gak.repository.UserRepository;
 import ru.iate.gak.service.UserService;
@@ -12,7 +12,6 @@ import ru.iate.gak.util.StringUtil;
 
 import javax.transaction.Transactional;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -25,49 +24,49 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public List<User> getAllUsers() {
-        return userRepository.findAll().stream().map(User::new).collect(Collectors.toList());
+    public List<UserEntity> getAllUsers() {
+        return userRepository.findAll();
     }
 
     @Override
     @Transactional
-    public List<User> getAllUsersByRole(Role role) {
+    public List<UserEntity> getAllUsersByRole(Role role) {
         Set<Role> roles = new HashSet<>();
         roles.add(role);
-        return userRepository.findAllByRoles(roles).stream().map(User::new).collect(Collectors.toList());
+        return userRepository.findAllByRoles(roles);
     }
 
     @Override
     @Transactional
-    public void saveUser(User user) {
-        if (userRepository.findByLogin(user.getLogin()) != null)
+    public void saveUser(UserDto user) {
+        if (userRepository.findByLogin(user.login) != null)
             throw new RuntimeException("Данный логин уже используется");
         UserEntity userEntity = new UserEntity();
-        userEntity.setId(user.getId());
-        userEntity.setLogin(user.getLogin());
-        userEntity.setPassword(passwordEncoder.encode(user.getPassword()));
-        userEntity.setFirstname(user.getFirstname());
-        userEntity.setGender(user.getGender());
-        userEntity.setMiddlename(user.getMiddlename());
-        userEntity.setLastname(user.getLastname());
-        userEntity.setRoles(user.getRoles());
+        userEntity.setId(user.id);
+        userEntity.setLogin(user.login);
+        userEntity.setPassword(passwordEncoder.encode(user.password));
+        userEntity.setFirstname(user.firstname);
+        userEntity.setGender(user.gender);
+        userEntity.setMiddlename(user.middlename);
+        userEntity.setLastname(user.lastname);
+        userEntity.setRoles(user.roles);
         userRepository.save(userEntity);
     }
 
     @Override
     @Transactional
-    public void updateUser(User user) {
-        UserEntity userEntity = userRepository.findByLogin(user.getLogin());
+    public void updateUser(UserDto user) {
+        UserEntity userEntity = userRepository.findByLogin(user.login);
         if (userEntity == null) throw new RuntimeException("Произошла ошибка");     //логин сменить нельзя
 
-        if (!StringUtil.isStringNullOrEmptyTrim(user.getPassword())) {
-            userEntity.setPassword(passwordEncoder.encode(user.getPassword()));
+        if (!StringUtil.isStringNullOrEmptyTrim(user.password)) {
+            userEntity.setPassword(passwordEncoder.encode(user.password));
         }
-        userEntity.setFirstname(user.getFirstname());
-        userEntity.setMiddlename(user.getMiddlename());
-        userEntity.setLastname(user.getLastname());
-        userEntity.setGender(user.getGender());
-        userEntity.setRoles(user.getRoles());
+        userEntity.setFirstname(user.firstname);
+        userEntity.setMiddlename(user.middlename);
+        userEntity.setLastname(user.lastname);
+        userEntity.setGender(user.gender);
+        userEntity.setRoles(user.roles);
         userRepository.save(userEntity);
     }
 

@@ -1,7 +1,7 @@
 package ru.iate.gak.service;
 
-import ru.iate.gak.domain.Diplom;
+import ru.iate.gak.model.DiplomEntity;
 
 public interface DiplomService {
-    Diplom getDiplomBySpeakerId(Long id);
+    DiplomEntity getDiplomBySpeakerId(Long id);
 }

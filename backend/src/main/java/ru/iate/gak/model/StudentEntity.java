@@ -1,7 +1,5 @@
 package ru.iate.gak.model;
 
-import ru.iate.gak.domain.Gender;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
 

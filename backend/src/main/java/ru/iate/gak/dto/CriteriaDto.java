@@ -1,6 +1,6 @@
 package ru.iate.gak.dto;
 
-import ru.iate.gak.domain.Criteria;
+import ru.iate.gak.model.CriteriaEntity;
 
 public class CriteriaDto extends LongIdentifiableDto {
 
@@ -12,23 +12,12 @@ public class CriteriaDto extends LongIdentifiableDto {
 
     public CriteriaDto() {}
 
-    public CriteriaDto(Criteria criteria) {
+    public CriteriaDto(CriteriaEntity criteria) {
         super(criteria.getId());
         this.diplom = new DiplomDto(criteria.getDiplom());
         this.commissionDto = new CommissionDto(criteria.getCommission());
         this.title = criteria.getTitle();
         this.rating = criteria.getRating();
         this.comment = criteria.getComment();
-    }
-
-    public Criteria toCriteria() {
-        Criteria criteria = new Criteria();
-        criteria.setId(this.id);
-        criteria.setDiplom((this.diplom == null) ? null : this.diplom.toDiplom());
-        criteria.setCommission((this.commissionDto == null) ? null : this.commissionDto.toCommission());
-        criteria.setTitle(this.title);
-        criteria.setRating(this.rating);
-        criteria.setComment(this.comment);
-        return criteria;
     }
 }

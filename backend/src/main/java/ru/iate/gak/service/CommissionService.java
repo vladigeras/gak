@@ -1,15 +1,18 @@
 package ru.iate.gak.service;
 
-import ru.iate.gak.domain.Commission;
+import ru.iate.gak.dto.CommissionDto;
+import ru.iate.gak.model.CommissionEntity;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 public interface CommissionService {
-    List<Commission> getCommissionsByListId(Integer listId);
-    void setPresidentRoleTemporally(Commission commission);
-    void doTaskForDeleteRoleWhenDateExpired(Commission commission, Date date);
+    List<CommissionEntity> getCommissionsByListId(Integer listId);
+
+    void setPresidentRoleTemporally(CommissionDto commission);
+
+    void doTaskForDeleteRoleWhenDateExpired(CommissionDto commission, Date date);
 
     default Date getRoleExpiredTime() {
         Calendar cal = Calendar.getInstance();

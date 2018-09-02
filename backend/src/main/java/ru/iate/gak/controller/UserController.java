@@ -2,8 +2,8 @@ package ru.iate.gak.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import ru.iate.gak.domain.Role;
 import ru.iate.gak.dto.UserDto;
+import ru.iate.gak.model.Role;
 import ru.iate.gak.security.GakSecured;
 import ru.iate.gak.security.Roles;
 import ru.iate.gak.service.UserService;
@@ -35,7 +35,7 @@ public class UserController {
         if (userDto.roles == null || userDto.roles.isEmpty()) {
             throw new RuntimeException("Пользователь должен иметь хотя бы одну роль");
         }
-        userService.saveUser(userDto.toUser());
+        userService.saveUser(userDto);
     }
 
     @PutMapping(value = "/", consumes = "application/json")
@@ -47,7 +47,7 @@ public class UserController {
         if (userDto.roles == null || userDto.roles.isEmpty()) {
             throw new RuntimeException("Пользователь должен иметь хотя бы одну роль");
         }
-        userService.updateUser(userDto.toUser());
+        userService.updateUser(userDto);
     }
 
     @GetMapping(value = "/roles/all")

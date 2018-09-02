@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit4.SpringRunner;
-import ru.iate.gak.domain.Role;
+import ru.iate.gak.model.Role;
 import ru.iate.gak.model.UserEntity;
 
 import java.util.List;

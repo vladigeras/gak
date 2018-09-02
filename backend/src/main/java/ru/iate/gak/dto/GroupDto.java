@@ -1,6 +1,6 @@
 package ru.iate.gak.dto;
 
-import ru.iate.gak.domain.Group;
+import ru.iate.gak.model.GroupEntity;
 
 public class GroupDto {
 
@@ -8,13 +8,7 @@ public class GroupDto {
 
     public GroupDto() {}
 
-    public GroupDto(Group group) {
+    public GroupDto(GroupEntity group) {
         this.title = group.getTitle();
-    }
-
-    public Group toGroup() {
-        Group group = new Group();
-        group.setTitle(this.title);
-        return group;
     }
 }

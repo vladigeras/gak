@@ -1,8 +1,8 @@
 package ru.iate.gak.dto;
 
-import ru.iate.gak.domain.Gender;
-import ru.iate.gak.domain.User;
-import ru.iate.gak.domain.Role;
+import ru.iate.gak.model.Gender;
+import ru.iate.gak.model.Role;
+import ru.iate.gak.model.UserEntity;
 
 import java.util.Set;
 
@@ -20,7 +20,7 @@ public class UserDto extends LongIdentifiableDto {
 
     }
 
-    public UserDto(User user) {
+    public UserDto(UserEntity user) {
         super(user.getId());
         this.login = user.getLogin();
         this.password = null;
@@ -29,18 +29,5 @@ public class UserDto extends LongIdentifiableDto {
         this.lastname = user.getLastname();
         this.gender = user.getGender();
         this.roles = user.getRoles();
-    }
-
-    public User toUser() {
-        User user = new User();
-        user.setId(this.id);
-        user.setLogin(this.login);
-        user.setPassword(this.password);
-        user.setFirstname(this.firstname);
-        user.setMiddlename(this.middlename);
-        user.setLastname(this.lastname);
-        user.setGender(this.gender);
-        user.setRoles(this.roles);
-        return user;
     }
 }

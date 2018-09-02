@@ -18,7 +18,6 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -35,7 +34,7 @@ public class SpeakerController {
     @PostMapping(value = "/", consumes = "application/json")
     @GakSecured(roles = {Roles.ADMIN})
     public void saveList(@RequestBody List<SpeakerDto> speakers) {
-        speakerService.fillList(speakers.stream().map(SpeakerDto::toSpeaker).collect(Collectors.toList()));
+        speakerService.fillList(speakers);
     }
 
     @GetMapping(value = "/")
@@ -44,7 +43,7 @@ public class SpeakerController {
         if (StringUtil.isStringNullOrEmptyTrim(group)) throw new RuntimeException("Неверное значение для группы");
         LocalDateTime localDateTime = (date == null) ? null : LocalDateTime.ofInstant(Instant.ofEpochMilli(date), ZoneOffset.UTC);
 
-        return speakerService.getSpeakerListOfCurrentGroupOfDay(group, localDateTime).stream().map(SpeakerDto::new).collect(Collectors.toList());
+        return speakerService.getSpeakerListOfCurrentGroupOfDay(group, localDateTime);
     }
 
     @GetMapping(value = "/zippedProtocols")

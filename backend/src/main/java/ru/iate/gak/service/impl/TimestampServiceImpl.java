@@ -3,7 +3,7 @@ package ru.iate.gak.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.iate.gak.domain.Timestamp;
+import ru.iate.gak.dto.TimestampDto;
 import ru.iate.gak.model.DiplomEntity;
 import ru.iate.gak.model.SpeakerEntity;
 import ru.iate.gak.model.TimestampEntity;
@@ -11,8 +11,10 @@ import ru.iate.gak.repository.SpeakerRepository;
 import ru.iate.gak.repository.TimestampRepository;
 import ru.iate.gak.service.TimestampService;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class TimestampServiceImpl implements TimestampService {
@@ -25,7 +27,7 @@ public class TimestampServiceImpl implements TimestampService {
 
     @Override
     @Transactional
-    public void saveTimestamp(Long speakerId, List<Timestamp> timestamps) {
+    public void saveTimestamp(Long speakerId, List<TimestampDto> timestamps) {
         SpeakerEntity speakerEntity = speakerRepository.findOne(speakerId);
         if (speakerEntity == null) throw new RuntimeException("Спикер с id = " + speakerId + " не найден");
 
@@ -37,8 +39,8 @@ public class TimestampServiceImpl implements TimestampService {
 
                 timestamps.forEach(timestamp -> {
                     TimestampEntity timestampEntity = new TimestampEntity();
-                    timestampEntity.setTimestamp(timestamp.getTimestamp());
-                    timestampEntity.setStatus(timestamp.getStatus());
+                    timestampEntity.setTimestamp((timestamp.timestamp == null) ? null : LocalDateTime.ofInstant(Instant.ofEpochMilli(timestamp.timestamp), ZoneOffset.UTC));
+                    timestampEntity.setStatus(timestamp.status);
                     timestampEntity.setDiplom(diplomEntity);
                     timestampRepository.save(timestampEntity);
                 });
@@ -50,7 +52,7 @@ public class TimestampServiceImpl implements TimestampService {
 
     @Override
     @Transactional
-    public List<Timestamp> getTimestampOfSpeaker(Long speakerId) {
+    public List<TimestampEntity> getTimestampOfSpeaker(Long speakerId) {
 
         SpeakerEntity speakerEntity = speakerRepository.findOne(speakerId);
         if (speakerEntity == null) throw new RuntimeException("Спикер с id = " + speakerId + " не найден");
@@ -58,7 +60,7 @@ public class TimestampServiceImpl implements TimestampService {
         if (speakerEntity.getStudent() != null) {
             if (speakerEntity.getStudent().getDiplom() != null) {
                 DiplomEntity diplomEntity = speakerEntity.getStudent().getDiplom();
-                return timestampRepository.getAllByDiplom(diplomEntity).stream().map(Timestamp::new).collect(Collectors.toList());
+                return timestampRepository.getAllByDiplom(diplomEntity);
             }
         }
         throw new RuntimeException("Произошла ошибка");

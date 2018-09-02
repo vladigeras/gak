@@ -1,11 +1,10 @@
 package ru.iate.gak.dto;
 
-import ru.iate.gak.domain.Gender;
-import ru.iate.gak.domain.Status;
-import ru.iate.gak.domain.Student;
+import ru.iate.gak.model.DiplomEntity;
+import ru.iate.gak.model.Gender;
+import ru.iate.gak.model.Status;
+import ru.iate.gak.model.StudentEntity;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
 public class StudentDto extends LongIdentifiableDto {
@@ -15,7 +14,7 @@ public class StudentDto extends LongIdentifiableDto {
     public Gender gender;
     public String title;
     public String executionPlace;
-    public Long deleteTime;
+    public Long deletedTime;
     public GroupDto group;
     public UserDto mentor;
     public UserDto reviewer;
@@ -26,40 +25,24 @@ public class StudentDto extends LongIdentifiableDto {
     public StudentDto() {
     }
 
-    public StudentDto(Student student) {
+    public StudentDto(StudentEntity student) {
         super(student.getId());
         this.firstname = student.getFirstname();
         this.middlename = student.getMiddlename();
         this.lastname = student.getLastname();
         this.gender = student.getGender();
-        this.title = student.getTitle();
-        this.executionPlace = student.getExecutionPlace();
-        this.deleteTime = (student.getDeleteTime() == null) ? null : student.getDeleteTime().toInstant(ZoneOffset.UTC).toEpochMilli();
+        this.deletedTime = (student.getDeletedTime() == null) ? null : student.getDeletedTime().toInstant(ZoneOffset.UTC).toEpochMilli();
         this.group = student.getGroup() == null ? null : new GroupDto(student.getGroup());
-        this.mentor = student.getMentor() == null ? null : new UserDto(student.getMentor());
-        this.reviewer = student.getReviewer() == null ? null : new UserDto(student.getReviewer());
-        this.report = student.getReport() == null ? null : "".getBytes();
-        this.presentation = student.getPresentation() == null ? null : "".getBytes();
-        this.status = student.getStatus();
 
-    }
-
-    public Student toStudent() {
-        Student student = new Student();
-        student.setId(this.id);
-        student.setFirstname(this.firstname);
-        student.setMiddlename(this.middlename);
-        student.setLastname(this.lastname);
-        student.setGender(this.gender);
-        student.setTitle(this.title);
-        student.setExecutionPlace(this.executionPlace);
-        student.setDeleteTime((this.deleteTime == null) ? null : LocalDateTime.ofInstant(Instant.ofEpochMilli(this.deleteTime), ZoneOffset.UTC));
-        student.setGroup((this.group == null) ? null : this.group.toGroup());
-        student.setMentor((this.mentor == null) ? null : this.mentor.toUser());
-        student.setReviewer((this.reviewer == null) ? null : this.reviewer.toUser());
-        student.setStatus(this.status);
-        student.setReport(this.report);
-        student.setPresentation(this.presentation);
-        return student;
+        DiplomEntity diplomEntity = student.getDiplom();
+        if (diplomEntity != null) {
+            this.title = diplomEntity.getTitle();
+            this.executionPlace = diplomEntity.getExecutionPlace();
+            this.mentor = diplomEntity.getMentor() == null ? null : new UserDto(diplomEntity.getMentor());
+            this.reviewer = diplomEntity.getReviewer() == null ? null : new UserDto(diplomEntity.getReviewer());
+            this.status = diplomEntity.getStatus();
+            this.report = diplomEntity.getReport() == null ? null : "".getBytes();
+            this.presentation = diplomEntity.getPresentation() == null ? null : "".getBytes();
+        }
     }
 }

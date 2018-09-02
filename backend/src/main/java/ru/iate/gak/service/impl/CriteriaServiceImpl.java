@@ -2,8 +2,6 @@ package ru.iate.gak.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.iate.gak.domain.Criteria;
-import ru.iate.gak.domain.GeneralCriteria;
 import ru.iate.gak.dto.CriteriaDto;
 import ru.iate.gak.dto.CriteriaDtoListWithResult;
 import ru.iate.gak.model.*;
@@ -13,7 +11,6 @@ import ru.iate.gak.util.StringUtil;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class CriteriaServiceImpl implements CriteriaService {
@@ -35,13 +32,13 @@ public class CriteriaServiceImpl implements CriteriaService {
 
     @Override
     @Transactional
-    public List<GeneralCriteria> getDefaultCriteria(Integer listId) {
-        return generalCriteriaRepository.getAllByListId(listId).stream().map(GeneralCriteria::new).collect(Collectors.toList());
+    public List<GeneralCriteriaEntity> getDefaultCriteria(Integer listId) {
+        return generalCriteriaRepository.getAllByListId(listId);
     }
 
     @Override
-    public List<Criteria> getCriteriaByDiplomId(Long diplomId){
-        return criteriaRepository.getCriteriaEntitiesByDiplomId(diplomId).stream().map(Criteria::new).collect(Collectors.toList());
+    public List<CriteriaEntity> getCriteriaByDiplomId(Long diplomId) {
+        return criteriaRepository.getCriteriaEntitiesByDiplomId(diplomId);
     }
 
 
@@ -71,7 +68,7 @@ public class CriteriaServiceImpl implements CriteriaService {
     @Transactional
     public void saveCriteriaListWithData(Long userId, CriteriaDtoListWithResult criteriaDtoListWithResult) {
         if (criteriaDtoListWithResult != null) {
-            List<Criteria> criteriaList = criteriaDtoListWithResult.criteriaDtoList.stream().map(CriteriaDto::toCriteria).collect(Collectors.toList());
+            List<CriteriaDto> criteriaList = criteriaDtoListWithResult.criteriaDtoList;
 
             if (criteriaDtoListWithResult.speakerId > 0 && userId > 0) {
                 UserEntity userEntity = userRepository.findOne(userId);
@@ -90,13 +87,13 @@ public class CriteriaServiceImpl implements CriteriaService {
                                 criteriaRepository.deleteByCommission(commissionEntity);
 
                                 criteriaList.forEach(c -> {
-                                    if (!StringUtil.isStringNullOrEmptyTrim(c.getTitle()) && c.getRating() != null) {
+                                    if (!StringUtil.isStringNullOrEmptyTrim(c.title) && c.rating != null) {
                                         CriteriaEntity criteriaEntity = new CriteriaEntity();
-                                        criteriaEntity.setComment(c.getComment());
+                                        criteriaEntity.setComment(c.comment);
                                         criteriaEntity.setCommission(commissionEntity);
                                         criteriaEntity.setDiplom(diplomEntity);
-                                        criteriaEntity.setRating(c.getRating());
-                                        criteriaEntity.setTitle(c.getTitle());
+                                        criteriaEntity.setRating(c.rating);
+                                        criteriaEntity.setTitle(c.title);
                                         criteriaRepository.save(criteriaEntity);
                                     }
                                 });

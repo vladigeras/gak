@@ -9,9 +9,9 @@ import org.springframework.scheduling.TaskScheduler;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.iate.gak.TestsConfig;
-import ru.iate.gak.domain.Commission;
-import ru.iate.gak.domain.Role;
+import ru.iate.gak.dto.CommissionDto;
 import ru.iate.gak.model.CommissionEntity;
+import ru.iate.gak.model.Role;
 import ru.iate.gak.model.UserEntity;
 import ru.iate.gak.repository.CommissionRepository;
 import ru.iate.gak.repository.UserRepository;
@@ -65,7 +65,7 @@ public class CommissionServiceImplTests {
         commissionRepository.save(commission2);
 
         //when
-        List<Commission> found = commissionService.getCommissionsByListId(listId);
+        List<CommissionEntity> found = commissionService.getCommissionsByListId(listId);
 
         //then
         assertEquals(found.size(), 1);
@@ -87,7 +87,7 @@ public class CommissionServiceImplTests {
         commissionRepository.save(commission);
 
         //when
-        commissionService.setPresidentRoleTemporally(new Commission(commission));
+        commissionService.setPresidentRoleTemporally(new CommissionDto(commission));
         CommissionEntity found = commissionRepository.getByUser(user);
 
         //then

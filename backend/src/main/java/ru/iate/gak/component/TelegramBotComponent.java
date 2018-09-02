@@ -10,9 +10,9 @@ import org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
-import ru.iate.gak.domain.Diplom;
-import ru.iate.gak.domain.Speaker;
-import ru.iate.gak.domain.Student;
+import ru.iate.gak.dto.SpeakerDto;
+import ru.iate.gak.dto.StudentDto;
+import ru.iate.gak.model.DiplomEntity;
 import ru.iate.gak.service.DiplomService;
 import ru.iate.gak.service.GroupService;
 import ru.iate.gak.service.SpeakerService;
@@ -63,12 +63,12 @@ public class TelegramBotComponent extends TelegramLongPollingBot {
 
             if (inputText.equals("/start")) {
                 List<InlineKeyboardButton> row = new ArrayList<>();
-                row.add(new InlineKeyboardButton().setText("speakers").setCallbackData("speakers"));
+                row.add(new InlineKeyboardButton().setText("Просмотр выступающих").setCallbackData("speakers"));
                 rows.add(row);
                 markupKeyboard.setKeyboard(rows);
                 response.setReplyMarkup(markupKeyboard);
-                response.setText("Select an action");
-            } else response.setText("Unknown command");
+                response.setText("Выберите действие");
+            } else response.setText("Неизвестная команда");
             try {
                 execute(response);
             } catch (TelegramApiException e) {
@@ -89,7 +89,7 @@ public class TelegramBotComponent extends TelegramLongPollingBot {
             switch (data) {
                 case "speakers":
                     List<InlineKeyboardButton> row = new ArrayList<>();
-                    row.add(new InlineKeyboardButton().setText("all").setCallbackData("all"));
+                    row.add(new InlineKeyboardButton().setText("Все").setCallbackData("all"));
 
                     groupService.getGroups().forEach(group -> {
                         row.add(new InlineKeyboardButton().setText(group.getTitle()).setCallbackData(group.getTitle()));
@@ -98,13 +98,13 @@ public class TelegramBotComponent extends TelegramLongPollingBot {
                     markupKeyboard.setKeyboard(rows);
 
                     response.setReplyMarkup(markupKeyboard);
-                    response.setText("Is speakers from ALL group or specific?");
+                    response.setText("Все выступающие или выбранной группы?");
                     break;
 
                 case "all":
                     //get all speakers of current day
                     StringBuilder finalResponseText = responseText;
-                    Map<String, List<Speaker>> allSpeakersListAllGroupsOfDay = speakerService.getAllSpeakersListAllGroupsOfDay(messageDateInUTC);
+                    Map<String, List<SpeakerDto>> allSpeakersListAllGroupsOfDay = speakerService.getAllSpeakersListAllGroupsOfDay(messageDateInUTC);
 
                     final boolean[] isOneSpeakerGroup = {false};
                     allSpeakersListAllGroupsOfDay.forEach((group, speakerList) -> {
@@ -115,16 +115,16 @@ public class TelegramBotComponent extends TelegramLongPollingBot {
                             finalResponseText.append("\n\n");
                         }
                     });
-                    if (!isOneSpeakerGroup[0]) finalResponseText.append("Today no speakers :(");
+                    if (!isOneSpeakerGroup[0]) finalResponseText.append("Сегодня никто не выступает :(");
                     response.setText(finalResponseText.toString());
                     break;
 
                 default:
                     //get speakers of current day of specific group
-                    List<Speaker> speakers = speakerService.getSpeakerListOfCurrentGroupOfDay(data, messageDateInUTC);
+                    List<SpeakerDto> speakers = speakerService.getSpeakerListOfCurrentGroupOfDay(data, messageDateInUTC);
                     if (!speakers.isEmpty()) {
                         responseText = getStringFromSpeakersList(speakers);
-                    } else responseText.append("Today no speakers :(");
+                    } else responseText.append("Сегодня никто не выступает :(");
                     response.setText(responseText.toString());
                     break;
             }
@@ -152,16 +152,16 @@ public class TelegramBotComponent extends TelegramLongPollingBot {
         return LocalDateTime.ofInstant(calendar.toInstant(), ZoneOffset.UTC);
     }
 
-    private StringBuilder getStringFromSpeakersList(List<Speaker> speakerList) {
+    private StringBuilder getStringFromSpeakersList(List<SpeakerDto> speakerList) {
         StringBuilder responseText = new StringBuilder();
         speakerList.forEach(speaker -> {
-            Student student = speaker.getStudent();
-            if (student != null) {
-                responseText.append((student.getMiddlename() != null)
-                        ? speaker.getOrderOfSpeaking() + ". " + student.getLastname() + " " + student.getFirstname() + " " + student.getMiddlename() + "\n"
-                        : speaker.getOrderOfSpeaking() + ". " + student.getLastname() + " " + student.getFirstname() + "\n");
+            StudentDto studentDto = speaker.student;
+            if (studentDto != null) {
+                responseText.append((studentDto.middlename != null)
+                        ? speaker.orderOfSpeaking + ". " + studentDto.lastname + " " + studentDto.firstname + " " + studentDto.middlename + "\n"
+                        : speaker.orderOfSpeaking + ". " + studentDto.lastname + " " + studentDto.firstname + "\n");
 
-                Diplom diplom = diplomService.getDiplomBySpeakerId(speaker.getId());
+                DiplomEntity diplom = diplomService.getDiplomBySpeakerId(speaker.id);
 
                 if (diplom != null) {
                     String status = StatusUtil.getRussianStringFromStatusEnum(diplom.getStatus());

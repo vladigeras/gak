@@ -1,6 +1,6 @@
 package ru.iate.gak.dto;
 
-import ru.iate.gak.domain.Commission;
+import ru.iate.gak.model.CommissionEntity;
 
 public class CommissionDto extends LongIdentifiableDto {
 
@@ -9,17 +9,9 @@ public class CommissionDto extends LongIdentifiableDto {
 
     public CommissionDto() {}
 
-    public CommissionDto(Commission commission) {
+    public CommissionDto(CommissionEntity commission) {
         super(commission.getId());
         this.listId = commission.getListId();
         this.user = new UserDto(commission.getUser());
-    }
-
-    public Commission toCommission() {
-        Commission commission = new Commission();
-        commission.setId(this.id);
-        commission.setListId(this.listId);
-        commission.setUser((this.user == null) ? null : this.user.toUser());
-        return commission;
     }
 }

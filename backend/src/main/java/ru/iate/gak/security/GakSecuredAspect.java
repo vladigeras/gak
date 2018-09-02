@@ -7,7 +7,7 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
-import ru.iate.gak.domain.Role;
+import ru.iate.gak.model.Role;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;

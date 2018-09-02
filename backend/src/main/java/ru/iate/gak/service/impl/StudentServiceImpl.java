@@ -3,8 +3,7 @@ package ru.iate.gak.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import ru.iate.gak.domain.Student;
-import ru.iate.gak.domain.User;
+import ru.iate.gak.dto.StudentDto;
 import ru.iate.gak.model.DiplomEntity;
 import ru.iate.gak.model.GroupEntity;
 import ru.iate.gak.model.StudentEntity;
@@ -19,7 +18,6 @@ import javax.transaction.Transactional;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -39,65 +37,52 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     @Transactional
-    public List<Student> getStudentOfCurrentGroup(String group) {
+    public List<StudentEntity> getStudentOfCurrentGroup(String group) {
         GroupEntity groupEntity = groupRepository.findOne(group);
         if (groupEntity == null) throw new RuntimeException("Группа с названием " + group + "  не найдена");
-
-        List<Student> result = new ArrayList<>();
-        studentRepository.getAllByGroupAndDeletedTimeIsNull(groupEntity).forEach(s -> {
-            Student student = new Student(s);
-            student.setTitle(s.getDiplom().getTitle());
-            student.setExecutionPlace(s.getDiplom().getExecutionPlace());
-            student.setMentor(new User(s.getDiplom().getMentor()));
-            student.setReviewer(new User(s.getDiplom().getReviewer()));
-            student.setReport(s.getDiplom().getReport() == null ? null : "".getBytes());
-            student.setPresentation(s.getDiplom().getPresentation() == null ? null : "".getBytes());
-            result.add(student);
-        });
-
-        return result;
+        return studentRepository.getAllByGroupAndDeletedTimeIsNull(groupEntity);
     }
 
     @Override
     @Transactional
-    public Long saveStudent(Student student) {
-        GroupEntity groupEntity = groupRepository.findOne(student.getGroup().getTitle());
+    public Long saveStudent(StudentDto student) {
+        GroupEntity groupEntity = groupRepository.findOne(student.group.title);
         if (groupEntity == null)
-            throw new RuntimeException("Группа с названием " + student.getGroup().getTitle() + "  не найдена");
+            throw new RuntimeException("Группа с названием " + student.group.title + "  не найдена");
 
-        UserEntity mentorEntity = userRepository.findOne(student.getMentor().getId());
+        UserEntity mentorEntity = userRepository.findOne(student.mentor.id);
         if (mentorEntity == null)
-            throw new RuntimeException("Руководитель с id " + student.getMentor().getId() + "  не найден");
+            throw new RuntimeException("Руководитель с id " + student.mentor.id + "  не найден");
 
-        UserEntity reviewerEntity = userRepository.findOne(student.getReviewer().getId());
+        UserEntity reviewerEntity = userRepository.findOne(student.reviewer.id);
         if (reviewerEntity == null)
-            throw new RuntimeException("Рецензент с id " + student.getReviewer().getId() + "  не найден");
+            throw new RuntimeException("Рецензент с id " + student.reviewer.id + "  не найден");
 
         StudentEntity studentEntity = null;
         DiplomEntity diplomEntity = null;
-        if (student.getId() != null) {
-            studentEntity = studentRepository.findOne(student.getId());
+        if (student.id != null) {
+            studentEntity = studentRepository.findOne(student.id);
             if (studentEntity != null && studentEntity.getDiplom() != null) {
                 diplomEntity = studentEntity.getDiplom();
-            } else throw new RuntimeException("Студент с id " + student.getId() + " не найден");
+            } else throw new RuntimeException("Студент с id " + student.id + " не найден");
         } else {
             studentEntity = new StudentEntity();
             diplomEntity = new DiplomEntity();
         }
 
-        studentEntity.setFirstname(student.getFirstname());
-        studentEntity.setLastname(student.getLastname());
-        studentEntity.setMiddlename(student.getMiddlename());
-        studentEntity.setGender(student.getGender());
+        studentEntity.setFirstname(student.firstname);
+        studentEntity.setLastname(student.lastname);
+        studentEntity.setMiddlename(student.middlename);
+        studentEntity.setGender(student.gender);
         studentEntity.setGroup(groupEntity);
         studentRepository.save(studentEntity);
 
-        diplomEntity.setTitle(student.getTitle());
-        diplomEntity.setExecutionPlace(student.getExecutionPlace());
+        diplomEntity.setTitle(student.title);
+        diplomEntity.setExecutionPlace(student.executionPlace);
         diplomEntity.setMentor(mentorEntity);
         diplomEntity.setReviewer(reviewerEntity);
-        diplomEntity.setReport(student.getReport());
-        diplomEntity.setPresentation(student.getPresentation());
+        diplomEntity.setReport(student.report);
+        diplomEntity.setPresentation(student.presentation);
         diplomEntity.setStudent(studentEntity);
         diplomRepository.save(diplomEntity);
 

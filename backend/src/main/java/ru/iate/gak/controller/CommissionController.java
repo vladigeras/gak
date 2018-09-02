@@ -28,8 +28,8 @@ public class CommissionController {
     @GakSecured(roles = {Roles.SECRETARY, Roles.PRESIDENT})
     public void transferPresidentRole(@RequestBody CommissionDto commissionDto) {
         if (commissionDto.id == null) throw new RuntimeException("Не выбран член комиссии");
-        commissionService.setPresidentRoleTemporally(commissionDto.toCommission());
-        commissionService.doTaskForDeleteRoleWhenDateExpired(commissionDto.toCommission(), commissionService.getRoleExpiredTime());
+        commissionService.setPresidentRoleTemporally(commissionDto);
+        commissionService.doTaskForDeleteRoleWhenDateExpired(commissionDto, commissionService.getRoleExpiredTime());
     }
 
 }

@@ -3,7 +3,7 @@ package ru.iate.gak.security;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import ru.iate.gak.domain.Role;
+import ru.iate.gak.model.Role;
 import ru.iate.gak.model.UserEntity;
 
 import java.util.Collection;

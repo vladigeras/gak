@@ -1,6 +1,6 @@
 package ru.iate.gak.dto;
 
-import ru.iate.gak.domain.GeneralCriteria;
+import ru.iate.gak.model.GeneralCriteriaEntity;
 
 public class GeneralCriteriaDto extends LongIdentifiableDto {
 
@@ -9,17 +9,9 @@ public class GeneralCriteriaDto extends LongIdentifiableDto {
 
     public GeneralCriteriaDto() {}
 
-    public GeneralCriteriaDto(GeneralCriteria generalCriteria) {
+    public GeneralCriteriaDto(GeneralCriteriaEntity generalCriteria) {
         super(generalCriteria.getId());
         this.listId = generalCriteria.getListId();
         this.title = generalCriteria.getTitle();
-    }
-
-    public GeneralCriteria toGeneralCriteria() {
-        GeneralCriteria generalCriteria = new GeneralCriteria();
-        generalCriteria.setId(this.id);
-        generalCriteria.setListId(this.listId);
-        generalCriteria.setTitle(this.title);
-        return generalCriteria;
     }
 }

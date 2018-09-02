@@ -1,7 +1,5 @@
 package ru.iate.gak.model;
 
-import ru.iate.gak.domain.Status;
-
 import javax.persistence.*;
 import java.util.Set;
 

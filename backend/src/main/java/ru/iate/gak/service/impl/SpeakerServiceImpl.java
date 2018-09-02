@@ -3,10 +3,7 @@ package ru.iate.gak.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import padeg.lib.Padeg;
-import ru.iate.gak.domain.Gender;
-import ru.iate.gak.domain.Role;
-import ru.iate.gak.domain.Speaker;
-import ru.iate.gak.domain.Status;
+import ru.iate.gak.dto.SpeakerDto;
 import ru.iate.gak.model.*;
 import ru.iate.gak.repository.*;
 import ru.iate.gak.service.SpeakerService;
@@ -14,6 +11,7 @@ import ru.iate.gak.service.TexService;
 
 import javax.transaction.Transactional;
 import java.io.File;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
@@ -49,22 +47,22 @@ public class SpeakerServiceImpl implements SpeakerService {
      */
     @Override
     @Transactional
-    public void fillList(List<Speaker> speakers) {
+    public void fillList(List<SpeakerDto> speakers) {
         List<SpeakerEntity> result = new ArrayList<>();
         speakers.forEach(s -> {
-            if (s.getStudent() != null && s.getStudent().getId() != null) {
-                StudentEntity studentEntity = studentRepository.findOne(s.getStudent().getId());
+            if (s.student != null && s.student.id != null) {
+                StudentEntity studentEntity = studentRepository.findOne(s.student.id);
                 if (studentEntity == null)
-                    throw new RuntimeException("Студент с id = " + s.getStudent().getId() + " не найден");
+                    throw new RuntimeException("Студент с id = " + s.student.id + " не найден");
 
                 speakerRepository.deleteByStudent(studentEntity);
 
-                if (s.getDate() != null) {
+                if (s.date != null) {
                     SpeakerEntity speakerEntity = new SpeakerEntity();
-                    speakerEntity.setListId(s.getListId());
-                    speakerEntity.setDate(s.getDate());
+                    speakerEntity.setListId(s.listId);
+                    speakerEntity.setDate((s.date == null) ? null : LocalDateTime.ofInstant(Instant.ofEpochMilli(s.date), ZoneOffset.UTC));
                     speakerEntity.setStudent(studentEntity);
-                    speakerEntity.setOrderOfSpeaking(s.getOrderOfSpeaking());
+                    speakerEntity.setOrderOfSpeaking(s.orderOfSpeaking);
                     result.add(speakerEntity);
                 }
             } else throw new RuntimeException("Нет id у студента");
@@ -74,23 +72,23 @@ public class SpeakerServiceImpl implements SpeakerService {
 
     @Override
     @Transactional
-    public List<Speaker> getSpeakerListOfCurrentGroupOfDay(String group, LocalDateTime date) {
+    public List<SpeakerDto> getSpeakerListOfCurrentGroupOfDay(String group, LocalDateTime date) {
         GroupEntity groupEntity = groupRepository.findOne(group);
         if (groupEntity == null) throw new RuntimeException("Группа с названием " + group + "  не найдена");
 
         if (date == null) {
-            return speakerRepository.getSpeakersListOfCurrentGroup(groupEntity).stream().map(Speaker::new).collect(Collectors.toList());
+            return speakerRepository.getSpeakersListOfCurrentGroup(groupEntity).stream().map(SpeakerDto::new).collect(Collectors.toList());
         } else {
-            return speakerRepository.getSpeakersListOfCurrentGroupOfDay(groupEntity, date).stream().map(Speaker::new).collect(Collectors.toList());
+            return speakerRepository.getSpeakersListOfCurrentGroupOfDay(groupEntity, date).stream().map(SpeakerDto::new).collect(Collectors.toList());
         }
     }
 
     @Override
     @Transactional
-    public Map<String, List<Speaker>> getAllSpeakersListAllGroupsOfDay(LocalDateTime date) {
-        Map<String, List<Speaker>> result = new HashMap<>();
+    public Map<String, List<SpeakerDto>> getAllSpeakersListAllGroupsOfDay(LocalDateTime date) {
+        Map<String, List<SpeakerDto>> result = new HashMap<>();
         groupRepository.getAllOrderByTitleAsc().forEach(groupEntity -> {   //get all groups and get speakers of these groups
-            result.put(groupEntity.getTitle(), speakerRepository.getSpeakersListOfCurrentGroupOfDay(groupEntity, date).stream().map(Speaker::new).collect(Collectors.toList()));
+            result.put(groupEntity.getTitle(), speakerRepository.getSpeakersListOfCurrentGroupOfDay(groupEntity, date).stream().map(SpeakerDto::new).collect(Collectors.toList()));
         });
         return result;
     }
@@ -104,7 +102,7 @@ public class SpeakerServiceImpl implements SpeakerService {
         List<File> result = new ArrayList<>();
 
         LocalDateTime currentDayInUTC = LocalDateTime.now(ZoneOffset.UTC);  // this is a next day, because we need to get
-                                                                            // objects of time included today, e.g. [-1day; now]
+        // objects of time included today, e.g. [-1day; now]
 
         List<SpeakerEntity> speakers = speakerRepository.getSpeakersListOfCurrentGroupBetweenDate(groupEntity, currentDayInUTC.minusDays(1), currentDayInUTC);
         speakers.forEach(s -> {
@@ -247,8 +245,7 @@ public class SpeakerServiceImpl implements SpeakerService {
             if (speakingTimeStart[0] != null && speakingTimeEnd[0] != null) {
                 Long speakingTime = speakingTimeStart[0].until(speakingTimeEnd[0], ChronoUnit.MINUTES);
                 params.put("@time", speakingTime.toString());
-            }
-            else params.put("@time", null);
+            } else params.put("@time", null);
 
             Integer resultMark = diplom.getResultMark();    //main result of diplom
             if (resultMark != null) {
@@ -276,7 +273,7 @@ public class SpeakerServiceImpl implements SpeakerService {
 
     @Override
     @Transactional
-    public Speaker updateDiplomStatus(Long speakerId, Status status) {
+    public SpeakerEntity updateDiplomStatus(Long speakerId, Status status) {
         if (speakerId > 0) {
             SpeakerEntity speakerEntity = speakerRepository.getOne(speakerId);
             if (speakerEntity != null) {
@@ -285,12 +282,11 @@ public class SpeakerServiceImpl implements SpeakerService {
                         speakerEntity.getStudent().getDiplom().setStatus(status);
                         speakerRepository.save(speakerEntity);
 
-                        return new Speaker(speakerEntity);
+                        return speakerEntity;
                     } else throw new RuntimeException("Произошла ошибка");
                 } else throw new RuntimeException("Произошла ошибка");
             } else throw new RuntimeException("Произошла ошибка");
         } else throw new RuntimeException("Произошла ошибка");
     }
-
 
 }

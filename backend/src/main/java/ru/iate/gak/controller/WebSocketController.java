@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
-import ru.iate.gak.domain.Status;
 import ru.iate.gak.dto.SpeakerDto;
+import ru.iate.gak.model.Status;
 import ru.iate.gak.service.SpeakerService;
 
 @Controller

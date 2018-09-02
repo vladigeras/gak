@@ -2,7 +2,6 @@ package ru.iate.gak.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.iate.gak.domain.Diplom;
 import ru.iate.gak.model.DiplomEntity;
 import ru.iate.gak.model.SpeakerEntity;
 import ru.iate.gak.repository.DiplomRepository;
@@ -22,7 +21,7 @@ public class DiplomServiceImpl implements DiplomService{
 
     @Override
     @Transactional
-    public Diplom getDiplomBySpeakerId(Long id) {
+    public DiplomEntity getDiplomBySpeakerId(Long id) {
         SpeakerEntity speakerEntity = speakerRepository.getOne(id);
         if (speakerEntity == null) throw new RuntimeException("Произошла ошибка");
 
@@ -30,7 +29,7 @@ public class DiplomServiceImpl implements DiplomService{
             DiplomEntity diplomEntity = diplomRepository.getByStudent(speakerEntity.getStudent());
             if (diplomEntity == null) throw new RuntimeException("Диплом не найден");
 
-            return new Diplom(diplomEntity);
+            return diplomEntity;
         } else throw new RuntimeException("Произошла ошибка");
     }
 }
