@@ -1,5 +1,7 @@
 package ru.iate.gak.security;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,6 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 @RestController
 @RequestMapping(value = "/auth")
 public class SecurityController {
+
+    private static final Logger logger = LoggerFactory.getLogger(SecurityController.class);
 
     @Autowired
     private SecurityService securityService;
@@ -31,6 +35,7 @@ public class SecurityController {
         Authentication auth = securityService.auth(loginDto.login, loginDto.password);
 
         if (auth == null || !auth.isAuthenticated()) {
+            logger.error("Пользователь " + loginDto.login + " неверно ввел пароль");
             throw new RuntimeException("Неверный логин или пароль");
         }
 
@@ -46,6 +51,9 @@ public class SecurityController {
         //fill result
         AuthTokenDto authTokenDto = new AuthTokenDto();
         authTokenDto.token = authToken;
+
+        logger.info("Был выполнен вход в систему пользователем " + loginDto.login);
+
         return authTokenDto;
     }
 
@@ -55,5 +63,7 @@ public class SecurityController {
         cookie.setMaxAge(0);
         cookie.setPath("/");
         response.addCookie(cookie);
+
+        logger.info("Пользователь вышел из системы");
     }
 }

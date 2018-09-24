@@ -1,16 +1,21 @@
 package ru.iate.gak.service.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ru.iate.gak.service.TexService;
 import ru.iate.gak.util.TranslitUtil;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.Random;
 
 @Service
 public class TexProtocolService implements TexService {
+
+    private static final Logger logger = LoggerFactory.getLogger(TexProtocolService.class);
 
     @Value("${template.files.directory}")
     String templateFilesDirectory;
@@ -29,6 +34,7 @@ public class TexProtocolService implements TexService {
         File file = null;
         try {
             file = generateReport(fillDataToReport(params));
+            logger.info("Сгенерирован протокол " + file.getName());
         } catch (InterruptedException | IOException e) {
             e.printStackTrace();
         }
@@ -53,9 +59,9 @@ public class TexProtocolService implements TexService {
         try {
             //get string from template, replace data and save in new file
             BufferedReader template = new BufferedReader(new InputStreamReader(new
-                    FileInputStream(workingDirectory.getAbsolutePath() + File.separator + this.templateFile), "utf-8"));
+                    FileInputStream(workingDirectory.getAbsolutePath() + File.separator + this.templateFile), StandardCharsets.UTF_8));
             BufferedWriter result = new BufferedWriter(new OutputStreamWriter(new
-                    FileOutputStream(tempDirectory.getAbsolutePath() + File.separator + fileName + ".tex"), "utf-8"));
+                    FileOutputStream(tempDirectory.getAbsolutePath() + File.separator + fileName + ".tex"), StandardCharsets.UTF_8));
 
             String line;
             while ((line = template.readLine()) != null) {

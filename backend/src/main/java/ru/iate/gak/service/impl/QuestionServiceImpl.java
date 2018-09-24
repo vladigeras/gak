@@ -1,5 +1,7 @@
 package ru.iate.gak.service.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +17,8 @@ import java.util.List;
 
 @Service
 public class QuestionServiceImpl implements QuestionService {
+
+    private static final Logger logger = LoggerFactory.getLogger(QuestionServiceImpl.class);
 
     @Autowired
     private SpeakerRepository speakerRepository;
@@ -41,6 +45,7 @@ public class QuestionServiceImpl implements QuestionService {
                     questionRepository.save(questionEntity);
                 });
 
+                logger.info("К диплому " + diplomEntity.getId() + " сохранены вопросы");
             }
         } else throw new RuntimeException("Произошла ошибка");
     }

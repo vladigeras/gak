@@ -14,22 +14,21 @@ import java.util.stream.Collectors;
 @RequestMapping(value = "/timestamps")
 public class TimestampController {
 
-    @Autowired
-    private TimestampService timestampService;
+	@Autowired
+	private TimestampService timestampService;
 
-    @PostMapping(value = "/", consumes = "application/json")
-    @GakSecured(roles = {Roles.PRESIDENT})
-    public void saveTimestampList(@RequestParam(name = "speakerId", required = true) Long id,
-                                  @RequestBody List<TimestampDto> timestamps) {
-        if (id <= 0) throw new RuntimeException("Неверное значение для спикера");
-        timestampService.saveTimestamp(id, timestamps);
-    }
+	@PostMapping(value = "/", consumes = "application/json")
+	@GakSecured(roles = {Roles.PRESIDENT})
+	public void saveTimestampList(@RequestParam(name = "speakerId", required = true) Long id,
+								  @RequestBody List<TimestampDto> timestamps) {
+		if (id <= 0) throw new RuntimeException("Неверное значение для спикера");
+		timestampService.saveTimestamp(id, timestamps);
+	}
 
-
-    @GetMapping(value = "/speaker")
-    @GakSecured(roles = {Roles.PRESIDENT})
-    public List<TimestampDto> getTimestampOfSpeaker(@RequestParam(name = "speakerId", required = true) Long id) {
-        if (id <= 0) throw new RuntimeException("Неверное значение для спикера");
-        return timestampService.getTimestampOfSpeaker(id).stream().map(TimestampDto::new).collect(Collectors.toList());
-    }
+	@GetMapping(value = "/speaker")
+	@GakSecured(roles = {Roles.PRESIDENT})
+	public List<TimestampDto> getTimestampOfSpeaker(@RequestParam(name = "speakerId", required = true) Long id) {
+		if (id <= 0) throw new RuntimeException("Неверное значение для спикера");
+		return timestampService.getTimestampOfSpeaker(id).stream().map(TimestampDto::new).collect(Collectors.toList());
+	}
 }

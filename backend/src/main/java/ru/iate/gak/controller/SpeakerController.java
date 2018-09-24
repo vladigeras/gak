@@ -1,5 +1,7 @@
 package ru.iate.gak.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +26,8 @@ import java.util.zip.ZipOutputStream;
 @RestController
 @RequestMapping(value = "/speakers")
 public class SpeakerController {
+
+	private static final Logger logger = LoggerFactory.getLogger(SpeakerController.class);
 
     @Autowired
     private SpeakerService speakerService;
@@ -62,26 +66,27 @@ public class SpeakerController {
             ZipOutputStream zos = new ZipOutputStream(new BufferedOutputStream(out));
 
             for (File file : files) {
-                if (file != null) {
-                    zos.putNextEntry(new ZipEntry(file.getName()));
 
-                    FileInputStream fis = null;
-                    try {
-                        fis = new FileInputStream(file);
-                    } catch (FileNotFoundException ex) {
-                        continue;
-                    }
+				logger.info("Для составления архива с протоколами используется следующий протокол: " + file.getName());
 
-                    BufferedInputStream fif = new BufferedInputStream(fis);
+				zos.putNextEntry(new ZipEntry(file.getName()));
 
-                    int data = 0;
-                    while ((data = fif.read()) != -1) {
-                        zos.write(data);
-                    }
-                    fif.close();
+				FileInputStream fis = null;
+				try {
+					fis = new FileInputStream(file);
+				} catch (FileNotFoundException ex) {
+					continue;
+				}
 
-                    zos.closeEntry();
-                }
+				BufferedInputStream fif = new BufferedInputStream(fis);
+
+				int data = 0;
+				while ((data = fif.read()) != -1) {
+					zos.write(data);
+				}
+				fif.close();
+
+				zos.closeEntry();
             }
 
             zos.close();

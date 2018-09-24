@@ -1,5 +1,7 @@
 package ru.iate.gak.service.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,8 @@ import java.util.List;
 
 @Service
 public class CommissionServiceImpl implements CommissionService {
+
+    private static final Logger logger = LoggerFactory.getLogger(CommissionServiceImpl.class);
 
     @Autowired
     private PlatformTransactionManager transactionManager;
@@ -45,6 +49,8 @@ public class CommissionServiceImpl implements CommissionService {
         commissionEntity.getUser().getRoles().add(Role.PRESIDENT);
 
         commissionRepository.save(commissionEntity);
+
+        logger.info("Члену комиссии " + commissionEntity.getUser().getLogin() + " временно передали роль ПРЕДСЕДАТЕЛЯ");
     }
 
     @Override
@@ -60,6 +66,8 @@ public class CommissionServiceImpl implements CommissionService {
                     if (commissionEntity.getUser() == null) throw new RuntimeException("Произошла ошибка");
                     commissionEntity.getUser().getRoles().remove(Role.PRESIDENT);
                     commissionRepository.save(commissionEntity);
+
+                    logger.info("У члена комиссии " + commissionEntity.getUser().getLogin() + " забрали временную роль ПРЕДСЕДАТЕЛЯ");
                 }
             });
         }, date);

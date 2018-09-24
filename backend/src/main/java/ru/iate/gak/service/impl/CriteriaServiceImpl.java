@@ -1,5 +1,7 @@
 package ru.iate.gak.service.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.iate.gak.dto.CriteriaDto;
@@ -14,6 +16,8 @@ import java.util.List;
 
 @Service
 public class CriteriaServiceImpl implements CriteriaService {
+
+    private static final Logger logger = LoggerFactory.getLogger(CriteriaServiceImpl.class);
 
     @Autowired
     private GeneralCriteriaRepository generalCriteriaRepository;
@@ -41,8 +45,6 @@ public class CriteriaServiceImpl implements CriteriaService {
         return criteriaRepository.getCriteriaEntitiesByDiplomId(diplomId);
     }
 
-
-
     @Override
     @Transactional
     public void saveResultToSpeaker(Integer rating, Long speakerId) {
@@ -53,6 +55,8 @@ public class CriteriaServiceImpl implements CriteriaService {
                 if (speaker.getStudent().getDiplom() != null) {
                     speaker.getStudent().getDiplom().setResultMark(rating);
                     speakerRepository.save(speaker);
+
+                    logger.info("Диплому " + speaker.getStudent().getDiplom().getId() + " выставлена оценка " + rating);
                 }
             }
         }
@@ -97,6 +101,10 @@ public class CriteriaServiceImpl implements CriteriaService {
                                         criteriaRepository.save(criteriaEntity);
                                     }
                                 });
+
+                                logger.info("Член комиссии " + commissionEntity.getUser().getLogin() + " сохранил оценки по критериям " +
+                                        "для диплома " + diplomEntity.getId());
+
                             } else throw new RuntimeException("Пользователь не найден в списке коммисии");
                         }
                     }
