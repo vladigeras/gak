@@ -246,7 +246,7 @@ public class SpeakerServiceImpl implements SpeakerService {
 
 			timestamps.forEach(t -> {
 				if (t.getStatus().equals(Status.SPEAKING_TIME)) speakingTimeStart[0] = t.getTimestamp();
-				if (t.getStatus().equals(Status.SPEAKING_TIME_END)) speakingTimeEnd[0] = t.getTimestamp();
+				if (t.getStatus().equals(Status.REWIEW_TIME)) speakingTimeEnd[0] = t.getTimestamp();
 			});
 
 			if (speakingTimeStart[0] != null && speakingTimeEnd[0] != null) {

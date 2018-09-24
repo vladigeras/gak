@@ -23,7 +23,7 @@ public class StudentEntity extends LongIdentifiableEntity {
     @Column(name = "deleted_time")
     private LocalDateTime deletedTime;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "group_title")
     private GroupEntity group;
 
