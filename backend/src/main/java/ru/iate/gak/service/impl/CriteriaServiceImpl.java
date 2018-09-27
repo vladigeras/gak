@@ -75,8 +75,8 @@ public class CriteriaServiceImpl implements CriteriaService {
             List<CriteriaDto> criteriaList = criteriaDtoListWithResult.criteriaDtoList;
 
             if (criteriaDtoListWithResult.speakerId > 0 && userId > 0) {
-                UserEntity userEntity = userRepository.findOne(userId);
-                if (userEntity == null) throw new RuntimeException("Произошла ошибка");
+				UserEntity userEntity = userRepository.findById(userId)
+						.orElseThrow(() -> new RuntimeException("Пользователь с  id = " + userId + " не найден"));
 
                 SpeakerEntity speakerEntity = speakerRepository.getOne(criteriaDtoListWithResult.speakerId);
                 if (speakerEntity != null) {

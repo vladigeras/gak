@@ -55,9 +55,8 @@ public class SpeakerServiceImpl implements SpeakerService {
 		List<SpeakerEntity> result = new ArrayList<>();
 		speakers.forEach(s -> {
 			if (s.student != null && s.student.id != null) {
-				StudentEntity studentEntity = studentRepository.findOne(s.student.id);
-				if (studentEntity == null)
-					throw new RuntimeException("Студент с id = " + s.student.id + " не найден");
+				StudentEntity studentEntity = studentRepository.findById(s.student.id)
+						.orElseThrow(() -> new RuntimeException("Студент с id = " + s.student.id + " не найден"));
 
 				speakerRepository.deleteByStudent(studentEntity);
 
@@ -71,14 +70,14 @@ public class SpeakerServiceImpl implements SpeakerService {
 				}
 			} else throw new RuntimeException("Нет id у студента");
 		});
-		speakerRepository.save(result);
+		speakerRepository.saveAll(result);
 	}
 
 	@Override
 	@Transactional
 	public List<SpeakerDto> getSpeakerListOfCurrentGroupOfDay(String group, LocalDateTime date) {
-		GroupEntity groupEntity = groupRepository.findOne(group);
-		if (groupEntity == null) throw new RuntimeException("Группа с названием " + group + "  не найдена");
+		GroupEntity groupEntity = groupRepository.findById(group)
+				.orElseThrow(() -> new RuntimeException("Группа с названием " + group + "  не найдена"));
 
 		if (date == null) {
 			return speakerRepository.getSpeakersListOfCurrentGroup(groupEntity).stream().map(SpeakerDto::new).collect(Collectors.toList());
@@ -100,8 +99,8 @@ public class SpeakerServiceImpl implements SpeakerService {
 	@Override
 	@Transactional
 	public List<File> getSpeakerProtocolsForTodaySpeakersOfGroup(String group) {
-		GroupEntity groupEntity = groupRepository.findOne(group);
-		if (groupEntity == null) throw new RuntimeException("Группа с названием " + group + "  не найдена");
+		GroupEntity groupEntity = groupRepository.findById(group)
+				.orElseThrow(() -> new RuntimeException("Группа с названием " + group + "  не найдена"));
 
 		List<File> result = new ArrayList<>();
 

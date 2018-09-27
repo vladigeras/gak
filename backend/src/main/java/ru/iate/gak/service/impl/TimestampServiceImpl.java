@@ -19,50 +19,47 @@ import java.util.List;
 @Service
 public class TimestampServiceImpl implements TimestampService {
 
-    @Autowired
-    private SpeakerRepository speakerRepository;
+	@Autowired
+	private SpeakerRepository speakerRepository;
 
-    @Autowired
-    private TimestampRepository timestampRepository;
+	@Autowired
+	private TimestampRepository timestampRepository;
 
-    @Override
-    @Transactional
-    public void saveTimestamp(Long speakerId, List<TimestampDto> timestamps) {
-        SpeakerEntity speakerEntity = speakerRepository.findOne(speakerId);
-        if (speakerEntity == null) throw new RuntimeException("Спикер с id = " + speakerId + " не найден");
+	@Override
+	@Transactional
+	public void saveTimestamp(Long speakerId, List<TimestampDto> timestamps) {
+		SpeakerEntity speakerEntity = speakerRepository.findById(speakerId).orElseThrow(() -> new RuntimeException("Спикер с id = " + speakerId + " не найден"));
 
-        if (speakerEntity.getStudent() != null) {
-            DiplomEntity diplomEntity = speakerEntity.getStudent().getDiplom();
+		if (speakerEntity.getStudent() != null) {
+			DiplomEntity diplomEntity = speakerEntity.getStudent().getDiplom();
 
-            if (diplomEntity != null) {
-                timestampRepository.delete(diplomEntity.getTimestamps());
+			if (diplomEntity != null) {
+				timestampRepository.deleteAll(diplomEntity.getTimestamps());
 
-                timestamps.forEach(timestamp -> {
-                    TimestampEntity timestampEntity = new TimestampEntity();
-                    timestampEntity.setTimestamp((timestamp.timestamp == null) ? null : LocalDateTime.ofInstant(Instant.ofEpochMilli(timestamp.timestamp), ZoneOffset.UTC));
-                    timestampEntity.setStatus(timestamp.status);
-                    timestampEntity.setDiplom(diplomEntity);
-                    timestampRepository.save(timestampEntity);
-                });
+				timestamps.forEach(timestamp -> {
+					TimestampEntity timestampEntity = new TimestampEntity();
+					timestampEntity.setTimestamp((timestamp.timestamp == null) ? null : LocalDateTime.ofInstant(Instant.ofEpochMilli(timestamp.timestamp), ZoneOffset.UTC));
+					timestampEntity.setStatus(timestamp.status);
+					timestampEntity.setDiplom(diplomEntity);
+					timestampRepository.save(timestampEntity);
+				});
 
-            }
+			}
 
-        } else throw new RuntimeException("Произошла ошибка");
-    }
+		} else throw new RuntimeException("Произошла ошибка");
+	}
 
-    @Override
-    @Transactional
-    public List<TimestampEntity> getTimestampOfSpeaker(Long speakerId) {
+	@Override
+	@Transactional
+	public List<TimestampEntity> getTimestampOfSpeaker(Long speakerId) {
+		SpeakerEntity speakerEntity = speakerRepository.findById(speakerId).orElseThrow(() -> new RuntimeException("Спикер с id = " + speakerId + " не найден"));
 
-        SpeakerEntity speakerEntity = speakerRepository.findOne(speakerId);
-        if (speakerEntity == null) throw new RuntimeException("Спикер с id = " + speakerId + " не найден");
-
-        if (speakerEntity.getStudent() != null) {
-            if (speakerEntity.getStudent().getDiplom() != null) {
-                DiplomEntity diplomEntity = speakerEntity.getStudent().getDiplom();
-                return timestampRepository.getAllByDiplom(diplomEntity);
-            }
-        }
-        throw new RuntimeException("Произошла ошибка");
-    }
+		if (speakerEntity.getStudent() != null) {
+			if (speakerEntity.getStudent().getDiplom() != null) {
+				DiplomEntity diplomEntity = speakerEntity.getStudent().getDiplom();
+				return timestampRepository.getAllByDiplom(diplomEntity);
+			}
+		}
+		throw new RuntimeException("Произошла ошибка");
+	}
 }

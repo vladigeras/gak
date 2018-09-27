@@ -23,108 +23,107 @@ import java.util.List;
 @Service
 public class StudentServiceImpl implements StudentService {
 
-    @Autowired
-    private StudentRepository studentRepository;
+	@Autowired
+	private StudentRepository studentRepository;
 
-    @Autowired
-    private GroupRepository groupRepository;
+	@Autowired
+	private GroupRepository groupRepository;
 
-    @Autowired
-    private DiplomRepository diplomRepository;
+	@Autowired
+	private DiplomRepository diplomRepository;
 
-    @Autowired
-    private UserRepository userRepository;
+	@Autowired
+	private UserRepository userRepository;
 
-    @Override
-    @Transactional
-    public List<StudentEntity> getStudentOfCurrentGroup(String group) {
-        GroupEntity groupEntity = groupRepository.findOne(group);
-        if (groupEntity == null) throw new RuntimeException("Группа с названием " + group + "  не найдена");
-        return studentRepository.getAllByGroupAndDeletedTimeIsNull(groupEntity);
-    }
+	@Override
+	@Transactional
+	public List<StudentEntity> getStudentOfCurrentGroup(String group) {
+		GroupEntity groupEntity = groupRepository.findById(group)
+				.orElseThrow(() -> new RuntimeException("Группа с названием " + group + "  не найдена"));
+		return studentRepository.getAllByGroupAndDeletedTimeIsNull(groupEntity);
+	}
 
-    @Override
-    @Transactional
-    public Long saveStudent(StudentDto student) {
-        GroupEntity groupEntity = groupRepository.findOne(student.group.title);
-        if (groupEntity == null)
-            throw new RuntimeException("Группа с названием " + student.group.title + "  не найдена");
+	@Override
+	@Transactional
+	public Long saveStudent(StudentDto student) {
+		GroupEntity groupEntity = groupRepository.findById(student.group.title)
+				.orElseThrow(() -> new RuntimeException("Группа с названием " + student.group.title + "  не найдена"));
 
-        UserEntity mentorEntity = userRepository.findOne(student.mentor.id);
-        if (mentorEntity == null)
-            throw new RuntimeException("Руководитель с id " + student.mentor.id + "  не найден");
+		UserEntity mentorEntity = userRepository.findById(student.mentor.id)
+				.orElseThrow(() -> new RuntimeException("Руководитель с id " + student.mentor.id + "  не найден"));
 
-        UserEntity reviewerEntity = userRepository.findOne(student.reviewer.id);
-        if (reviewerEntity == null)
-            throw new RuntimeException("Рецензент с id " + student.reviewer.id + "  не найден");
+		UserEntity reviewerEntity = userRepository.findById(student.reviewer.id)
+				.orElseThrow(() -> new RuntimeException("Рецензент с id " + student.reviewer.id + "  не найден"));
 
-        StudentEntity studentEntity = null;
-        DiplomEntity diplomEntity = null;
-        if (student.id != null) {
-            studentEntity = studentRepository.findOne(student.id);
-            if (studentEntity != null && studentEntity.getDiplom() != null) {
-                diplomEntity = studentEntity.getDiplom();
-            } else throw new RuntimeException("Студент с id " + student.id + " не найден");
-        } else {
-            studentEntity = new StudentEntity();
-            diplomEntity = new DiplomEntity();
-        }
+		StudentEntity studentEntity = null;
+		DiplomEntity diplomEntity = null;
+		if (student.id != null) {
+			studentEntity = studentRepository.findById(student.id)
+					.orElseThrow(() -> new RuntimeException("Студент с id " + student.id + " не найден"));
 
-        studentEntity.setFirstname(student.firstname);
-        studentEntity.setLastname(student.lastname);
-        studentEntity.setMiddlename(student.middlename);
-        studentEntity.setGender(student.gender);
-        studentEntity.setGroup(groupEntity);
-        studentRepository.save(studentEntity);
+			if (studentEntity.getDiplom() != null) {
+				diplomEntity = studentEntity.getDiplom();
+			} else throw new RuntimeException("Произошла ошибка: у студента id = " + student.id + " не найден диплом");
+		} else {
+			studentEntity = new StudentEntity();
+			diplomEntity = new DiplomEntity();
+		}
 
-        diplomEntity.setTitle(student.title);
-        diplomEntity.setExecutionPlace(student.executionPlace);
-        diplomEntity.setMentor(mentorEntity);
-        diplomEntity.setReviewer(reviewerEntity);
-        diplomEntity.setReport(student.report);
-        diplomEntity.setPresentation(student.presentation);
-        diplomEntity.setStudent(studentEntity);
-        diplomRepository.save(diplomEntity);
+		studentEntity.setFirstname(student.firstname);
+		studentEntity.setLastname(student.lastname);
+		studentEntity.setMiddlename(student.middlename);
+		studentEntity.setGender(student.gender);
+		studentEntity.setGroup(groupEntity);
+		studentRepository.save(studentEntity);
 
-        return studentEntity.getId();
-    }
+		diplomEntity.setTitle(student.title);
+		diplomEntity.setExecutionPlace(student.executionPlace);
+		diplomEntity.setMentor(mentorEntity);
+		diplomEntity.setReviewer(reviewerEntity);
+		diplomEntity.setReport(student.report);
+		diplomEntity.setPresentation(student.presentation);
+		diplomEntity.setStudent(studentEntity);
+		diplomRepository.save(diplomEntity);
 
-    @Override
-    @Transactional
-    public void saveFiles(Long studentId, MultipartFile reportFile, MultipartFile presentationFile) throws IOException {
-        StudentEntity studentEntity = studentRepository.findOne(studentId);
-        if (studentEntity == null) throw new RuntimeException("Произошла ошибка");
+		return studentEntity.getId();
+	}
 
-        studentEntity.getDiplom().setReport(reportFile == null ? null : reportFile.getBytes());
-        studentEntity.getDiplom().setPresentation(presentationFile == null ? null : presentationFile.getBytes());
-        studentRepository.save(studentEntity);
-    }
+	@Override
+	@Transactional
+	public void saveFiles(Long studentId, MultipartFile reportFile, MultipartFile presentationFile) throws IOException {
+		StudentEntity studentEntity = studentRepository.findById(studentId)
+				.orElseThrow(() -> new RuntimeException("Студент с id = " + studentId + "  не найден"));
 
-    @Override
-    @Transactional
-    public byte[] readFile(Long studentId, boolean isReport) {
-        StudentEntity studentEntity = studentRepository.findOne(studentId);
-        if (studentEntity == null) throw new RuntimeException("Произошла ошибка");
+		studentEntity.getDiplom().setReport(reportFile == null ? null : reportFile.getBytes());
+		studentEntity.getDiplom().setPresentation(presentationFile == null ? null : presentationFile.getBytes());
+		studentRepository.save(studentEntity);
+	}
 
-        if (isReport) {
-            if (studentEntity.getDiplom().getReport() != null) {
-                return studentEntity.getDiplom().getReport();
-            } else throw new RuntimeException("У этого студента еще не загружен данный фаил");
+	@Override
+	@Transactional
+	public byte[] readFile(Long studentId, boolean isReport) {
+		StudentEntity studentEntity = studentRepository.findById(studentId)
+				.orElseThrow(() -> new RuntimeException("Студент с id = " + studentId + "  не найден"));
 
-        } else {
-            if (studentEntity.getDiplom().getPresentation() != null) {
-                return studentEntity.getDiplom().getPresentation();
-            } else throw new RuntimeException("У этого студента еще не загружен данный фаил");
-        }
-    }
+		if (isReport) {
+			if (studentEntity.getDiplom().getReport() != null) {
+				return studentEntity.getDiplom().getReport();
+			} else throw new RuntimeException("У этого студента еще не загружен данный фаил");
 
-    @Override
-    @Transactional
-    public void deleteStudent(Long id) {
-        StudentEntity student = studentRepository.findOne(id);
-        if (student == null) throw new RuntimeException("Произошла ошибка");
+		} else {
+			if (studentEntity.getDiplom().getPresentation() != null) {
+				return studentEntity.getDiplom().getPresentation();
+			} else throw new RuntimeException("У этого студента еще не загружен данный фаил");
+		}
+	}
 
-        student.setDeletedTime(LocalDateTime.now(ZoneOffset.UTC));
-        studentRepository.save(student);
-    }
+	@Override
+	@Transactional
+	public void deleteStudent(Long id) {
+		StudentEntity studentEntity = studentRepository.findById(id)
+				.orElseThrow(() -> new RuntimeException("Студент с id = " + id + "  не найден"));
+
+		studentEntity.setDeletedTime(LocalDateTime.now(ZoneOffset.UTC));
+		studentRepository.save(studentEntity);
+	}
 }

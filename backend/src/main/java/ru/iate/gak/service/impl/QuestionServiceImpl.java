@@ -29,14 +29,14 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     @Transactional
     public void saveQuestions(Long speakerId, List<QuestionDto> questions) {
-        SpeakerEntity speakerEntity = speakerRepository.findOne(speakerId);
-        if (speakerEntity == null) throw new RuntimeException("Спикер с id = " + speakerId + " не найден");
+		SpeakerEntity speakerEntity = speakerRepository.findById(speakerId)
+				.orElseThrow(() -> new RuntimeException("Спикер с id = " + speakerId + " не найден"));
 
         if (speakerEntity.getStudent() != null) {
             DiplomEntity diplomEntity = speakerEntity.getStudent().getDiplom();
 
             if (diplomEntity != null) {
-                questionRepository.delete(diplomEntity.getQuestions());
+				questionRepository.deleteAll(diplomEntity.getQuestions());
 
                 questions.forEach(question -> {
                     QuestionEntity questionEntity = new QuestionEntity();
@@ -53,11 +53,10 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     @Transactional
     public List<QuestionEntity> getQuestionsOfSpeaker(Long speakerId) {
+		SpeakerEntity speakerEntity = speakerRepository.findById(speakerId)
+				.orElseThrow(() -> new RuntimeException("Спикер с id = " + speakerId + " не найден"));
 
-        SpeakerEntity speakerEntity = speakerRepository.findOne(speakerId);
-        if (speakerEntity == null) throw new RuntimeException("Спикер с id = " + speakerId + " не найден");
-
-        if (speakerEntity.getStudent() != null) {
+		if (speakerEntity.getStudent() != null) {
             if (speakerEntity.getStudent().getDiplom() != null) {
                 DiplomEntity diplomEntity = speakerEntity.getStudent().getDiplom();
                 return questionRepository.getAllByDiplom(diplomEntity);

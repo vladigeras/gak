@@ -41,8 +41,8 @@ public class CommissionServiceImpl implements CommissionService {
     @Override
     @Transactional
     public void setPresidentRoleTemporally(CommissionDto commission) {
-        CommissionEntity commissionEntity = commissionRepository.findOne(commission.id);
-        if (commissionEntity == null) throw new RuntimeException("Произошла ошибка");
+        CommissionEntity commissionEntity = commissionRepository.findById(commission.id)
+                .orElseThrow(() -> new RuntimeException("Член комиссии с id = " + commission.id + " не найден"));
         if (commissionEntity.getUser() == null) throw new RuntimeException("Произошла ошибка");
         if (commissionEntity.getUser().getRoles().contains(Role.PRESIDENT)) throw new RuntimeException("Данный член комиссии уже является ПРЕДСЕДАТЕЛЕМ");
 
@@ -60,7 +60,8 @@ public class CommissionServiceImpl implements CommissionService {
             transactionTemplate.execute(new TransactionCallbackWithoutResult() {
                 @Override
                 protected void doInTransactionWithoutResult(TransactionStatus transactionStatus) {
-                    CommissionEntity commissionEntity = commissionRepository.findOne(commission.id);
+                    CommissionEntity commissionEntity = commissionRepository.findById(commission.id)
+                            .orElseThrow(() -> new RuntimeException("Член комиссии с id = " + commission.id + " не найден"));
                     if (commissionEntity == null) throw new RuntimeException("Произошла ошибка");
 
                     if (commissionEntity.getUser() == null) throw new RuntimeException("Произошла ошибка");
